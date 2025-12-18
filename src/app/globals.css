@@ -1,12 +1,157 @@
+
+
+
+/* ------------------------- Fonts -------------------------  */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ------------------------- Lenis Smooth Scroll -------------------------  */
+
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+@font-face {
+  font-family: 'Chaney';
+  src: url('/fonts/CHANEY-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Chaney';
+  src: url('/fonts/CHANEY-Wide.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Chaney';
+  src: url('/fonts/CHANEY-Extended.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Chaney';
+  src: url('/fonts/CHANEY-UltraExtended.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Chaney Individual Variants */
+@font-face {
+  font-family: 'Chaney Regular';
+  src: url('/fonts/CHANEY-Regular.otf') format('opentype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Chaney Wide';
+  src: url('/fonts/CHANEY-Wide.otf') format('opentype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Chaney Extended';
+  src: url('/fonts/CHANEY-Extended.otf') format('opentype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Chaney UltraExtended';
+  src: url('/fonts/CHANEY-UltraExtended.otf') format('opentype');
+  font-display: swap;
+}
+
+/* ------------------------- Scaling System by Osmo [https://osmo.supply/] -------------------------  */
+
+/* Desktop */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Font Family */
+  --font-primary: 'Chaney', sans-serif;
+  --font-secondary: 'Inter', sans-serif;
+
+  /* Color System */
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-dark: #272727;
+  --color-gray: #B0B0B0;
+  --color-light: #E6E6E6;
+  --color-accent: #9DF032;
+
+  --background: var(--color-white);
+  --foreground: var(--color-dark);
+
+  /* Typography - Golden Ratio (1.618) */
+  --font-ratio: 1.618;
+  --font-small: 0.618em;
+  --font-par: 1em;
+  --font-h4: 1.618em;
+  --font-h3: 2.618em;
+  --font-h2: 4.236em;
+  --font-h1: 6.854em;
+
+  /* Scaling System */
+  --size-unit: 16; /* body font-size in design - no px */
+  --size-container-ideal: 1440; /* screen-size in design - no px */
+  --size-container-min: 992px;
+  --size-container-max: 2560px;
+  --size-container: clamp(var(--size-container-min), 100vw, var(--size-container-max));
+  --size-font: calc(var(--size-container) / (var(--size-container-ideal) / var(--size-unit)));
+}
+
+/* Tablet */
+@media screen and (max-width: 991px) {
+  :root {
+    --size-container-ideal: 834; /* screen-size in design - no px */
+    --size-container-min: 768px;
+    --size-container-max: 991px;
+  }
+}
+
+/* Mobile Landscape */
+@media screen and (max-width: 767px) {
+  :root {
+    --size-container-ideal: 550; /* screen-size in design - no px */
+    --size-container-min: 480px;
+    --size-container-max: 767px;
+  }
+}
+
+/* Mobile Portrait */
+@media screen and (max-width: 479px) {
+  :root {
+    --size-container-ideal: 390; /* screen-size in design - no px */
+    --size-container-min: 320px;
+    --size-container-max: 479px;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: var(--color-dark);
+    --foreground: var(--color-light);
   }
 }
 
@@ -19,9 +164,130 @@ body {
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-secondary);
+  font-size: var(--size-font);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  font-family: var(--font-secondary);
+  font-size: var(--font-par);
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 0.8em 1.5em;
+  background: var(--color-accent);
+  color: var(--color-black);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.btn:hover {
+  letter-spacing: 0.1em;
+  transform: skewX(-10deg);
+}
+
+.btn:hover > * {
+  transform: skewX(10deg);
+}
+
+.btn-social {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-secondary);
+  font-size: var(--font-small);
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 0.6em 1.2em;
+  background: var(--color-accent);
+  color: var(--color-black);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  gap: 0.5em;
+}
+
+.btn-social:hover {
+  letter-spacing: 0.1em;
+  transform: skewX(-10deg);
+}
+
+.btn-social:hover > * {
+  transform: skewX(10deg);
+}
+
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5em;
+  height: 3.5em;
+  background: transparent;
+  border: 1px solid var(--color-accent);
+  color: var(--color-accent);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.btn-icon:hover {
+  background: var(--color-accent);
+  color: var(--color-black);
+}
+
+.btn-icon svg {
+  width: 1.5em;
+  height: 1.5em;
+}
+
+.btn-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 1em;
+  font-family: var(--font-secondary);
+  font-size: var(--font-par);
+  font-weight: 500;
+  text-transform: uppercase;
+  background: transparent;
+  color: var(--color-dark);
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-bar::before {
+  content: '';
+  display: block;
+  width: 0.8em;
+  height: 0.8em;
+  background: var(--color-dark);
+  transition: width 0.3s ease, transform 0.3s ease;
+}
+
+.btn-bar:hover::before {
+  width: 2.5em;
+  transform: skewX(-10deg);
+}
+
+/* Container Classes */
+.container {
+  max-width: var(--size-container);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.container.medium {
+  max-width: calc(var(--size-container) * 0.85);
+}
+
+.container.small {
+  max-width: calc(var(--size-container) * 0.7);
 }
 
 * {
