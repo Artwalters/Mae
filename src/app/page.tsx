@@ -1,5 +1,6 @@
 import styles from "./page.module.css";
 import ScalingSection from "@/components/ScalingSection";
+import DienstenSection from "@/components/DienstenSection";
 import Modal from "@/components/Modal";
 
 export default function Home() {
@@ -26,6 +27,7 @@ export default function Home() {
       </div>
     </div>
     <ScalingSection />
+    <DienstenSection />
     <Modal />
     </>
   );

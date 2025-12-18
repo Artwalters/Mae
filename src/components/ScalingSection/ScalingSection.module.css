@@ -105,6 +105,7 @@
 .spacer {
   height: 300vh;
   position: relative;
+  z-index: 10;
 }
 
 /* Fixed state na flip animatie */
@@ -115,10 +116,52 @@
   width: 100vw !important;
   height: 100vh !important;
   transform: none !important;
+  z-index: 1;
 }
 
 .fixed .videoImg {
-  transform: none !important;
+  width: 120%;
+  height: 120%;
+  top: -10%;
+  left: -10%;
+  transform: none;
+}
+
+/* Stacking Cards */
+.cardsContainer {
+  position: relative;
+  width: 100%;
+}
+
+.card {
+  width: 100vw;
+  height: 100vh;
+  padding: 4em;
+  background: var(--color-white);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 -0.5em 3em rgba(0, 0, 0, 0.15);
+}
+
+.cardTitle {
+  font-family: var(--font-primary);
+  font-size: var(--font-h2);
+  font-weight: 400;
+  color: var(--color-dark);
+  margin-bottom: 0.5em;
+  text-transform: uppercase;
+}
+
+.cardDescription {
+  font-family: var(--font-secondary);
+  font-size: var(--font-h4);
+  font-weight: 300;
+  color: var(--color-gray);
+  line-height: 1.6;
+  max-width: 30em;
 }
 
 /* Responsive */
@@ -130,6 +173,18 @@
   .smallBox {
     width: 1.5em;
     height: 0.6em;
+  }
+
+  .card {
+    padding: 3em;
+  }
+
+  .cardTitle {
+    font-size: var(--font-h3);
+  }
+
+  .cardDescription {
+    font-size: var(--font-par);
   }
 }
 
@@ -145,5 +200,17 @@
 
   .line {
     flex-wrap: wrap;
+  }
+
+  .card {
+    padding: 2em;
+  }
+
+  .cardTitle {
+    font-size: var(--font-h4);
+  }
+
+  .cardDescription {
+    font-size: var(--font-small);
   }
 }

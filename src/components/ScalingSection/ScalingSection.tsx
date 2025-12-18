@@ -8,6 +8,21 @@ import styles from './ScalingSection.module.css';
 
 gsap.registerPlugin(ScrollTrigger, Flip);
 
+const cardData = [
+  {
+    title: 'MOVE',
+    description: 'Prestatie begint met beweging. Of je nu herstelt van een blessure of je grenzen wilt verleggen — zonder actie geen progressie. Wij zorgen dat jouw lichaam klaar is voor elke uitdaging.',
+  },
+  {
+    title: 'ADAPT',
+    description: 'Geen atleet is hetzelfde. Wij ontwikkelen een plan dat zich aanpast aan jouw sport, jouw lichaam en jouw ambities. Naarmate jij groeit, evolueert jouw programma mee.',
+  },
+  {
+    title: 'EVOLVE',
+    description: 'Dit is geen eindpunt, maar een continue reis naar de beste versie van jezelf. Sterker, sneller, veerkrachtiger. Wij begeleiden je naar het niveau waar jij altijd van hebt gedroomd.',
+  },
+];
+
 export default function ScalingSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const targetRef = useRef<HTMLDivElement>(null);
@@ -16,6 +31,7 @@ export default function ScalingSection() {
   const whereRef = useRef<HTMLSpanElement>(null);
   const youRef = useRef<HTMLSpanElement>(null);
   const spacerRef = useRef<HTMLDivElement>(null);
+  const cardsContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const wrapperElements = [smallWrapperRef.current, bigWrapperRef.current];
@@ -101,6 +117,7 @@ export default function ScalingSection() {
       }
 
       // 3. Na de flip: kill flip animatie en maak fixed
+      // Image blijft fixed tot het einde van de spacer
       ScrollTrigger.create({
         trigger: spacer,
         start: 'top bottom',
@@ -114,6 +131,10 @@ export default function ScalingSection() {
           tl.kill();
           gsap.set(targetEl, { clearProps: 'all' });
           targetEl.classList.add(styles.fixed);
+          // Reset de image transform
+          if (videoImg) {
+            gsap.set(videoImg, { clearProps: 'transform' });
+          }
         },
         onLeave: () => {
           targetEl.classList.remove(styles.fixed);
@@ -123,6 +144,37 @@ export default function ScalingSection() {
           targetEl.classList.remove(styles.fixed);
           setupAnimations();
         },
+      });
+
+      // 3b. Subtiele zoom op de afbeelding tijdens het stacken
+      if (videoImg) {
+        gsap.to(videoImg, {
+          scale: 1.4,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: spacer,
+            start: 'top bottom',
+            end: 'bottom bottom',
+            scrub: 0,
+          },
+        });
+      }
+
+      // 4. Stacking cards animatie
+      const cards = gsap.utils.toArray<HTMLElement>(`.${styles.card}`);
+
+      cards.forEach((card, index) => {
+        // Pin elke card wanneer deze bovenaan komt
+        // Blijf pinnen tot het einde van de spacer
+        ScrollTrigger.create({
+          trigger: card,
+          start: 'top top',
+          endTrigger: spacer,
+          end: 'bottom bottom',
+          pin: true,
+          pinSpacing: false,
+          invalidateOnRefresh: true,
+        });
       });
     }
 
@@ -173,8 +225,17 @@ export default function ScalingSection() {
         </div>
       </section>
 
-      {/* Spacer voor de sticky periode - 300vh */}
-      <div ref={spacerRef} className={styles.spacer}></div>
+      {/* Spacer met stacking cards */}
+      <div ref={spacerRef} className={styles.spacer}>
+        <div ref={cardsContainerRef} className={styles.cardsContainer}>
+          {cardData.map((card, index) => (
+            <div key={index} className={styles.card}>
+              <h3 className={styles.cardTitle}>{card.title}</h3>
+              <p className={styles.cardDescription}>{card.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
