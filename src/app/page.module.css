@@ -18,12 +18,14 @@
 /* Spacer zodat hero initieel zichtbaar is */
 .heroSpacer {
   height: 100vh;
+  pointer-events: none;
 }
 
 /* Footer spacer om hero weer te tonen onderaan */
 .footerSpacer {
   height: 100vh;
   background: transparent;
+  pointer-events: none;
 }
 
 /* Side Labels */
@@ -37,6 +39,7 @@
   text-transform: uppercase;
   color: var(--color-gray);
   letter-spacing: 0.2em;
+  pointer-events: none;
 }
 
 .left {
