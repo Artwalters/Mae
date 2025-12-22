@@ -2,18 +2,13 @@ import styles from "./page.module.css";
 import ScalingSection from "@/components/ScalingSection";
 import DienstenSection from "@/components/DienstenSection";
 import Modal from "@/components/Modal";
+import Nav from "@/components/Nav";
 
 export default function Home() {
   return (
     <>
+    <Nav />
     <div className={styles.hero}>
-      {/* Navigation */}
-      <nav className={styles.nav}>
-        <a href="#" className={styles.navLink}>HOME</a>
-        <a href="#" className={styles.navLink}>TRAJECTEN</a>
-        <a href="#" className={styles.navLink}>OVER</a>
-        <a href="#" className={styles.navLink}>CONTACT</a>
-      </nav>
 
       {/* Side Labels */}
       <span className={styles.sideLabel + ' ' + styles.left}>FYSIOTHERAPIE</span>

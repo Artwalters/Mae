@@ -6,31 +6,6 @@
   overflow: hidden;
 }
 
-/* Navigation */
-.nav {
-  position: absolute;
-  top: 2rem;
-  left: 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5em;
-  z-index: 10;
-}
-
-.navLink {
-  font-family: var(--font-secondary);
-  font-size: var(--font-small);
-  font-weight: 500;
-  text-transform: uppercase;
-  color: var(--color-white);
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.navLink:hover {
-  color: var(--color-accent);
-}
-
 /* Side Labels */
 .sideLabel {
   position: absolute;

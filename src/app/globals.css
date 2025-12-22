@@ -105,7 +105,7 @@ html.lenis, html.lenis body {
 
   /* Typography - Golden Ratio (1.618) */
   --font-ratio: 1.618;
-  --font-small: 0.618em;
+  --font-small: 0.5em;
   --font-par: 1em;
   --font-h4: 1.618em;
   --font-h3: 2.618em;
@@ -305,4 +305,58 @@ a {
   html {
     color-scheme: dark;
   }
+}
+
+/* Magnetic Cursor */
+.cursor {
+  aspect-ratio: 1;
+  border-radius: 100em;
+  width: 0.75em;
+  position: fixed;
+  inset: 0% auto auto 0%;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.cursor-bg {
+  border-radius: inherit;
+  background-color: var(--color-white);
+  width: 100%;
+  height: 100%;
+  transition: transform 0.25s ease;
+}
+
+/* Magnetic Link */
+.magnetic-link {
+  color: inherit;
+  padding: 0.4em 0.8em;
+  text-decoration: none;
+  position: relative;
+  display: inline-block;
+  width: auto;
+}
+
+.magnetic-link__inner {
+  z-index: 1;
+  position: relative;
+}
+
+.magnetic-link__label {
+  transition: letter-spacing 0.3s ease;
+}
+
+.magnetic-link__bg {
+  z-index: 0;
+  position: absolute;
+  inset: 0%;
+}
+
+.magnetic-link .cursor-bg {
+  opacity: 0.15;
+  border-radius: 0;
+  transform: skewX(-10deg);
+}
+
+.magnetic-link:hover .magnetic-link__label {
+  letter-spacing: 0.1em;
 }
