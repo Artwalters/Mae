@@ -3,6 +3,7 @@ import ScalingSection from "@/components/ScalingSection";
 import DienstenSection from "@/components/DienstenSection";
 import Modal from "@/components/Modal";
 import Nav from "@/components/Nav";
+import ParticleHero from "@/components/ParticleHero";
 
 export default function Home() {
   return (
@@ -14,11 +15,9 @@ export default function Home() {
       <span className={styles.sideLabel + ' ' + styles.left}>FYSIOTHERAPIE</span>
       <span className={styles.sideLabel + ' ' + styles.right}>LEEFSTIJL</span>
 
-      {/* Center Logo with Image Mask */}
+      {/* Center Logo with Particle Effect */}
       <div className={styles.logoContainer}>
-        <div className={styles.logoMask}>
-          <img src="/img/run.png" alt="Background" className={styles.logoImage} />
-        </div>
+        <ParticleHero />
       </div>
     </div>
 

@@ -56,6 +56,8 @@ export default function ScalingSection() {
     let flipST: ScrollTrigger | null = null;
 
     function setupAnimations() {
+      if (!targetEl || !whereEl || !youEl || !spacer) return;
+
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
       if (tl) tl.kill();
       if (textTl) textTl.kill();
@@ -103,12 +105,13 @@ export default function ScalingSection() {
           const thisDistance = thisRect.top + window.pageYOffset + element.offsetHeight / 2;
           const offset = nextDistance - thisDistance;
 
-          tl.add(
-            Flip.fit(targetEl, nextWrapperEl, {
-              duration: offset,
-              ease: 'none',
-            })
-          );
+          const flipAnimation = Flip.fit(targetEl, nextWrapperEl, {
+            duration: offset,
+            ease: 'none',
+          }) as gsap.core.Tween;
+          if (flipAnimation) {
+            tl.add(flipAnimation);
+          }
         }
       });
 
