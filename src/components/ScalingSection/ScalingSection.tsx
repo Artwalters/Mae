@@ -140,10 +140,19 @@ export default function ScalingSection() {
           tl.kill();
           gsap.set(targetEl, { clearProps: 'all' });
           targetEl.classList.add(styles.fixed);
+          targetEl.style.display = 'flex';
           // Reset de image transform
           if (videoImg) {
             gsap.set(videoImg, { clearProps: 'transform' });
           }
+        },
+        onLeave: () => {
+          // Verberg de fixed image zodat de hero/footer zichtbaar wordt
+          targetEl.style.display = 'none';
+        },
+        onEnterBack: () => {
+          // Toon de fixed image weer bij terugscrollen
+          targetEl.style.display = 'flex';
         },
         onLeaveBack: () => {
           // Herstel de flip animatie

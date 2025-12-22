@@ -21,8 +21,14 @@ export default function Home() {
         </div>
       </div>
     </div>
-    <ScalingSection />
-    <DienstenSection />
+
+    <div className={styles.content}>
+      <div className={styles.heroSpacer} />
+      <ScalingSection />
+      <DienstenSection />
+      <div className={styles.footerSpacer} />
+    </div>
+
     <Modal />
     </>
   );

@@ -1,9 +1,29 @@
 .hero {
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
+  z-index: 1;
   background: var(--color-black);
   overflow: hidden;
+}
+
+/* Content wrapper scrollt over de hero */
+.content {
+  position: relative;
+  z-index: 10;
+}
+
+/* Spacer zodat hero initieel zichtbaar is */
+.heroSpacer {
+  height: 100vh;
+}
+
+/* Footer spacer om hero weer te tonen onderaan */
+.footerSpacer {
+  height: 100vh;
+  background: transparent;
 }
 
 /* Side Labels */
