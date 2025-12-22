@@ -10,16 +10,25 @@ gsap.registerPlugin(ScrollTrigger, Flip);
 
 const cardData = [
   {
+    id: '01',
+    slug: 'MOVE',
     title: 'MOVE',
     description: 'Prestatie begint met beweging. Of je nu herstelt van een blessure of je grenzen wilt verleggen — zonder actie geen progressie. Wij zorgen dat jouw lichaam klaar is voor elke uitdaging.',
+    images: ['/img/run.png', '/img/run.png', '/img/run.png'],
   },
   {
+    id: '02',
+    slug: 'ADAPT',
     title: 'ADAPT',
     description: 'Geen atleet is hetzelfde. Wij ontwikkelen een plan dat zich aanpast aan jouw sport, jouw lichaam en jouw ambities. Naarmate jij groeit, evolueert jouw programma mee.',
+    images: ['/img/run.png', '/img/run.png', '/img/run.png'],
   },
   {
+    id: '03',
+    slug: 'EVOLVE',
     title: 'EVOLVE',
     description: 'Dit is geen eindpunt, maar een continue reis naar de beste versie van jezelf. Sterker, sneller, veerkrachtiger. Wij begeleiden je naar het niveau waar jij altijd van hebt gedroomd.',
+    images: ['/img/run.png', '/img/run.png', '/img/run.png'],
   },
 ];
 
@@ -136,9 +145,6 @@ export default function ScalingSection() {
             gsap.set(videoImg, { clearProps: 'transform' });
           }
         },
-        onLeave: () => {
-          targetEl.classList.remove(styles.fixed);
-        },
         onLeaveBack: () => {
           // Herstel de flip animatie
           targetEl.classList.remove(styles.fixed);
@@ -164,11 +170,11 @@ export default function ScalingSection() {
       const cards = gsap.utils.toArray<HTMLElement>(`.${styles.card}`);
 
       cards.forEach((card, index) => {
-        // Pin elke card wanneer deze bovenaan komt
+        // Pin elke card wanneer deze op 20vh van de top komt
         // Blijf pinnen tot het einde van de spacer
         ScrollTrigger.create({
           trigger: card,
-          start: 'top top',
+          start: 'top 10%',
           endTrigger: spacer,
           end: 'bottom bottom',
           pin: true,
@@ -230,8 +236,48 @@ export default function ScalingSection() {
         <div ref={cardsContainerRef} className={styles.cardsContainer}>
           {cardData.map((card, index) => (
             <div key={index} className={styles.card}>
-              <h3 className={styles.cardTitle}>{card.title}</h3>
-              <p className={styles.cardDescription}>{card.description}</p>
+              {/* Tab Row */}
+              <div className={styles.tabRow}>
+                {cardData.slice(0, index + 1).map((tab, tabIndex) => (
+                  <div
+                    key={tab.id}
+                    className={`${styles.tab} ${tabIndex === index ? styles.tabActive : ''}`}
+                  >
+                    <span>WERKWIJZE {tab.id}/{tab.slug}</span>
+                  </div>
+                ))}
+                {index === 2 && (
+                  <div className={styles.tabButton}>
+                    <span>BEKIJK TRAJECTEN</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Content */}
+              <div className={styles.cardContent}>
+                <div className={styles.textColumn}>
+                  <h3 className={styles.cardTitle}>{card.title}</h3>
+                  <div className={styles.cardDivider}></div>
+                  <p className={styles.cardDescription}>{card.description}</p>
+                </div>
+
+                <div className={styles.imageColumn}>
+                  <div className={styles.progressBar}>
+                    <span className={styles.progressText}>{card.id}/03</span>
+                  </div>
+                  <div className={styles.imageGrid}>
+                    <div className={styles.mainImage}>
+                      <img src={card.images[0]} alt={card.title} />
+                    </div>
+                    <div className={styles.smallImage}>
+                      <img src={card.images[1]} alt={card.title} />
+                    </div>
+                    <div className={styles.smallImage}>
+                      <img src={card.images[2]} alt={card.title} />
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           ))}
         </div>

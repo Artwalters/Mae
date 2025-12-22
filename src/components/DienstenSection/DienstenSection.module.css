@@ -2,6 +2,7 @@
   background: var(--color-dark);
   padding: 8em 0;
   position: relative;
+  z-index: 10;
 }
 
 .container {
