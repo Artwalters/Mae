@@ -234,23 +234,41 @@ export default function ScalingSection() {
       {/* Spacer met stacking cards */}
       <div ref={spacerRef} className={styles.spacer}>
         <div ref={cardsContainerRef} className={styles.cardsContainer}>
-          {cardData.map((card, index) => (
-            <div key={index} className={styles.card}>
-              {/* Tab Row */}
+          {cardData.map((card, index) => {
+            const cardColorClass = index === 0 ? styles.cardLight : index === 1 ? styles.cardGray : styles.cardAccent;
+
+            return (
+            <div key={index} className={`${styles.card} ${cardColorClass}`}>
+              {/* Tab Row - 4 column grid */}
               <div className={styles.tabRow}>
-                {cardData.slice(0, index + 1).map((tab, tabIndex) => (
-                  <div
-                    key={tab.id}
-                    className={`${styles.tab} ${tabIndex === index ? styles.tabActive : ''}`}
-                  >
-                    <span>WERKWIJZE {tab.id}/{tab.slug}</span>
-                  </div>
-                ))}
-                {index === 2 && (
-                  <div className={styles.tabButton}>
-                    <span>BEKIJK TRAJECTEN</span>
-                  </div>
-                )}
+                <div className={styles.tabCell}>
+                  {index === 0 && (
+                    <div className={`${styles.tab} ${styles.tabLight}`}>
+                      <span className={styles.tabText}>WERKWIJZE 01/MOVE</span>
+                    </div>
+                  )}
+                </div>
+                <div className={styles.tabCell}>
+                  {index === 1 && (
+                    <div className={`${styles.tab} ${styles.tabGray}`}>
+                      <span className={styles.tabText}>WERKWIJZE 02/ADAPT</span>
+                    </div>
+                  )}
+                </div>
+                <div className={styles.tabCell}>
+                  {index === 2 && (
+                    <div className={`${styles.tab} ${styles.tabAccent}`}>
+                      <span className={styles.tabText}>WERKWIJZE 03/EVOLVE</span>
+                    </div>
+                  )}
+                </div>
+                <div className={styles.tabCell}>
+                  {index === 0 && (
+                    <div className={`${styles.tab} ${styles.tabBlack}`}>
+                      <span className={styles.tabText}>BEKIJK TRAJECTEN</span>
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* Content */}
@@ -279,7 +297,8 @@ export default function ScalingSection() {
                 </div>
               </div>
             </div>
-          ))}
+          );
+          })}
         </div>
       </div>
     </div>

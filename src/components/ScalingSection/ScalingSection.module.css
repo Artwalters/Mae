@@ -157,41 +157,127 @@
   width: 100vw;
   height: 90vh;
   margin-top: 10vh;
-  display: grid;
-  grid-template-rows: auto 1fr;
   background: var(--color-white);
+  position: relative;
+  padding-top: 1.75em;
 }
 
 .card:first-child {
   margin-top: 0;
 }
 
+/* Card color variants */
+.cardLight {
+  background: var(--color-light);
+}
+
+.cardGray {
+  background: var(--color-gray);
+}
+
+.cardGray .cardTitle,
+.cardGray .cardDescription {
+  color: var(--color-white);
+}
+
+.cardGray .cardDivider {
+  background: var(--color-white);
+  opacity: 0.3;
+}
+
+.cardAccent {
+  background: var(--color-accent);
+}
+
+.cardAccent .cardTitle {
+  color: var(--color-dark);
+}
+
+.cardAccent .cardDescription {
+  color: var(--color-dark);
+  opacity: 0.8;
+}
+
+.cardAccent .cardDivider {
+  background: var(--color-dark);
+  opacity: 0.3;
+}
+
+.cardAccent .progressText {
+  color: var(--color-dark);
+}
+
 /* Tab Row */
 .tabRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 0 2em;
+  transform: translateY(-100%);
+}
+
+.tabCell {
   display: flex;
-  padding: 2em;
-  gap: 0;
+  align-items: flex-end;
+  justify-content: flex-start;
+}
+
+.tabCell:last-child {
+  justify-content: flex-end;
 }
 
 .tab {
-  background: var(--color-dark);
-  color: var(--color-white);
-  padding: 1em 2em;
-  transform: skewX(-10deg);
+  height: 1.75em;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background: var(--color-light);
+  color: var(--color-gray);
+}
+
+.tabText {
   font-family: var(--font-secondary);
   font-size: var(--font-small);
   font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.05em;
+  padding-left: 1em;
 }
 
-.tab span {
-  transform: skewX(10deg);
-  display: inline-block;
+.tabLight {
+  background: var(--color-light);
 }
 
-.tabActive {
+.tabLight .tabText {
+  color: var(--color-dark);
+}
+
+.tabGray {
+  background: var(--color-gray);
+}
+
+.tabGray .tabText {
+  color: var(--color-white);
+}
+
+.tabAccent {
   background: var(--color-accent);
+}
+
+.tabAccent .tabText {
+  color: var(--color-dark);
+}
+
+.tabBlack {
+  background: var(--color-black);
+}
+
+.tabBlack .tabText {
+  color: var(--color-white);
 }
 
 .tabButton {
@@ -204,9 +290,11 @@
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  margin-left: auto;
   cursor: pointer;
   transition: background 0.3s ease;
+  align-self: flex-end;
+  margin-right: 2em;
+  margin-bottom: 0.5em;
 }
 
 .tabButton:hover {
@@ -222,7 +310,7 @@
 .cardContent {
   display: grid;
   grid-template-columns: 1fr 1.5fr;
-  padding: 3em;
+  padding: 3em 2em;
   gap: 3em;
   align-items: start;
 }
@@ -284,7 +372,8 @@
   grid-template-columns: 1.5fr 1fr;
   grid-template-rows: 1fr 1fr;
   gap: 1em;
-  height: 100%;
+  max-height: 50vh;
+  aspect-ratio: 16 / 9;
 }
 
 .mainImage {
@@ -337,10 +426,6 @@
   .imageGrid {
     height: 100%;
   }
-
-  .tabRow {
-    flex-wrap: wrap;
-  }
 }
 
 @media screen and (max-width: 767px) {
@@ -384,13 +469,24 @@
     height: 15vh;
   }
 
+  .tabsLeft {
+    flex-direction: column;
+  }
+
   .tab {
-    padding: 0.8em 1.5em;
+    min-width: 10em;
+    height: 2.5em;
+    margin-right: 0;
+    margin-bottom: -0.5em;
+  }
+
+  .tabText {
+    font-size: 0.6em;
   }
 
   .tabButton {
-    width: 100%;
-    margin-top: 0.5em;
-    margin-left: 0;
+    margin-top: 1em;
+    margin-right: 1em;
+    padding: 0.8em 1.5em;
   }
 }
