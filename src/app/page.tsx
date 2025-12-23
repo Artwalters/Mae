@@ -1,6 +1,6 @@
 import styles from "./page.module.css";
-import ScalingSection from "@/components/ScalingSection";
 import DienstenSection from "@/components/DienstenSection";
+import MaeSection from "@/components/MaeSection";
 import Modal from "@/components/Modal";
 import Nav from "@/components/Nav";
 import ParticleHero from "@/components/ParticleHero";
@@ -23,7 +23,7 @@ export default function Home() {
 
     <div className={styles.content}>
       <div className={styles.heroSpacer} />
-      <ScalingSection />
+      <MaeSection />
       <DienstenSection />
       <div className={styles.footerSpacer} />
     </div>

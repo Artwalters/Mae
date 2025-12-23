@@ -45,7 +45,8 @@ Alleen pushen wanneer expliciet gevraagd door de gebruiker.
 
 ### Fonts
 - `--font-primary` (Chaney)
-- `--font-secondary` (Inter)
+- `--font-secondary` (Neue Haas Grotesk)
+- `--font-mono` (Plaid Mono)
 - `--font-h1` t/m `--font-h4`
 - `--font-par`
 - `--font-small`

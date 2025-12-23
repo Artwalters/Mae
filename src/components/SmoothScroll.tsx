@@ -10,6 +10,14 @@ gsap.registerPlugin(ScrollTrigger, Flip);
 
 export default function SmoothScroll({ children }: { children: React.ReactNode }) {
   useEffect(() => {
+    // Geen Lenis op mobile - veroorzaakt scroll problemen
+    const isMobile = window.innerWidth < 768;
+
+    if (isMobile) {
+      // Op mobile: alleen native scroll met ScrollTrigger
+      return;
+    }
+
     const lenis = new Lenis();
 
     lenis.on('scroll', ScrollTrigger.update);

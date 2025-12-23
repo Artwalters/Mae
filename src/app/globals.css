@@ -5,6 +5,24 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
+/* Neue Haas Grotesk - Base Font */
+@font-face {
+  font-family: 'Neue Haas Grotesk';
+  src: url('/fonts/NeueHaasGrotesk.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Plaid Mono - Details Font */
+@font-face {
+  font-family: 'Plaid Mono';
+  src: url('/fonts/PlaidMono.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ------------------------- Lenis Smooth Scroll -------------------------  */
 
 html.lenis, html.lenis body {
@@ -90,7 +108,8 @@ html.lenis, html.lenis body {
 :root {
   /* Font Family */
   --font-primary: 'Chaney', sans-serif;
-  --font-secondary: 'Inter', sans-serif;
+  --font-secondary: 'Neue Haas Grotesk', 'Inter', sans-serif;
+  --font-mono: 'Plaid Mono', monospace;
 
   /* Color System */
   --color-white: #ffffff;
