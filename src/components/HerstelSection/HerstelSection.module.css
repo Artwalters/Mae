@@ -1,0 +1,141 @@
+.section {
+  background: var(--color-dark);
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* Left Content */
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 4em 3em;
+  text-align: center;
+}
+
+.label {
+  font-family: var(--font-secondary);
+  font-size: var(--font-small);
+  font-weight: 300;
+  color: var(--color-white);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1em;
+}
+
+.title {
+  font-family: 'Chaney Regular', var(--font-primary);
+  font-size: var(--font-h1);
+  font-weight: 400;
+  color: var(--color-white);
+  line-height: 1;
+  margin: 0 0 1em 0;
+  text-transform: uppercase;
+}
+
+.description {
+  font-family: var(--font-secondary);
+  font-size: var(--font-par);
+  font-weight: 400;
+  color: var(--color-white);
+  line-height: 1.5;
+  max-width: 28em;
+  margin: 0 0 2em 0;
+}
+
+.accentBar {
+  width: 10em;
+  height: 1.5em;
+  background: var(--color-accent);
+}
+
+/* Right Image */
+.imageContainer {
+  position: relative;
+  overflow: hidden;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(100%);
+}
+
+/* Green Banner */
+.banner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: var(--color-accent);
+  padding: 1em 1.5em;
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+}
+
+.bannerIcon {
+  width: 0.75em;
+  height: 0.75em;
+  background: var(--color-dark);
+}
+
+.bannerText {
+  font-family: var(--font-secondary);
+  font-size: var(--font-small);
+  font-weight: 500;
+  color: var(--color-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+/* Responsive - Tablet */
+@media screen and (max-width: 991px) {
+  .section {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .content {
+    padding: 4em 2em;
+    order: 2;
+  }
+
+  .imageContainer {
+    height: 50vh;
+    order: 1;
+  }
+
+  .title {
+    font-size: var(--font-h2);
+  }
+}
+
+/* Responsive - Mobile */
+@media screen and (max-width: 767px) {
+  .content {
+    padding: 3em 1.5em;
+  }
+
+  .title {
+    font-size: var(--font-h3);
+  }
+
+  .description {
+    font-size: var(--font-small);
+  }
+
+  .accentBar {
+    width: 8em;
+    height: 1.25em;
+  }
+
+  .imageContainer {
+    height: 40vh;
+  }
+}

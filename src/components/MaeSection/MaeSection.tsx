@@ -73,8 +73,7 @@ export default function MaeSection() {
         trigger: rowsWrapper,
         start: 'top 90%',
         end: 'bottom 60%',
-        scrub: 2,
-        markers: true,
+        scrub: true,
       },
     });
 

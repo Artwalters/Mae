@@ -1,5 +1,5 @@
 import styles from "./page.module.css";
-import DienstenSection from "@/components/DienstenSection";
+import HerstelSection from "@/components/HerstelSection";
 import MaeSection from "@/components/MaeSection";
 import Modal from "@/components/Modal";
 import Nav from "@/components/Nav";
@@ -24,7 +24,7 @@ export default function Home() {
     <div className={styles.content}>
       <div className={styles.heroSpacer} />
       <MaeSection />
-      <DienstenSection />
+      <HerstelSection />
       <div className={styles.footerSpacer} />
     </div>
 
