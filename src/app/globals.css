@@ -129,7 +129,7 @@ html.lenis, html.lenis body {
   --font-h4: 1.618em;
   --font-h3: 2.618em;
   --font-h2: 4.236em;
-  --font-h1: 6.854em;
+  --font-h1: 5.5em;
 
   /* Scaling System */
   --size-unit: 16; /* body font-size in design - no px */

@@ -202,9 +202,12 @@ function MarqueeRow({ reviews, direction, speed = 25, scrollSpeed = 10 }: Marque
 export default function ReviewsSection({ type }: ReviewsSectionProps) {
   const reviews = type === 'fysio' ? fysioReviews : leefstijlReviews;
   const direction = type === 'fysio' ? 'left' : 'right';
+  const sectionClasses = type === 'leefstijl'
+    ? `${styles.section} ${styles.sectionNoPaddingBottom}`
+    : styles.section;
 
   return (
-    <section className={styles.section}>
+    <section className={sectionClasses}>
       <div className={styles.marqueeWrapper}>
         <MarqueeRow reviews={reviews} direction={direction} />
       </div>

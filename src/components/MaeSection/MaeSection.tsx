@@ -72,7 +72,7 @@ export default function MaeSection() {
       scrollTrigger: {
         trigger: rowsWrapper,
         start: 'top 90%',
-        end: 'bottom 60%',
+        end: 'bottom 90%',
         scrub: true,
       },
     });

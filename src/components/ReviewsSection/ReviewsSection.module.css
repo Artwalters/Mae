@@ -4,6 +4,10 @@
   overflow: hidden;
 }
 
+.sectionNoPaddingBottom {
+  padding-bottom: 0;
+}
+
 /* Marquee Container */
 .marqueeWrapper {
   margin-bottom: 0.5em;
