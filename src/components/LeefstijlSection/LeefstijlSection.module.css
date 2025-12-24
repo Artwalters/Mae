@@ -7,7 +7,7 @@
   overflow: hidden;
 }
 
-/* Left Content */
+/* Right Content */
 .content {
   display: flex;
   flex-direction: column;
@@ -53,7 +53,7 @@
   background: var(--color-accent);
 }
 
-/* Right Image */
+/* Left Image */
 .imageContainer {
   position: relative;
   overflow: hidden;
@@ -67,12 +67,12 @@
   filter: grayscale(100%);
 }
 
-/* Green Banner */
+/* Green Banner - Top Left */
 .banner {
   position: absolute;
   top: 0.5em;
-  right: 0.5em;
-  left: auto;
+  left: 0.5em;
+  right: auto;
   width: fit-content;
   z-index: 2;
   background: var(--color-accent);

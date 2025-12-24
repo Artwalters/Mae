@@ -3,11 +3,11 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import styles from './HerstelSection.module.css';
+import styles from './LeefstijlSection.module.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function HerstelSection() {
+export default function LeefstijlSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const imageContainerRef = useRef<HTMLDivElement>(null);
   const bannerRef = useRef<HTMLDivElement>(null);
@@ -40,22 +40,22 @@ export default function HerstelSection() {
           banner.style.position = 'fixed';
           banner.style.top = 'auto';
           banner.style.bottom = '0';
-          banner.style.left = 'auto';
-          banner.style.right = '0.5em';
+          banner.style.right = 'auto';
+          banner.style.left = '0.5em';
         } else if (containerRect.bottom <= viewportHeight) {
           // Stop at bottom of container
           banner.style.position = 'absolute';
           banner.style.top = 'auto';
           banner.style.bottom = '0.5em';
-          banner.style.left = 'auto';
-          banner.style.right = '0.5em';
+          banner.style.right = 'auto';
+          banner.style.left = '0.5em';
         } else {
           // Default position at top
           banner.style.position = 'absolute';
           banner.style.top = '0.5em';
           banner.style.bottom = 'auto';
-          banner.style.left = 'auto';
-          banner.style.right = '0.5em';
+          banner.style.right = 'auto';
+          banner.style.left = '0.5em';
         }
       }
     });
@@ -67,9 +67,22 @@ export default function HerstelSection() {
 
   return (
     <section ref={sectionRef} className={styles.section}>
-      {/* Left Content */}
+      {/* Left Image */}
+      <div ref={imageContainerRef} className={styles.imageContainer}>
+        <div ref={bannerRef} className={styles.banner}>
+          <div className={styles.bannerIcon} />
+          <p className={styles.bannerText}>Meet Leefstijlcoach Merel</p>
+        </div>
+        <img
+          src="/img/run.png"
+          alt="Leefstijl coaching"
+          className={styles.image}
+        />
+      </div>
+
+      {/* Right Content */}
       <div className={styles.content}>
-        <span className={styles.label}>Fysiotherapie</span>
+        <span className={styles.label}>Leefstijl</span>
         <h2 className={styles.title}>Herstel</h2>
         <p className={styles.description}>
           Bij M.A.E. Fysiotherapie kijken we anders naar revalidatie. Waar veel
@@ -78,19 +91,6 @@ export default function HerstelSection() {
           laten functioneren zonder belemmeringen.
         </p>
         <div className={styles.accentBar} />
-      </div>
-
-      {/* Right Image */}
-      <div ref={imageContainerRef} className={styles.imageContainer}>
-        <div ref={bannerRef} className={styles.banner}>
-          <div className={styles.bannerIcon} />
-          <p className={styles.bannerText}>Meet Fysiotherapeut Maarten</p>
-        </div>
-        <img
-          src="/img/run.png"
-          alt="Hardlopers tijdens marathon"
-          className={styles.image}
-        />
       </div>
     </section>
   );

@@ -1,9 +1,12 @@
 import styles from "./page.module.css";
 import HerstelSection from "@/components/HerstelSection";
+import LeefstijlSection from "@/components/LeefstijlSection";
 import MaeSection from "@/components/MaeSection";
 import Modal from "@/components/Modal";
 import Nav from "@/components/Nav";
 import ParticleHero from "@/components/ParticleHero";
+import ReviewsSection from "@/components/ReviewsSection";
+import ShowreelSection from "@/components/ShowreelSection";
 
 export default function Home() {
   return (
@@ -25,6 +28,10 @@ export default function Home() {
       <div className={styles.heroSpacer} />
       <MaeSection />
       <HerstelSection />
+      <ReviewsSection type="fysio" />
+      <ShowreelSection />
+      <LeefstijlSection />
+      <ReviewsSection type="leefstijl" />
       <div className={styles.footerSpacer} />
     </div>
 
