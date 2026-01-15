@@ -73,29 +73,35 @@
   top: 0.5em;
   left: 0.5em;
   right: auto;
-  width: fit-content;
+  width: 20em;
   z-index: 2;
   background: var(--color-accent);
-  padding: 1em 1.5em;
+  padding: 1.5em;
   display: flex;
-  align-items: center;
-  gap: 0.75em;
+  flex-direction: column;
+  gap: 1.5em;
 }
 
-.bannerIcon {
-  width: 0.75em;
-  height: 0.75em;
-  background: var(--color-dark);
+.bannerTitle {
+  font-family: var(--font-secondary);
+  font-size: 0.85em;
+  font-weight: 600;
+  color: var(--color-dark);
+  line-height: 1.4;
+  margin: 0;
 }
 
 .bannerText {
   font-family: var(--font-secondary);
-  font-size: var(--font-small);
-  font-weight: 500;
+  font-size: 0.55em;
+  font-weight: 400;
   color: var(--color-dark);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  line-height: 1.6;
   margin: 0;
+}
+
+.bannerButton {
+  font-size: var(--font-small);
 }
 
 /* Responsive - Tablet */

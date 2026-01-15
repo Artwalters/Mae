@@ -268,7 +268,7 @@ body {
 .btn-bar {
   display: inline-flex;
   align-items: center;
-  gap: 1em;
+  gap: 0.75em;
   font-family: var(--font-secondary);
   font-size: var(--font-par);
   font-weight: 500;
@@ -283,10 +283,11 @@ body {
 .btn-bar::before {
   content: '';
   display: block;
-  width: 0.8em;
-  height: 0.8em;
+  width: 1.2em;
+  height: 1.2em;
   background: var(--color-dark);
   transition: width 0.3s ease, transform 0.3s ease;
+  flex-shrink: 0;
 }
 
 .btn-bar:hover::before {
