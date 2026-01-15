@@ -29,6 +29,16 @@ html.lenis, html.lenis body {
   height: auto;
 }
 
+/* Hide scrollbar */
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
+
 .lenis.lenis-smooth {
   scroll-behavior: auto !important;
 }
@@ -283,16 +293,16 @@ body {
 .btn-bar::before {
   content: '';
   display: block;
-  width: 1.2em;
-  height: 1.2em;
+  width: 1.35em;
+  height: 1.1em;
   background: var(--color-dark);
-  transition: width 0.3s ease, transform 0.3s ease;
+  transition: width 0.3s ease;
   flex-shrink: 0;
+  transform: skewX(-20deg) translateY(-0.1em);
 }
 
 .btn-bar:hover::before {
   width: 2.5em;
-  transform: skewX(-10deg);
 }
 
 /* Container Classes */

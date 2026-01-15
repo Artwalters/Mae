@@ -107,7 +107,7 @@
   grid-template-columns: 14em 1fr auto;
   gap: 2em;
   align-items: flex-start;
-  padding: 1.5em 0;
+  padding: 1.5em 0.5em;
 }
 
 /* Number */
