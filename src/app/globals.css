@@ -134,6 +134,7 @@ html::-webkit-scrollbar {
 
   /* Typography - Golden Ratio (1.618) */
   --font-ratio: 1.618;
+  --font-tag: 0.5em;
   --font-small: 0.5em;
   --font-par: 1em;
   --font-h4: 1.618em;
@@ -165,6 +166,8 @@ html::-webkit-scrollbar {
     --size-container-ideal: 550; /* screen-size in design - no px */
     --size-container-min: 480px;
     --size-container-max: 767px;
+    --font-tag: 0.6em;
+    --font-small: 0.85em;
   }
 }
 

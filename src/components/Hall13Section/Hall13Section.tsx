@@ -59,11 +59,8 @@ export default function Hall13Section() {
   return (
     <section ref={sectionRef} className={styles.section}>
       <div ref={bannerRef} className={styles.banner}>
-        <h3 className={styles.bannerTitle}>
-          MAE maakt deel uit van Hall 13, een platform voor beweging en prestatie.
-        </h3>
         <p className={styles.bannerText}>
-          Naast fysiotherapie en leefstijlcoaching biedt Hall 13 nog meer: performance coaching, sport specifieke trainingen en mentale begeleiding. Klaar voor de volgende stap?
+          MAE maakt deel uit van Hall 13, een platform voor beweging en prestatie. Naast fysiotherapie en leefstijlcoaching biedt Hall 13 nog meer: performance coaching, sport specifieke trainingen en mentale begeleiding.
         </p>
         <a href="https://hall13.nl" target="_blank" rel="noopener noreferrer" className={`btn-bar ${styles.bannerButton}`}>
           Ontdek Hall 13

@@ -95,7 +95,7 @@
 /* Responsive - Mobile */
 @media screen and (max-width: 767px) {
   .section {
-    padding: 1.5em 0;
+    padding: 0.5em 0;
   }
 
   .reviewCard {

@@ -15,7 +15,7 @@
 
 .label {
   font-family: var(--font-secondary);
-  font-size: var(--font-small);
+  font-size: var(--font-tag);
   font-weight: 300;
   color: var(--color-dark);
   text-transform: uppercase;

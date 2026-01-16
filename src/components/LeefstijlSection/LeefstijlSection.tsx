@@ -57,14 +57,11 @@ export default function LeefstijlSection() {
       {/* Left Image */}
       <div className={styles.imageContainer}>
         <div ref={bannerRef} className={styles.banner}>
-          <h3 className={styles.bannerTitle}>
-            Merel begeleidt je naar een gezondere leefstijl.
-          </h3>
           <p className={styles.bannerText}>
-            Met persoonlijke coaching helpt ze je om duurzame veranderingen te maken in voeding, beweging en mindset.
+            Ontdek hoe Maarten je helpt met een doelgerichte aanpak voor herstel en prestatie. Met jarenlange ervaring in fysiotherapie en sport begeleidt hij je stap voor stap naar je doelen.
           </p>
           <a href="#" className={`btn-bar ${styles.bannerButton}`}>
-            Meet Leefstijlcoach Merel
+            Meet Maarten
           </a>
         </div>
         <img
@@ -76,15 +73,15 @@ export default function LeefstijlSection() {
 
       {/* Right Content */}
       <div className={styles.content}>
-        <span className={styles.label}>Leefstijl</span>
-        <h2 className={styles.title}>Herstel</h2>
+        <span className={styles.label}>[ Leefstijl ]</span>
+        <h2 className={styles.title}>Balans</h2>
         <p className={styles.description}>
           Bij M.A.E. Fysiotherapie kijken we anders naar revalidatie. Waar veel
           zorgprofessionals vooral beperkingen opleggen, geloven wij in een
           doelgerichte, persoonlijke en stapsgewijze aanpak. Het doel: jou weer
           laten functioneren zonder belemmeringen.
         </p>
-        <div className={styles.accentBar} />
+        <a href="#" className={styles.accentButton}><span>Let's start</span></a>
       </div>
     </section>
   );

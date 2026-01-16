@@ -5,7 +5,6 @@ import HerstelSection from "@/components/HerstelSection";
 import LeefstijlSection from "@/components/LeefstijlSection";
 import MaeSection from "@/components/MaeSection";
 import Modal from "@/components/Modal";
-import Nav from "@/components/Nav";
 import ParticleHero from "@/components/ParticleHero";
 import ReviewsSection from "@/components/ReviewsSection";
 import ShowreelSection from "@/components/ShowreelSection";
@@ -13,7 +12,6 @@ import ShowreelSection from "@/components/ShowreelSection";
 export default function Home() {
   return (
     <>
-    <Nav />
     <div className={styles.hero}>
 
       {/* Side Labels */}

@@ -12,19 +12,22 @@ const maeData = [
     number: '01',
     title: 'MOVE',
     description: 'Verandering begint met beweging. Niet alleen fysiek, maar ook mentaal. De eerste stap is vaak het lastigst, en de weg ernaartoe gaat niet altijd in een rechte lijn. Dat hoort erbij. Wij zijn er om je te begeleiden, te motiveren wanneer het tegenzit, en je te helpen volhouden.',
-    image: '/img/maarten.png'
+    image: '/img/maarten.png',
+    keywords: ['Mobiliteit', 'Beweging', 'Motivatie', 'Begeleiding']
   },
   {
     number: '02',
     title: 'ADAPT',
     description: 'Iedereen is anders. Daarom krijg je een plan dat volledig is afgestemd op jouw situatie, doelen en niveau. En omdat jij verandert, verandert je plan mee. We evalueren regelmatig en sturen bij waar nodig, zodat je altijd blijft groeien.',
-    image: '/img/run.png'
+    image: '/img/run.png',
+    keywords: ['Persoonlijk', 'Maatwerk', 'Progressie', 'Evaluatie']
   },
   {
     number: '03',
     title: 'EVOLVE',
     description: 'Dit gaat verder dan alleen trainen. Het gaat om bouwen aan een sterkere, gezondere versie van jezelf. Niet voor even, maar voor de lange termijn. Meer energie, meer zelfvertrouwen, en een lichaam waar je je goed in voelt.',
-    image: '/img/RICKv2.png'
+    image: '/img/RICKv2.png',
+    keywords: ['Transformatie', 'Energie', 'Zelfvertrouwen', 'Lange termijn']
   }
 ];
 
@@ -113,7 +116,7 @@ export default function MaeSection() {
     <section ref={sectionRef} className={styles.section}>
       {/* Header */}
       <div className={styles.header}>
-        <span className={styles.label}>[ FYSIOTHERAPIE ]</span>
+        <span className={styles.label}>[ VISIE EN MISSIE ]</span>
       </div>
 
       {/* Main Title */}
@@ -149,6 +152,11 @@ export default function MaeSection() {
                 <div className={styles.textContent}>
                   <h2 className={styles.rowTitle}>{item.title}</h2>
                   <p className={styles.description}>{item.description}</p>
+                  <div className={styles.keywords}>
+                    {item.keywords.map((keyword, i) => (
+                      <span key={i}>{keyword}{i < item.keywords.length - 1 ? ' /' : ''}</span>
+                    ))}
+                  </div>
                 </div>
                 <div className={styles.imageWrapper}>
                   <img

@@ -19,7 +19,7 @@
 
 .label {
   font-family: var(--font-secondary);
-  font-size: var(--font-small);
+  font-size: var(--font-tag);
   font-weight: 300;
   color: var(--color-white);
   text-transform: uppercase;
@@ -53,6 +53,33 @@
   background: var(--color-accent);
 }
 
+.accentButton {
+  display: inline-block;
+  background: var(--color-accent);
+  color: var(--color-dark);
+  font-family: var(--font-secondary);
+  font-size: 0.65em;
+  font-weight: 500;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 0.6em 1.8em;
+  transition: all 0.3s ease;
+}
+
+.accentButton:hover {
+  letter-spacing: 0.1em;
+  transform: skewX(-10deg);
+}
+
+.accentButton span {
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.accentButton:hover span {
+  transform: skewX(10deg);
+}
+
 /* Right Image */
 .imageContainer {
   position: relative;
@@ -73,30 +100,22 @@
   top: 0.5em;
   right: 0.5em;
   left: auto;
-  width: 20em;
+  width: 16em;
+  min-height: 18em;
   z-index: 2;
   background: var(--color-accent);
-  padding: 1.5em;
+  padding: 1.2em;
   display: flex;
   flex-direction: column;
-  gap: 1.5em;
-}
-
-.bannerTitle {
-  font-family: var(--font-secondary);
-  font-size: 0.85em;
-  font-weight: 600;
-  color: var(--color-dark);
-  line-height: 1.4;
-  margin: 0;
+  justify-content: space-between;
 }
 
 .bannerText {
   font-family: var(--font-secondary);
-  font-size: 0.55em;
+  font-size: 0.65em;
   font-weight: 400;
   color: var(--color-dark);
-  line-height: 1.6;
+  line-height: 1.5;
   margin: 0;
 }
 
@@ -128,8 +147,13 @@
 
 /* Responsive - Mobile */
 @media screen and (max-width: 767px) {
+  .section {
+    height: auto;
+  }
+
   .content {
-    padding: 3em 1.5em;
+    padding: 7em 1.5em;
+    order: 1;
   }
 
   .title {
@@ -146,6 +170,20 @@
   }
 
   .imageContainer {
-    height: 40vh;
+    height: 100svh;
+    order: 2;
+    padding: 0;
+  }
+
+  .banner {
+    position: absolute !important;
+    top: auto !important;
+    bottom: 0 !important;
+    right: 0 !important;
+    left: auto !important;
+  }
+
+  .bannerButton {
+    font-size: 0.5em;
   }
 }
