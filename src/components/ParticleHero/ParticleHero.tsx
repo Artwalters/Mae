@@ -9,7 +9,7 @@ import WaterEffectMobile from './WaterEffectMobile';
 import styles from './ParticleHero.module.css';
 
 export default function ParticleHero() {
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState<boolean | null>(null);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -20,14 +20,17 @@ export default function ParticleHero() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Mobiel: kleinere scale
-  const scale = isMobile ? 0.055 : 0.15;
+  // Don't render water effect until we know the device type (prevents hydration mismatch)
+  const WaterComponent = isMobile === null ? null : isMobile ? WaterEffectMobile : WaterEffect;
+
+  // Mobiel: kleinere scale (default to desktop during SSR)
+  const scale = isMobile === true ? 0.055 : 0.15;
 
   return (
     <div className={styles.container}>
       <Canvas
         orthographic
-        camera={{ position: [0, 0, 100], zoom: isMobile ? 180 : 280, near: 0.1, far: 200 }}
+        camera={{ position: [0, 0, 100], zoom: isMobile === true ? 180 : 280, near: 0.1, far: 200 }}
         gl={{ antialias: true, alpha: true }}
         dpr={[1, 2]}
       >
@@ -35,7 +38,7 @@ export default function ParticleHero() {
           <Center precise>
             <Logo3D scale={scale} />
           </Center>
-          {isMobile ? <WaterEffectMobile /> : <WaterEffect />}
+          {WaterComponent && <WaterComponent />}
         </Suspense>
       </Canvas>
     </div>
