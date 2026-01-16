@@ -20,8 +20,8 @@ export default function RootLayout({
         <PanelProvider>
           <SmoothScroll>
             {children}
+            <GlobalPanel />
           </SmoothScroll>
-          <GlobalPanel />
         </PanelProvider>
       </body>
     </html>

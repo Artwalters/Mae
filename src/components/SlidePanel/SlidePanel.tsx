@@ -24,9 +24,13 @@ export default function SlidePanel({ isOpen, onClose, children }: SlidePanelProp
     if (!panel || !overlay) return;
 
     if (isOpen) {
-      // Stop Lenis smooth scroll and prevent body scroll
+      // Stop Lenis smooth scroll and prevent all scrolling
       lenis?.stop();
+      document.documentElement.style.overflow = 'hidden';
       document.body.style.overflow = 'hidden';
+
+      // Check if mobile or desktop for animation
+      const isMobile = window.innerWidth <= 767;
 
       // Animate in
       gsap.to(overlay, {
@@ -36,12 +40,28 @@ export default function SlidePanel({ isOpen, onClose, children }: SlidePanelProp
         pointerEvents: 'auto'
       });
 
-      gsap.to(panel, {
-        x: '0%',
-        y: '0%',
-        duration: 0.5,
-        ease: 'power3.out'
-      });
+      if (isMobile) {
+        gsap.to(panel, {
+          x: '0%',
+          y: '0%',
+          duration: 0.5,
+          ease: 'power3.out'
+        });
+      } else {
+        // Desktop: skewed animation
+        gsap.fromTo(panel,
+          {
+            x: '100%',
+            skewX: -10,
+          },
+          {
+            x: '0%',
+            skewX: 0,
+            duration: 0.6,
+            ease: 'power3.out'
+          }
+        );
+      }
     } else {
       // Animate out
       gsap.to(overlay, {
@@ -54,17 +74,33 @@ export default function SlidePanel({ isOpen, onClose, children }: SlidePanelProp
       // Check if mobile or desktop for animation direction
       const isMobile = window.innerWidth <= 767;
 
-      gsap.to(panel, {
-        x: isMobile ? '0%' : '100%',
-        y: isMobile ? '100%' : '0%',
-        duration: 0.5,
-        ease: 'power3.in',
-        onComplete: () => {
-          // Re-enable Lenis and body scroll
-          lenis?.start();
-          document.body.style.overflow = '';
-        }
-      });
+      if (isMobile) {
+        gsap.to(panel, {
+          x: '0%',
+          y: '100%',
+          duration: 0.5,
+          ease: 'power3.in',
+          onComplete: () => {
+            lenis?.start();
+            document.documentElement.style.overflow = '';
+            document.body.style.overflow = '';
+          }
+        });
+      } else {
+        // Desktop: skewed animation out
+        gsap.to(panel, {
+          x: '100%',
+          skewX: -10,
+          duration: 0.5,
+          ease: 'power3.in',
+          onComplete: () => {
+            lenis?.start();
+            document.documentElement.style.overflow = '';
+            document.body.style.overflow = '';
+            gsap.set(panel, { skewX: 0 });
+          }
+        });
+      }
     }
   }, [isOpen, lenis]);
 
