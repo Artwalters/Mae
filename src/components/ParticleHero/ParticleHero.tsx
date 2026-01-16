@@ -1,17 +1,23 @@
 'use client';
 
-import { Suspense, useState, useEffect } from 'react';
+import { Suspense, useState, useEffect, useRef } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Center } from '@react-three/drei';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Logo3D from './LogoParticles';
 import WaterEffect from './WaterEffect';
 import WaterEffectMobile from './WaterEffectMobile';
 import styles from './ParticleHero.module.css';
 
+gsap.registerPlugin(ScrollTrigger);
+
 type ScreenSize = 'mobile' | 'tablet-sm' | 'tablet' | 'desktop' | null;
 
 export default function ParticleHero() {
   const [screenSize, setScreenSize] = useState<ScreenSize>(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -29,6 +35,26 @@ export default function ParticleHero() {
     checkScreenSize();
     window.addEventListener('resize', checkScreenSize);
     return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
+
+  // Scroll-based rotation
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const trigger = ScrollTrigger.create({
+      trigger: container,
+      start: 'top top',
+      end: 'bottom top',
+      scrub: true,
+      onUpdate: (self) => {
+        setScrollProgress(self.progress);
+      }
+    });
+
+    return () => {
+      trigger.kill();
+    };
   }, []);
 
   // Don't render water effect until we know the device type (prevents hydration mismatch)
@@ -53,16 +79,20 @@ export default function ParticleHero() {
   const { scale, zoom } = getScaleAndZoom();
 
   return (
-    <div className={styles.container}>
+    <div ref={containerRef} className={styles.container}>
       <Canvas
         orthographic
         camera={{ position: [0, 0, 100], zoom, near: 0.1, far: 200 }}
         gl={{ antialias: true, alpha: true }}
         dpr={[1, 2]}
       >
+        {/* Strong frontal light for white front, darker edges */}
+        <ambientLight intensity={0.5} />
+        <directionalLight position={[0, 0, 10]} intensity={2.5} />
+
         <Suspense fallback={null}>
           <Center precise>
-            <Logo3D scale={scale} />
+            <Logo3D scale={scale} scrollProgress={scrollProgress} />
           </Center>
           {WaterComponent && <WaterComponent />}
         </Suspense>
