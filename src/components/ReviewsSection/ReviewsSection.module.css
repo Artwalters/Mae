@@ -1,5 +1,5 @@
 .section {
-  background: var(--color-dark);
+  background: transparent;
   padding: 0 0 0.5em 0;
   overflow: hidden;
 }

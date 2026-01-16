@@ -5,7 +5,7 @@ import styles from './CTASection.module.css';
 
 export default function CTASection() {
   return (
-    <section className={styles.section}>
+    <section id="cta-section" className={styles.section}>
       <div className={styles.header}>
         <span className={styles.label}>
           [ <ScrambleText retriggerAtEnd>READY?</ScrambleText> ]

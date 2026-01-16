@@ -114,7 +114,7 @@ export default function MaeSection() {
   }, []);
 
   return (
-    <section ref={sectionRef} className={styles.section}>
+    <section ref={sectionRef} id="mae-section" className={styles.section}>
       {/* Swipe indicator - mobile only */}
       <div className={styles.swipeIndicator} />
 

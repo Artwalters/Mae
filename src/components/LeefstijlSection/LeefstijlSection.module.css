@@ -1,5 +1,5 @@
 .section {
-  background: var(--color-dark);
+  background: transparent;
   position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr;

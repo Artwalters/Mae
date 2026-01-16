@@ -9,9 +9,10 @@ interface Logo3DProps {
   scale?: number;
   scrollProgress?: number;
   isFooterArea?: boolean;
+  isVisible?: boolean;
 }
 
-export default function Logo3D({ scale = 1, scrollProgress = 0, isFooterArea = false }: Logo3DProps) {
+export default function Logo3D({ scale = 1, scrollProgress = 0, isFooterArea = false, isVisible = true }: Logo3DProps) {
   const groupRef = useRef<THREE.Group>(null);
 
   // Load GLB model
@@ -35,9 +36,16 @@ export default function Logo3D({ scale = 1, scrollProgress = 0, isFooterArea = f
     return cloned;
   }, [scene]);
 
-  // Smooth rotation based on scroll
+  // Smooth rotation and visibility based on scroll
   useFrame(() => {
     if (groupRef.current) {
+      // Handle visibility with smooth fade
+      const targetScale = isVisible ? scale : 0;
+      const currentScale = groupRef.current.scale.x;
+      const newScale = currentScale + (targetScale - currentScale) * 0.1;
+      groupRef.current.scale.set(newScale, newScale, newScale);
+
+      // Handle rotation
       let targetRotationX: number;
       const maxTilt = Math.PI * 0.25;
 
@@ -55,7 +63,7 @@ export default function Logo3D({ scale = 1, scrollProgress = 0, isFooterArea = f
   });
 
   return (
-    <group ref={groupRef} scale={scale}>
+    <group ref={groupRef} scale={isVisible ? scale : 0}>
       <primitive object={model} />
     </group>
   );

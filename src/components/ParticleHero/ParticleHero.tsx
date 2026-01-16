@@ -8,6 +8,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Logo3D from './LogoParticles';
 import WaterEffect from './WaterEffect';
 import WaterEffectMobile from './WaterEffectMobile';
+import ScrambleText from '@/components/ScrambleText';
 import styles from './ParticleHero.module.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -18,6 +19,7 @@ export default function ParticleHero() {
   const [screenSize, setScreenSize] = useState<ScreenSize>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isFooterArea, setIsFooterArea] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -58,6 +60,26 @@ export default function ParticleHero() {
       }
     });
 
+    // Hide trigger: hide model at end of MaeSection
+    const maeSection = document.getElementById('mae-section');
+    const hideTrigger = maeSection ? ScrollTrigger.create({
+      trigger: maeSection,
+      start: 'bottom 80%',
+      end: 'bottom 80%',
+      onEnter: () => setIsVisible(false),
+      onLeaveBack: () => setIsVisible(true),
+    }) : null;
+
+    // Show trigger: show model at start of CTA section (Ready to Evolve)
+    const ctaSection = document.getElementById('cta-section');
+    const showTrigger = ctaSection ? ScrollTrigger.create({
+      trigger: ctaSection,
+      start: 'top bottom',
+      end: 'top bottom',
+      onEnter: () => setIsVisible(true),
+      onLeaveBack: () => setIsVisible(false),
+    }) : null;
+
     // Footer trigger: tilt from backwards to upright when reaching bottom
     const footerTrigger = ScrollTrigger.create({
       trigger: document.body,
@@ -72,6 +94,8 @@ export default function ParticleHero() {
 
     return () => {
       topTrigger.kill();
+      hideTrigger?.kill();
+      showTrigger?.kill();
       footerTrigger.kill();
     };
   }, []);
@@ -99,6 +123,16 @@ export default function ParticleHero() {
 
   return (
     <div ref={containerRef} className={styles.container}>
+      {/* Side Labels */}
+      <div className={`${styles.sideLabels} ${isVisible ? styles.visible : styles.hidden}`}>
+        <span className={`${styles.sideLabel} ${styles.left}`}>
+          [<ScrambleText trigger="load" retriggerAtEnd retriggerAtStart>FYSIOTHERAPIE</ScrambleText>]
+        </span>
+        <span className={`${styles.sideLabel} ${styles.right}`}>
+          [<ScrambleText trigger="load" retriggerAtEnd retriggerAtStart>LEEFSTIJL</ScrambleText>]
+        </span>
+      </div>
+
       <Canvas
         orthographic
         camera={{ position: [0, 0, 100], zoom, near: 0.1, far: 200 }}
@@ -111,7 +145,7 @@ export default function ParticleHero() {
 
         <Suspense fallback={null}>
           <Center precise>
-            <Logo3D scale={scale} scrollProgress={scrollProgress} isFooterArea={isFooterArea} />
+            <Logo3D scale={scale} scrollProgress={scrollProgress} isFooterArea={isFooterArea} isVisible={isVisible} />
           </Center>
           {WaterComponent && <WaterComponent />}
         </Suspense>
