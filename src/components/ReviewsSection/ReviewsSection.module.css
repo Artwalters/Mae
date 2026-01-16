@@ -36,9 +36,12 @@
   position: relative;
 }
 
-/* Review Card */
+/* Review Card - Glass Effect */
 .reviewCard {
-  background: #1a1a1a;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   padding: 1.5em;
   margin: 0 0.25em;
   min-width: 17.5em;
@@ -51,7 +54,7 @@
 .reviewImage {
   width: 5em;
   height: 5em;
-  background: var(--color-dark);
+  background: rgba(255, 255, 255, 0.05);
   overflow: hidden;
 }
 

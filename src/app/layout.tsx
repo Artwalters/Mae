@@ -3,10 +3,11 @@ import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import { PanelProvider } from "@/context/PanelContext";
 import GlobalPanel from "@/components/SlidePanel/GlobalPanel";
+import TitleRotator from "@/components/TitleRotator";
 
 export const metadata: Metadata = {
-  title: "MAE",
-  description: "MAE Website",
+  title: "Move Adapt Evolve",
+  description: "MAE - Fysiotherapie & Leefstijlcoaching",
 };
 
 export default function RootLayout({
@@ -17,6 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
+        <TitleRotator />
         <PanelProvider>
           <SmoothScroll>
             {children}
