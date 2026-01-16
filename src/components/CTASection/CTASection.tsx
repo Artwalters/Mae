@@ -1,12 +1,15 @@
 'use client';
 
+import ScrambleText from '@/components/ScrambleText';
 import styles from './CTASection.module.css';
 
 export default function CTASection() {
   return (
     <section className={styles.section}>
       <div className={styles.header}>
-        <span className={styles.label}>[ READY? ]</span>
+        <span className={styles.label}>
+          [ <ScrambleText retriggerAtEnd>READY?</ScrambleText> ]
+        </span>
         <h2 className={styles.title}>
           <span className={styles.titleLine}>ARE YOU READY</span>
           <span className={styles.titleLine}>TO EVOLVE?</span>
@@ -44,6 +47,9 @@ export default function CTASection() {
           </a>
         </div>
       </div>
+
+      {/* Swipe indicator - mobile only */}
+      <div className={styles.swipeIndicator} />
     </section>
   );
 }

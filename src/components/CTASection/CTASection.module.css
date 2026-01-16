@@ -145,10 +145,16 @@
   }
 }
 
+/* Swipe Indicator */
+.swipeIndicator {
+  display: none;
+}
+
 /* Responsive - Mobile */
 @media screen and (max-width: 767px) {
   .section {
     padding: 3em 1em;
+    padding-bottom: 0;
   }
 
   .title {
@@ -163,5 +169,14 @@
   .card {
     width: 100%;
     max-width: 20em;
+  }
+
+  .swipeIndicator {
+    display: block;
+    width: 3em;
+    height: 2px;
+    background: var(--color-gray);
+    opacity: 0.5;
+    margin: 3em auto 0.5em auto;
   }
 }

@@ -8,29 +8,55 @@ import WaterEffect from './WaterEffect';
 import WaterEffectMobile from './WaterEffectMobile';
 import styles from './ParticleHero.module.css';
 
+type ScreenSize = 'mobile' | 'tablet-sm' | 'tablet' | 'desktop' | null;
+
 export default function ParticleHero() {
-  const [isMobile, setIsMobile] = useState<boolean | null>(null);
+  const [screenSize, setScreenSize] = useState<ScreenSize>(null);
 
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
+    const checkScreenSize = () => {
+      const width = window.innerWidth;
+      if (width < 768) {
+        setScreenSize('mobile');
+      } else if (width < 900) {
+        setScreenSize('tablet-sm');
+      } else if (width < 1200) {
+        setScreenSize('tablet');
+      } else {
+        setScreenSize('desktop');
+      }
     };
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+    return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
 
   // Don't render water effect until we know the device type (prevents hydration mismatch)
-  const WaterComponent = isMobile === null ? null : isMobile ? WaterEffectMobile : WaterEffect;
+  const isMobile = screenSize === 'mobile';
+  const WaterComponent = screenSize === null ? null : isMobile ? WaterEffectMobile : WaterEffect;
 
-  // Mobiel: kleinere scale (default to desktop during SSR)
-  const scale = isMobile === true ? 0.055 : 0.15;
+  // Responsive scale en zoom
+  const getScaleAndZoom = () => {
+    switch (screenSize) {
+      case 'mobile':
+        return { scale: 0.055, zoom: 180 };
+      case 'tablet-sm':
+        return { scale: 0.085, zoom: 200 };
+      case 'tablet':
+        return { scale: 0.11, zoom: 220 };
+      case 'desktop':
+      default:
+        return { scale: 0.15, zoom: 280 };
+    }
+  };
+
+  const { scale, zoom } = getScaleAndZoom();
 
   return (
     <div className={styles.container}>
       <Canvas
         orthographic
-        camera={{ position: [0, 0, 100], zoom: isMobile === true ? 180 : 280, near: 0.1, far: 200 }}
+        camera={{ position: [0, 0, 100], zoom, near: 0.1, far: 200 }}
         gl={{ antialias: true, alpha: true }}
         dpr={[1, 2]}
       >

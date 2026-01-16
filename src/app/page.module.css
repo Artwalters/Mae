@@ -23,8 +23,14 @@
 
 /* Spacer zodat hero initieel zichtbaar is */
 .heroSpacer {
-  height: 100vh;
+  height: 100svh;
   pointer-events: none;
+}
+
+@media screen and (max-width: 767px) {
+  .heroSpacer {
+    height: 94svh;
+  }
 }
 
 /* Footer spacer om hero weer te tonen onderaan */
@@ -35,6 +41,16 @@
 }
 
 /* Side Labels */
+.sideLabels {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
 .sideLabel {
   position: absolute;
   top: 50%;
@@ -45,14 +61,6 @@
   text-transform: uppercase;
   color: var(--color-gray);
   letter-spacing: 0.2em;
-  pointer-events: none;
-  z-index: 10;
-}
-
-@media screen and (max-width: 767px) {
-  .sideLabel {
-    display: none;
-  }
 }
 
 .left {
@@ -61,6 +69,29 @@
 
 .right {
   right: 2em;
+}
+
+@media screen and (max-width: 767px) {
+  .sideLabels {
+    top: auto;
+    bottom: 8svh;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+  }
+
+  .sideLabel {
+    position: static;
+    transform: none;
+    font-size: 0.65em;
+  }
+
+  .left,
+  .right {
+    left: auto;
+    right: auto;
+  }
 }
 
 /* Logo Container */

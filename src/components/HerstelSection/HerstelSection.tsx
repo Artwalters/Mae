@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import ScrambleText from '@/components/ScrambleText';
 import styles from './HerstelSection.module.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -56,7 +57,9 @@ export default function HerstelSection() {
     <section ref={sectionRef} className={styles.section}>
       {/* Left Content */}
       <div className={styles.content}>
-        <span className={styles.label}>[ Fysiotherapie ]</span>
+        <span className={styles.label}>
+          [ <ScrambleText retriggerAtEnd>Fysiotherapie</ScrambleText> ]
+        </span>
         <h2 className={styles.title}>Herstel</h2>
         <p className={styles.description}>
           Bij M.A.E. Fysiotherapie kijken we anders naar revalidatie. Waar veel

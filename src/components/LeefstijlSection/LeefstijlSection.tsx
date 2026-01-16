@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import ScrambleText from '@/components/ScrambleText';
 import styles from './LeefstijlSection.module.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -73,7 +74,9 @@ export default function LeefstijlSection() {
 
       {/* Right Content */}
       <div className={styles.content}>
-        <span className={styles.label}>[ Leefstijl ]</span>
+        <span className={styles.label}>
+          [ <ScrambleText retriggerAtEnd>Leefstijl</ScrambleText> ]
+        </span>
         <h2 className={styles.title}>Balans</h2>
         <p className={styles.description}>
           Bij M.A.E. Fysiotherapie kijken we anders naar revalidatie. Waar veel

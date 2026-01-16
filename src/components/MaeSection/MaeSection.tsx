@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import ScrambleText from '@/components/ScrambleText';
 import styles from './MaeSection.module.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -114,9 +115,14 @@ export default function MaeSection() {
 
   return (
     <section ref={sectionRef} className={styles.section}>
+      {/* Swipe indicator - mobile only */}
+      <div className={styles.swipeIndicator} />
+
       {/* Header */}
       <div className={styles.header}>
-        <span className={styles.label}>[ VISIE EN MISSIE ]</span>
+        <span className={styles.label}>
+          [ <ScrambleText retriggerAtEnd>VISIE EN MISSIE</ScrambleText> ]
+        </span>
       </div>
 
       {/* Main Title */}
