@@ -8,9 +8,10 @@ import * as THREE from 'three';
 interface Logo3DProps {
   scale?: number;
   scrollProgress?: number;
+  isFooterArea?: boolean;
 }
 
-export default function Logo3D({ scale = 1, scrollProgress = 0 }: Logo3DProps) {
+export default function Logo3D({ scale = 1, scrollProgress = 0, isFooterArea = false }: Logo3DProps) {
   const groupRef = useRef<THREE.Group>(null);
 
   // Load GLB model
@@ -37,9 +38,16 @@ export default function Logo3D({ scale = 1, scrollProgress = 0 }: Logo3DProps) {
   // Smooth rotation based on scroll
   useFrame(() => {
     if (groupRef.current) {
-      // Tilt backwards (rotate around X axis) as you scroll down
-      // Max rotation of about 45 degrees (PI/4) - negative for backwards
-      const targetRotationX = scrollProgress * Math.PI * -0.25;
+      let targetRotationX: number;
+      const maxTilt = Math.PI * 0.25;
+
+      if (isFooterArea) {
+        // Footer: start tilted backwards, scroll to upright
+        targetRotationX = -maxTilt * (1 - scrollProgress);
+      } else {
+        // Top: start upright, scroll to tilted backwards
+        targetRotationX = scrollProgress * -maxTilt;
+      }
 
       // Smooth interpolation
       groupRef.current.rotation.x += (targetRotationX - groupRef.current.rotation.x) * 0.1;

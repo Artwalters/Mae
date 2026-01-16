@@ -17,6 +17,7 @@ type ScreenSize = 'mobile' | 'tablet-sm' | 'tablet' | 'desktop' | null;
 export default function ParticleHero() {
   const [screenSize, setScreenSize] = useState<ScreenSize>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [isFooterArea, setIsFooterArea] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -42,18 +43,36 @@ export default function ParticleHero() {
     const container = containerRef.current;
     if (!container) return;
 
-    const trigger = ScrollTrigger.create({
+    const isMobileDevice = window.innerWidth < 768;
+    const footerStartOffset = isMobileDevice ? '300vh' : '800vh';
+
+    // Top trigger: tilt backwards when scrolling away from hero
+    const topTrigger = ScrollTrigger.create({
       trigger: container,
       start: 'top top',
       end: 'bottom top',
       scrub: true,
       onUpdate: (self) => {
         setScrollProgress(self.progress);
+        setIsFooterArea(false);
+      }
+    });
+
+    // Footer trigger: tilt from backwards to upright when reaching bottom
+    const footerTrigger = ScrollTrigger.create({
+      trigger: document.body,
+      start: `bottom-=${footerStartOffset} bottom`,
+      end: 'bottom bottom',
+      scrub: 1.5,
+      onUpdate: (self) => {
+        setScrollProgress(self.progress);
+        setIsFooterArea(true);
       }
     });
 
     return () => {
-      trigger.kill();
+      topTrigger.kill();
+      footerTrigger.kill();
     };
   }, []);
 
@@ -92,7 +111,7 @@ export default function ParticleHero() {
 
         <Suspense fallback={null}>
           <Center precise>
-            <Logo3D scale={scale} scrollProgress={scrollProgress} />
+            <Logo3D scale={scale} scrollProgress={scrollProgress} isFooterArea={isFooterArea} />
           </Center>
           {WaterComponent && <WaterComponent />}
         </Suspense>
