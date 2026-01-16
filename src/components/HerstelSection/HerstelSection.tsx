@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import ScrambleText from '@/components/ScrambleText';
+import { usePanel } from '@/context/PanelContext';
 import styles from './HerstelSection.module.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -11,6 +12,7 @@ gsap.registerPlugin(ScrollTrigger);
 export default function HerstelSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const bannerRef = useRef<HTMLDivElement>(null);
+  const { openPanel } = usePanel();
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -67,7 +69,7 @@ export default function HerstelSection() {
           doelgerichte, persoonlijke en stapsgewijze aanpak. Het doel: jou weer
           laten functioneren zonder belemmeringen.
         </p>
-        <a href="#" className={styles.accentButton}><span>Ontdek meer</span></a>
+        <button className={styles.accentButton} onClick={() => openPanel('start-nu')}><span>Start nu</span></button>
       </div>
 
       {/* Right Image */}
@@ -76,9 +78,9 @@ export default function HerstelSection() {
           <p className={styles.bannerText}>
             Maarten is gespecialiseerd in sportblessures en revalidatie. Met jarenlange ervaring helpt hij sporters en actieve mensen om sterker terug te komen na een blessure.
           </p>
-          <a href="#" className={`btn-bar ${styles.bannerButton}`}>
+          <button className={`btn-bar ${styles.bannerButton}`} onClick={() => openPanel('meet-maarten')}>
             Meet Maarten
-          </a>
+          </button>
         </div>
         <img
           src="/img/run.png"

@@ -1,0 +1,528 @@
+.panel {
+  color: var(--color-dark);
+  min-height: 100%;
+}
+
+/* Progress Indicator */
+.progress {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  margin-bottom: 3em;
+  padding-bottom: 2em;
+  border-bottom: 1px solid var(--color-gray);
+}
+
+.progressStep {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3em;
+  opacity: 0.3;
+  transition: opacity 0.3s ease;
+}
+
+.progressStep.active,
+.progressStep.completed {
+  opacity: 1;
+}
+
+.progressNumber {
+  width: 2em;
+  height: 2em;
+  background: var(--color-dark);
+  color: var(--color-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Chaney Regular', var(--font-primary);
+  font-size: var(--font-tag);
+}
+
+.progressLabel {
+  font-family: var(--font-secondary);
+  font-size: var(--font-tag);
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.progressLine {
+  width: 3em;
+  height: 1px;
+  background: var(--color-gray);
+}
+
+/* Step Content */
+.stepContent {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Back Button */
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  font-family: var(--font-secondary);
+  font-size: var(--font-tag);
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  background: transparent;
+  border: none;
+  color: var(--color-dark);
+  cursor: pointer;
+  margin-bottom: 2em;
+  transition: gap 0.3s ease;
+}
+
+.backButton:hover {
+  gap: 0.75em;
+}
+
+/* Header */
+.header {
+  margin-bottom: 2em;
+}
+
+.label {
+  font-family: var(--font-secondary);
+  font-size: var(--font-tag);
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  display: block;
+  margin-bottom: 0.5em;
+}
+
+.title {
+  font-family: 'Chaney Regular', var(--font-primary);
+  font-size: var(--font-h3);
+  font-weight: 400;
+  line-height: 1;
+  margin: 0 0 0.5em 0;
+}
+
+.subtitle {
+  font-family: var(--font-secondary);
+  font-size: var(--font-par);
+  font-weight: 300;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Choice Grid */
+.choiceGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5em;
+}
+
+.choiceCard {
+  background: var(--color-dark);
+  color: var(--color-accent);
+  padding: 2em;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.choiceCard:hover {
+  transform: translateY(-0.5em);
+}
+
+.choiceIcon {
+  margin-bottom: 1em;
+}
+
+.choiceTitle {
+  font-family: 'Chaney Regular', var(--font-primary);
+  font-size: var(--font-h4);
+  font-weight: 400;
+  line-height: 1;
+  margin: 0 0 0.5em 0;
+}
+
+.choiceText {
+  font-family: var(--font-secondary);
+  font-size: 0.65em;
+  font-weight: 400;
+  line-height: 1.6;
+  margin: 0 0 1em 0;
+}
+
+.choiceList {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5em 0;
+}
+
+.choiceList li {
+  font-family: var(--font-secondary);
+  font-size: 0.65em;
+  font-weight: 300;
+  padding: 0.3em 0;
+}
+
+.choiceList li::before {
+  content: '→ ';
+}
+
+.choiceArrow {
+  position: absolute;
+  bottom: 1.5em;
+  right: 1.5em;
+  opacity: 0.5;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.choiceCard:hover .choiceArrow {
+  opacity: 1;
+  transform: translateX(0.3em);
+}
+
+/* Info Sections */
+.infoSection {
+  margin-bottom: 2em;
+}
+
+.infoTitle {
+  font-family: var(--font-secondary);
+  font-size: var(--font-par);
+  font-weight: 600;
+  text-transform: uppercase;
+  margin: 0 0 1em 0;
+}
+
+/* Expectation List */
+.expectationList {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.expectationItem {
+  display: flex;
+  gap: 1em;
+  padding: 1em;
+  background: rgba(39, 39, 39, 0.05);
+}
+
+.expectationNumber {
+  font-family: 'Chaney Regular', var(--font-primary);
+  font-size: var(--font-h4);
+  font-weight: 400;
+  opacity: 0.2;
+  line-height: 1;
+}
+
+.expectationItem h4 {
+  font-family: var(--font-secondary);
+  font-size: var(--font-par);
+  font-weight: 600;
+  margin: 0 0 0.3em 0;
+}
+
+.expectationItem p {
+  font-family: var(--font-secondary);
+  font-size: 0.65em;
+  font-weight: 400;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Price Card */
+.priceCard {
+  background: rgba(39, 39, 39, 0.05);
+  padding: 1.5em;
+}
+
+.priceRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75em 0;
+  border-bottom: 1px solid rgba(39, 39, 39, 0.1);
+  font-family: var(--font-secondary);
+  font-size: var(--font-par);
+  font-weight: 300;
+}
+
+.priceRow:last-of-type {
+  border-bottom: none;
+}
+
+.price {
+  font-weight: 600;
+}
+
+.priceNote {
+  font-family: var(--font-secondary);
+  font-size: 0.65em;
+  font-weight: 400;
+  line-height: 1.6;
+  margin-top: 1em;
+  padding-top: 1em;
+  border-top: 1px solid rgba(39, 39, 39, 0.1);
+}
+
+/* Package Grid */
+.packageGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1em;
+}
+
+.packageCard {
+  background: rgba(39, 39, 39, 0.05);
+  padding: 1.5em;
+  position: relative;
+}
+
+.packageFeatured {
+  background: var(--color-dark);
+  color: var(--color-accent);
+}
+
+.packageBadge {
+  position: absolute;
+  top: -0.5em;
+  right: 1em;
+  background: var(--color-accent);
+  color: var(--color-dark);
+  font-family: var(--font-secondary);
+  font-size: var(--font-tag);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0.3em 0.8em;
+}
+
+.packageTitle {
+  font-family: 'Chaney Regular', var(--font-primary);
+  font-size: var(--font-par);
+  font-weight: 400;
+  line-height: 1;
+  margin: 0 0 0.3em 0;
+}
+
+.packageDuration {
+  font-family: var(--font-secondary);
+  font-size: 0.65em;
+  font-weight: 400;
+  margin: 0 0 0.5em 0;
+}
+
+.packagePrice {
+  font-family: 'Chaney Regular', var(--font-primary);
+  font-size: var(--font-h4);
+  font-weight: 400;
+  line-height: 1;
+  margin: 0 0 1em 0;
+}
+
+.packageFeatures {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.packageFeatures li {
+  font-family: var(--font-secondary);
+  font-size: 0.65em;
+  font-weight: 300;
+  padding: 0.3em 0;
+}
+
+.packageFeatures li::before {
+  content: '✓ ';
+}
+
+/* Continue Button */
+.continueButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75em;
+  font-family: var(--font-secondary);
+  font-size: 0.65em;
+  font-weight: 500;
+  text-transform: uppercase;
+  padding: 0.6em 1.8em;
+  background: var(--color-dark);
+  color: var(--color-accent);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 2em;
+}
+
+.continueButton:hover {
+  letter-spacing: 0.05em;
+  gap: 1em;
+}
+
+/* Form */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1em;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.formLabel {
+  font-family: var(--font-secondary);
+  font-size: var(--font-tag);
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.formInput,
+.formTextarea {
+  font-family: var(--font-secondary);
+  font-size: var(--font-par);
+  font-weight: 300;
+  padding: 0.75em 1em;
+  background: rgba(39, 39, 39, 0.05);
+  border: 1px solid transparent;
+  color: var(--color-dark);
+  transition: border-color 0.3s ease;
+}
+
+.formInput:focus,
+.formTextarea:focus {
+  outline: none;
+  border-color: var(--color-dark);
+}
+
+.formTextarea {
+  resize: vertical;
+  min-height: 6em;
+}
+
+.radioGroup {
+  display: flex;
+  gap: 1.5em;
+}
+
+.radioLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  font-family: var(--font-secondary);
+  font-size: var(--font-par);
+  font-weight: 300;
+  cursor: pointer;
+}
+
+.radioLabel input {
+  accent-color: var(--color-dark);
+}
+
+.submitButton {
+  font-family: var(--font-secondary);
+  font-size: 0.65em;
+  font-weight: 500;
+  text-transform: uppercase;
+  padding: 0.6em 1.8em;
+  background: var(--color-dark);
+  color: var(--color-accent);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1em;
+}
+
+.submitButton:hover {
+  letter-spacing: 0.1em;
+  transform: skewX(-10deg);
+}
+
+.submitButton:hover > * {
+  transform: skewX(10deg);
+}
+
+/* Responsive - Tablet */
+@media screen and (max-width: 991px) {
+  .title {
+    font-size: var(--font-h4);
+  }
+
+  .choiceTitle {
+    font-size: var(--font-par);
+  }
+}
+
+/* Responsive - Mobile */
+@media screen and (max-width: 767px) {
+  .progress {
+    gap: 0.3em;
+  }
+
+  .progressLine {
+    width: 2em;
+  }
+
+  .title {
+    font-size: var(--font-h4);
+  }
+
+  .subtitle {
+    font-size: var(--font-small);
+  }
+
+  .choiceGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .choiceTitle {
+    font-size: var(--font-par);
+  }
+
+  .packageGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .formRow {
+    grid-template-columns: 1fr;
+  }
+
+  .radioGroup {
+    flex-direction: column;
+    gap: 0.75em;
+  }
+
+  .formInput,
+  .formTextarea {
+    font-size: var(--font-small);
+  }
+
+  .expectationItem h4 {
+    font-size: var(--font-small);
+  }
+}

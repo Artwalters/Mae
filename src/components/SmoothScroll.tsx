@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, createContext, useContext, useRef } from 'react';
 import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -8,7 +8,20 @@ import { Flip } from 'gsap/Flip';
 
 gsap.registerPlugin(ScrollTrigger, Flip);
 
+interface LenisContextType {
+  stop: () => void;
+  start: () => void;
+}
+
+const LenisContext = createContext<LenisContextType | null>(null);
+
+export function useLenis() {
+  return useContext(LenisContext);
+}
+
 export default function SmoothScroll({ children }: { children: React.ReactNode }) {
+  const lenisRef = useRef<Lenis | null>(null);
+
   useEffect(() => {
     // Scroll naar top bij page load
     window.scrollTo(0, 0);
@@ -22,6 +35,7 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
     }
 
     const lenis = new Lenis();
+    lenisRef.current = lenis;
 
     lenis.on('scroll', ScrollTrigger.update);
 
@@ -33,9 +47,22 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
 
     return () => {
       lenis.destroy();
+      lenisRef.current = null;
       gsap.ticker.remove(lenis.raf);
     };
   }, []);
 
-  return <>{children}</>;
+  const stop = () => {
+    lenisRef.current?.stop();
+  };
+
+  const start = () => {
+    lenisRef.current?.start();
+  };
+
+  return (
+    <LenisContext.Provider value={{ stop, start }}>
+      {children}
+    </LenisContext.Provider>
+  );
 }

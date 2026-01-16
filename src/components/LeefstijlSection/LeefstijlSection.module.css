@@ -64,6 +64,8 @@
   text-decoration: none;
   padding: 0.6em 1.8em;
   transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
 }
 
 .accentButton:hover {
@@ -121,6 +123,9 @@
 
 .bannerButton {
   font-size: var(--font-small);
+  border: none;
+  background: transparent;
+  cursor: pointer;
 }
 
 /* Responsive - Tablet */

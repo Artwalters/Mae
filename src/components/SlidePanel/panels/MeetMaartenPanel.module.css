@@ -1,0 +1,325 @@
+.panel {
+  color: var(--color-dark);
+}
+
+/* Hero Section */
+.hero {
+  display: flex;
+  gap: 2em;
+  margin-bottom: 3em;
+  align-items: flex-start;
+}
+
+.imageWrapper {
+  width: 10em;
+  height: 10em;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(100%);
+}
+
+.heroContent {
+  flex: 1;
+}
+
+.label {
+  font-family: var(--font-secondary);
+  font-size: var(--font-tag);
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  display: block;
+  margin-bottom: 0.5em;
+}
+
+.name {
+  font-family: 'Chaney Regular', var(--font-primary);
+  font-size: var(--font-h2);
+  font-weight: 400;
+  line-height: 1;
+  margin: 0 0 0.5em 0;
+}
+
+.tagline {
+  font-family: var(--font-secondary);
+  font-size: var(--font-par);
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Sections */
+.section {
+  margin-bottom: 3em;
+  padding-bottom: 2em;
+  border-bottom: 1px solid var(--color-gray);
+}
+
+.sectionTitle {
+  font-family: 'Chaney Regular', var(--font-primary);
+  font-size: var(--font-h4);
+  font-weight: 400;
+  line-height: 1;
+  margin: 0 0 1em 0;
+}
+
+.text {
+  font-family: var(--font-secondary);
+  font-size: var(--font-par);
+  font-weight: 300;
+  line-height: 1.6;
+  margin: 0 0 1em 0;
+}
+
+.text:last-child {
+  margin-bottom: 0;
+}
+
+/* Method Grid */
+.methodGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5em;
+}
+
+.methodCard {
+  background: rgba(39, 39, 39, 0.05);
+  padding: 1.5em;
+}
+
+.methodNumber {
+  font-family: 'Chaney Regular', var(--font-primary);
+  font-size: var(--font-h3);
+  font-weight: 400;
+  opacity: 0.2;
+  display: block;
+  line-height: 1;
+  margin-bottom: 0.5em;
+}
+
+.methodTitle {
+  font-family: var(--font-secondary);
+  font-size: var(--font-par);
+  font-weight: 600;
+  text-transform: uppercase;
+  margin: 0 0 0.5em 0;
+}
+
+.methodText {
+  font-family: var(--font-secondary);
+  font-size: 0.65em;
+  font-weight: 400;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Specializations */
+.specList {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.specItem {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+}
+
+.specIcon {
+  width: 2.5em;
+  height: 2.5em;
+  background: var(--color-dark);
+  color: var(--color-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.specIcon svg {
+  width: 1.2em;
+  height: 1.2em;
+}
+
+.specText {
+  font-family: var(--font-secondary);
+  font-size: var(--font-par);
+  font-weight: 300;
+}
+
+/* Credentials */
+.credentialsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.credential {
+  display: flex;
+  gap: 1.5em;
+  padding: 1em 0;
+  border-bottom: 1px solid rgba(39, 39, 39, 0.1);
+}
+
+.credential:last-child {
+  border-bottom: none;
+}
+
+.credentialYear {
+  font-family: 'Chaney Regular', var(--font-primary);
+  font-size: var(--font-par);
+  font-weight: 400;
+  width: 4em;
+  flex-shrink: 0;
+}
+
+.credentialText {
+  font-family: var(--font-secondary);
+  font-size: var(--font-par);
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+/* Quote Section */
+.quoteSection {
+  background: var(--color-dark);
+  color: var(--color-accent);
+  padding: 2em;
+  margin-bottom: 3em;
+}
+
+.quote {
+  font-family: var(--font-secondary);
+  font-size: var(--font-par);
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.6;
+  margin: 0 0 1em 0;
+}
+
+.quoteAuthor {
+  font-family: var(--font-secondary);
+  font-size: var(--font-tag);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* CTA Section */
+.ctaSection {
+  text-align: center;
+  padding: 2em 0;
+}
+
+.ctaTitle {
+  font-family: 'Chaney Regular', var(--font-primary);
+  font-size: var(--font-h3);
+  font-weight: 400;
+  line-height: 1;
+  margin: 0 0 0.5em 0;
+}
+
+.ctaText {
+  font-family: var(--font-secondary);
+  font-size: var(--font-par);
+  font-weight: 300;
+  line-height: 1.6;
+  margin: 0 0 1.5em 0;
+}
+
+.ctaButton {
+  display: inline-block;
+  font-family: var(--font-secondary);
+  font-size: 0.65em;
+  font-weight: 500;
+  text-transform: uppercase;
+  padding: 0.6em 1.8em;
+  background: var(--color-dark);
+  color: var(--color-accent);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.ctaButton:hover {
+  letter-spacing: 0.1em;
+  transform: skewX(-10deg);
+}
+
+.ctaButton:hover > * {
+  transform: skewX(10deg);
+}
+
+/* Responsive - Tablet */
+@media screen and (max-width: 991px) {
+  .name {
+    font-size: var(--font-h3);
+  }
+
+  .sectionTitle {
+    font-size: var(--font-par);
+  }
+
+  .methodGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .ctaTitle {
+    font-size: var(--font-h4);
+  }
+}
+
+/* Responsive - Mobile */
+@media screen and (max-width: 767px) {
+  .hero {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .imageWrapper {
+    width: 8em;
+    height: 8em;
+  }
+
+  .name {
+    font-size: var(--font-h4);
+  }
+
+  .tagline {
+    font-size: var(--font-small);
+  }
+
+  .sectionTitle {
+    font-size: var(--font-par);
+  }
+
+  .text {
+    font-size: var(--font-small);
+  }
+
+  .methodNumber {
+    font-size: var(--font-h4);
+  }
+
+  .quote {
+    font-size: var(--font-small);
+  }
+
+  .ctaTitle {
+    font-size: var(--font-par);
+  }
+
+  .ctaText {
+    font-size: var(--font-small);
+  }
+}

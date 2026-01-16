@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
+import { PanelProvider } from "@/context/PanelContext";
+import GlobalPanel from "@/components/SlidePanel/GlobalPanel";
 
 export const metadata: Metadata = {
   title: "MAE",
@@ -15,9 +17,12 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <SmoothScroll>
-          {children}
-        </SmoothScroll>
+        <PanelProvider>
+          <SmoothScroll>
+            {children}
+          </SmoothScroll>
+          <GlobalPanel />
+        </PanelProvider>
       </body>
     </html>
   );

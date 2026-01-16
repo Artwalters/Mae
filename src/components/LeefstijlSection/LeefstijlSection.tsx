@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import ScrambleText from '@/components/ScrambleText';
+import { usePanel } from '@/context/PanelContext';
 import styles from './LeefstijlSection.module.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -11,6 +12,7 @@ gsap.registerPlugin(ScrollTrigger);
 export default function LeefstijlSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const bannerRef = useRef<HTMLDivElement>(null);
+  const { openPanel } = usePanel();
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -61,9 +63,9 @@ export default function LeefstijlSection() {
           <p className={styles.bannerText}>
             Ontdek hoe Maarten je helpt met een doelgerichte aanpak voor herstel en prestatie. Met jarenlange ervaring in fysiotherapie en sport begeleidt hij je stap voor stap naar je doelen.
           </p>
-          <a href="#" className={`btn-bar ${styles.bannerButton}`}>
+          <button className={`btn-bar ${styles.bannerButton}`} onClick={() => openPanel('meet-maarten')}>
             Meet Maarten
-          </a>
+          </button>
         </div>
         <img
           src="/img/run.png"
@@ -84,7 +86,7 @@ export default function LeefstijlSection() {
           doelgerichte, persoonlijke en stapsgewijze aanpak. Het doel: jou weer
           laten functioneren zonder belemmeringen.
         </p>
-        <a href="#" className={styles.accentButton}><span>Let's start</span></a>
+        <button className={styles.accentButton} onClick={() => openPanel('start-nu')}><span>Start nu</span></button>
       </div>
     </section>
   );
