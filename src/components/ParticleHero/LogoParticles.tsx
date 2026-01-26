@@ -16,7 +16,7 @@ export default function Logo3D({ scale = 1, scrollProgress = 0, isFooterArea = f
   const groupRef = useRef<THREE.Group>(null);
 
   // Load GLB model
-  const { scene } = useGLTF('/3D/mae.glb');
+  const { scene } = useGLTF('/3D/maeuv.glb');
 
   // Clone and setup in useMemo - solid white with shaded edges
   const model = useMemo(() => {
@@ -70,4 +70,4 @@ export default function Logo3D({ scale = 1, scrollProgress = 0, isFooterArea = f
 }
 
 // Preload model
-useGLTF.preload('/3D/mae.glb');
+useGLTF.preload('/3D/maeuv.glb');

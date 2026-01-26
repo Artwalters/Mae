@@ -21,6 +21,7 @@ export default function ParticleHero() {
   const [isFooterArea, setIsFooterArea] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
+  const menuRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -90,9 +91,10 @@ export default function ParticleHero() {
       start: `bottom-=${footerStartOffset} bottom`,
       end: 'bottom bottom',
       scrub: 1.5,
+      onEnter: () => setIsFooterArea(true),
+      onLeaveBack: () => setIsFooterArea(false),
       onUpdate: (self) => {
         setScrollProgress(self.progress);
-        setIsFooterArea(true);
       }
     });
 
@@ -100,6 +102,67 @@ export default function ParticleHero() {
       topTrigger.kill();
       hideTrigger?.kill();
       showTrigger?.kill();
+      footerTrigger.kill();
+    };
+  }, []);
+
+  // Menu hide on scroll with stagger effect
+  useEffect(() => {
+    const menu = menuRef.current;
+    if (!menu) return;
+
+    const menuItems = menu.querySelectorAll('a');
+    let menuHidden = false;
+
+    // Set initial state
+    gsap.set(menuItems, { yPercent: 0, opacity: 1 });
+
+    const showMenu = () => {
+      if (!menuHidden) return;
+      menuHidden = false;
+      gsap.to(menuItems, {
+        yPercent: 0,
+        opacity: 1,
+        duration: 0.5,
+        stagger: 0.08,
+        ease: 'expo.out',
+        overwrite: true
+      });
+    };
+
+    const hideMenu = () => {
+      if (menuHidden) return;
+      menuHidden = true;
+      gsap.to(menuItems, {
+        yPercent: -110,
+        opacity: 0,
+        duration: 0.4,
+        stagger: 0.05,
+        ease: 'power2.inOut',
+        overwrite: true
+      });
+    };
+
+    // Top trigger - hide when scrolling away from top
+    const topTrigger = ScrollTrigger.create({
+      trigger: document.body,
+      start: 'top top',
+      end: '100px top',
+      onLeave: hideMenu,
+      onEnterBack: showMenu
+    });
+
+    // Footer trigger - show when reaching footer
+    const footerTrigger = ScrollTrigger.create({
+      trigger: document.body,
+      start: 'bottom bottom+=200',
+      end: 'bottom bottom',
+      onEnter: showMenu,
+      onLeaveBack: hideMenu
+    });
+
+    return () => {
+      topTrigger.kill();
       footerTrigger.kill();
     };
   }, []);
@@ -129,8 +192,26 @@ export default function ParticleHero() {
 
   const { scale, zoom } = getScaleAndZoom();
 
+  // Y-offset voor logo positie per schermgrootte
+  const getLogoYOffset = () => {
+    switch (screenSize) {
+      case 'mobile':
+        return 0.30;  // Hoger op mobile
+      default:
+        return 0;
+    }
+  };
+
   return (
     <div ref={containerRef} className={styles.container}>
+      {/* Menu */}
+      <nav ref={menuRef} className={styles.menu}>
+        <a href="#home" className={styles.menuItem}>HOME</a>
+        <a href="#trajecten" className={styles.menuItem}>TRAJECTEN</a>
+        <a href="#over" className={styles.menuItem}>OVER</a>
+        <a href="#contact" className={styles.menuItem}>CONTACT</a>
+      </nav>
+
       {/* Side Labels */}
       <div className={`${styles.sideLabels} ${isVisible ? styles.visible : styles.hidden}`}>
         <span className={`${styles.sideLabel} ${styles.left}`}>
@@ -139,6 +220,16 @@ export default function ParticleHero() {
         <span className={`${styles.sideLabel} ${styles.right}`}>
           [<ScrambleText trigger="load" retriggerAtEnd retriggerAtStart>LEEFSTIJL</ScrambleText>]
         </span>
+      </div>
+
+      {/* Footer Tags */}
+      <div className={`${styles.footerTags} ${(isVisible || isFooterArea) ? styles.visible : styles.hidden}`}>
+        <a href="#fysio" className={styles.footerTag}>
+          [<ScrambleText retriggerAtEnd>START FYSIOTHERAPIE</ScrambleText>]
+        </a>
+        <a href="#leefstijl" className={styles.footerTag}>
+          [<ScrambleText retriggerAtEnd>START LEEFSTIJL COACHING</ScrambleText>]
+        </a>
       </div>
 
       <Canvas
@@ -152,9 +243,11 @@ export default function ParticleHero() {
         <directionalLight position={[0, 0, 10]} intensity={2.5} />
 
         <Suspense fallback={null}>
-          <Center precise>
-            <Logo3D scale={scale} scrollProgress={scrollProgress} isFooterArea={isFooterArea} isVisible={isVisible} />
-          </Center>
+          <group position={[0, getLogoYOffset(), 0]}>
+            <Center precise>
+              <Logo3D scale={scale} scrollProgress={scrollProgress} isFooterArea={isFooterArea} isVisible={isVisible} />
+            </Center>
+          </group>
           {WaterComponent && <WaterComponent />}
         </Suspense>
       </Canvas>
