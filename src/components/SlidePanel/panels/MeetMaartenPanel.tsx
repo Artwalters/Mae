@@ -58,7 +58,6 @@ export default function MeetMaartenPanel() {
       {/* Hero Section */}
       <div className={styles.hero}>
         <h2 className={styles.name}>Maarten</h2>
-        <span className={styles.heroLabel}>Over Maarten</span>
       </div>
 
       {/* Hero Image */}
@@ -159,6 +158,13 @@ export default function MeetMaartenPanel() {
         </div>
 
         <div className={styles.timelineContent}>
+          <div className={styles.timelineMain}>
+            <div className={styles.timelineTitleWrapper}>
+              <h3 ref={titleRef} className={styles.timelineTitle}>
+                {credentials[activeCredential].text}
+              </h3>
+            </div>
+          </div>
           <div className={styles.timelineNav}>
             <button className={styles.timelineArrow} onClick={goToPrev}>
               <span>&#8592;</span>
@@ -166,11 +172,6 @@ export default function MeetMaartenPanel() {
             <button className={styles.timelineArrow} onClick={goToNext}>
               <span>&#8594;</span>
             </button>
-          </div>
-          <div className={styles.timelineMain}>
-            <h3 ref={titleRef} className={styles.timelineTitle}>
-              {credentials[activeCredential].text}
-            </h3>
           </div>
         </div>
 
