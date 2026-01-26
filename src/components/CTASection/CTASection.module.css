@@ -25,6 +25,11 @@
 
 .titleLine {
   display: block;
+  white-space: nowrap;
+}
+
+.rotatingWord {
+  vertical-align: baseline;
 }
 
 /* Cards Container */
@@ -38,7 +43,7 @@
 /* Card Base */
 .card {
   width: 18em;
-  padding: 2em;
+  padding: 1em;
   display: flex;
   flex-direction: column;
   transition: all 0.4s ease;
@@ -84,6 +89,7 @@
   min-height: 18em;
   z-index: 2;
   margin-left: -4em;
+  justify-content: space-between;
 }
 
 .cards:hover .cardAccent {

@@ -8,7 +8,7 @@ export default function CTASection() {
     <section id="cta-section" className={styles.section}>
       <div className={styles.header}>
         <span className="label label-dark">
-          [ <ScrambleText retriggerAtEnd>READY?</ScrambleText> ]
+          [ <ScrambleText retriggerAtEnd>START NOW</ScrambleText> ]
         </span>
         <h2 className={styles.title}>
           <span className={styles.titleLine}>ARE YOU READY</span>
