@@ -149,7 +149,10 @@ function MarqueeRow({ reviews, direction, speed = 25, scrollSpeed = 10 }: Marque
     // Set initial status
     marquee.setAttribute('data-marquee-status', 'normal');
 
-    // ScrollTrigger for direction inversion
+    // ScrollTrigger for direction inversion and skew effect
+    let currentSkew = 0;
+    const maxSkew = 8;
+
     ScrollTrigger.create({
       trigger: marquee,
       start: 'top bottom',
@@ -159,6 +162,14 @@ function MarqueeRow({ reviews, direction, speed = 25, scrollSpeed = 10 }: Marque
         const currentDirection = isInverted ? -marqueeDirectionAttr : marqueeDirectionAttr;
         animation.timeScale(currentDirection);
         marquee.setAttribute('data-marquee-status', isInverted ? 'normal' : 'inverted');
+
+        // Skew effect based on scroll velocity (inverted for 'right' direction)
+        const velocity = self.getVelocity();
+        const skewDirection = direction === 'right' ? -1 : 1;
+        const targetSkew = gsap.utils.clamp(-maxSkew, maxSkew, (velocity / 300) * skewDirection);
+        currentSkew += (targetSkew - currentSkew) * 0.1;
+
+        gsap.set(marqueeScroll, { skewX: currentSkew });
       }
     });
 
