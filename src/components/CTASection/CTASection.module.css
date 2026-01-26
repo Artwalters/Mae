@@ -113,7 +113,7 @@
 }
 
 .cardButton {
-  font-size: var(--font-small);
+  font-size: var(--font-tag);
   margin-top: auto;
   padding-top: 2em;
 }

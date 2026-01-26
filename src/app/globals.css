@@ -14,6 +14,95 @@
   font-display: swap;
 }
 
+/* Helvetica Neue - All Weights (WOFF2 with lineheight fix) */
+@font-face {
+  font-family: 'Helvetica Neue';
+  src: url('/fonts/HelveticaNeueThin.woff2') format('woff2');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+  ascent-override: 95%;
+  descent-override: 25%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Helvetica Neue';
+  src: url('/fonts/HelveticaNeueUltraLight.woff2') format('woff2');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+  ascent-override: 95%;
+  descent-override: 25%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Helvetica Neue';
+  src: url('/fonts/HelveticaNeueLight.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+  ascent-override: 95%;
+  descent-override: 25%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Helvetica Neue';
+  src: url('/fonts/HelveticaNeueRoman.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  ascent-override: 95%;
+  descent-override: 25%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Helvetica Neue';
+  src: url('/fonts/HelveticaNeueMedium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  ascent-override: 95%;
+  descent-override: 25%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Helvetica Neue';
+  src: url('/fonts/HelveticaNeueBold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  ascent-override: 95%;
+  descent-override: 25%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Helvetica Neue';
+  src: url('/fonts/HelveticaNeueHeavy.woff2') format('woff2');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+  ascent-override: 95%;
+  descent-override: 25%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Helvetica Neue';
+  src: url('/fonts/HelveticaNeueBlack.woff2') format('woff2');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+  ascent-override: 95%;
+  descent-override: 25%;
+  line-gap-override: 0%;
+}
+
 /* Plaid Mono - Details Font */
 @font-face {
   font-family: 'Plaid Mono';
@@ -118,8 +207,11 @@ html::-webkit-scrollbar {
 :root {
   /* Font Family */
   --font-primary: 'Chaney', sans-serif;
-  --font-secondary: 'Neue Haas Grotesk', 'Inter', sans-serif;
+  --font-secondary: 'Helvetica Neue', sans-serif;
   --font-mono: 'Plaid Mono', monospace;
+
+  /* Font Weight */
+  --font-weight: 300;
 
   /* Color System */
   --color-white: #ffffff;
@@ -134,8 +226,8 @@ html::-webkit-scrollbar {
 
   /* Typography - Golden Ratio (1.618) */
   --font-ratio: 1.618;
-  --font-tag: 0.5em;
-  --font-small: 0.5em;
+  --font-tag: 0.5em; /*tags and buttons*/
+  --font-small: 0.75em;
   --font-par: 1em;
   --font-h4: 1.618em;
   --font-h3: 2.618em;
@@ -198,6 +290,7 @@ body {
   background: var(--background);
   font-family: var(--font-secondary);
   font-size: var(--size-font);
+  font-weight: var(--font-weight);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -418,7 +511,7 @@ body {
 .text-description {
   font-family: var(--font-secondary);
   font-size: var(--font-par);
-  font-weight: 400;
+  font-weight: var(--font-weight);
   line-height: 1.5;
   margin: 0;
 }
@@ -433,9 +526,9 @@ body {
 }
 
 .banner-text {
-  font-family: var(--font-par);
-  font-size: 0.65em;
-  font-weight: 400;
+  font-family: var(--font-secondary);
+  font-size: var(--font-small);
+  font-weight: var(--font-weight);
   color: var(--color-dark);
   line-height: 1.5;
   margin: 0;
