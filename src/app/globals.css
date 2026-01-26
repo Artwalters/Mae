@@ -258,8 +258,6 @@ html::-webkit-scrollbar {
     --size-container-ideal: 550; /* screen-size in design - no px */
     --size-container-min: 480px;
     --size-container-max: 767px;
-    --font-tag: 0.6em;
-    --font-small: 0.85em;
   }
 }
 

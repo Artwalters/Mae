@@ -157,7 +157,21 @@
 
   .card {
     width: 100%;
-    max-width: 20em;
+    max-width: 24em;
+  }
+
+  .cardDark {
+    order: 1;
+    margin-left: 0;
+  }
+
+  .cardLight {
+    order: 2;
+  }
+
+  .cardAccent {
+    order: 3;
+    margin-left: 0;
   }
 
   .swipeIndicator {

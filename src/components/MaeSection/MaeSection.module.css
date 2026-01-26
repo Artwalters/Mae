@@ -4,6 +4,29 @@
   padding-top: 4em;
 }
 
+/* 3D Depth Edge */
+.depthEdge {
+  position: absolute;
+  top: -0.4em;
+  left: 0.8em;
+  right: 0;
+  height: 0.4em;
+  background: #c9c9c9;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.depthEdge::before {
+  content: '';
+  position: absolute;
+  right: calc(100% - 1px);
+  bottom: 0;
+  width: calc(0.8em + 1px);
+  height: 0.4em;
+  background: #c9c9c9;
+  clip-path: polygon(100% 0%, 100% 100%, 0% 100%);
+}
+
 /* Swipe Indicator */
 .swipeIndicator {
   display: none;
