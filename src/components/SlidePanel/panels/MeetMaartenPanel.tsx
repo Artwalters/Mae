@@ -1,159 +1,196 @@
 'use client';
 
+import { useState, useRef, useEffect } from 'react';
+import gsap from 'gsap';
 import styles from './MeetMaartenPanel.module.css';
 
+const credentials = [
+  { year: '2016', text: 'Bachelor Fysiotherapie' },
+  { year: '2018', text: 'Master Sports Physiotherapy' },
+  { year: '2019', text: 'Certified Strength & Conditioning Specialist' },
+  { year: '2022', text: 'Leefstijlcoach Certificering' },
+];
+
 export default function MeetMaartenPanel() {
+  const [activeCredential, setActiveCredential] = useState(0);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => {
+    if (titleRef.current) {
+      const tl = gsap.timeline();
+      tl.fromTo(
+        titleRef.current,
+        { y: '100%' },
+        { y: '0%', duration: 0.4, ease: 'power2.out' }
+      );
+    }
+  }, [activeCredential]);
+
+  const animateAndChange = (newIndex: number) => {
+    if (titleRef.current) {
+      gsap.to(titleRef.current, {
+        y: '-100%',
+        duration: 0.3,
+        ease: 'power2.in',
+        onComplete: () => setActiveCredential(newIndex),
+      });
+    }
+  };
+
+  const goToPrev = () => {
+    const newIndex = activeCredential > 0 ? activeCredential - 1 : credentials.length - 1;
+    animateAndChange(newIndex);
+  };
+
+  const goToNext = () => {
+    const newIndex = activeCredential < credentials.length - 1 ? activeCredential + 1 : 0;
+    animateAndChange(newIndex);
+  };
+
+  const handleTimelineClick = (index: number) => {
+    if (index !== activeCredential) {
+      animateAndChange(index);
+    }
+  };
+
   return (
     <div className={styles.panel}>
       {/* Hero Section */}
       <div className={styles.hero}>
-        <div className={styles.imageWrapper}>
-          <img src="/img/maarten.png" alt="Maarten" className="img-cover img-grayscale" />
-        </div>
-        <div className={styles.heroContent}>
-          <span className="label label-dark">[ Personal Trainer & Fysiotherapeut ]</span>
-          <h2 className={styles.name}>Maarten</h2>
-          <p className={styles.tagline}>Beweging is de sleutel tot een gezond leven</p>
-        </div>
+        <h2 className={styles.name}>Maarten</h2>
+        <span className={styles.heroLabel}>Over Maarten</span>
       </div>
 
-      {/* Introduction */}
-      <section className={styles.section}>
-        <h3 className={styles.sectionTitle}>Over Mij</h3>
-        <p className={styles.text}>
-          Als gecertificeerd fysiotherapeut en personal trainer combineer ik het beste van beide werelden.
-          Met meer dan 8 jaar ervaring in de sport- en gezondheidssector heb ik een unieke aanpak ontwikkeld
-          die verder gaat dan standaard behandelingen.
-        </p>
-        <p className={styles.text}>
-          Mijn filosofie is simpel: ik geloof niet in beperkingen opleggen, maar in mogelijkheden creëren.
-          Of je nu herstelt van een blessure, je prestaties wilt verbeteren, of gewoon fitter wilt worden -
-          samen vinden we de weg die bij jou past.
-        </p>
+      {/* Hero Image */}
+      <div className={styles.heroImage}>
+        <img src="/img/maarten.png" alt="Maarten" className="img-cover" />
+      </div>
+
+      {/* Over Maarten Section */}
+      <section className={styles.aboutSection}>
+        <div className={styles.aboutHeader}>
+          <span className={styles.aboutLabel}>Over Maarten</span>
+          <span className={styles.aboutNumber}>[01]</span>
+        </div>
+        <div className={styles.stats}>
+          <div className={styles.stat}>
+            <span className={styles.statNumber}>8+</span>
+            <span className={styles.statLabel}>Jaar actief</span>
+          </div>
+          <div className={styles.stat}>
+            <span className={styles.statNumber}>500+</span>
+            <span className={styles.statLabel}>Cliënten</span>
+          </div>
+          <div className={styles.stat}>
+            <span className={styles.statNumber}>1500+</span>
+            <span className={styles.statLabel}>Sessies</span>
+          </div>
+          <div className={styles.stat}>
+            <span className={styles.statNumber}>2</span>
+            <span className={styles.statLabel}>Disciplines</span>
+          </div>
+        </div>
+        <div className={styles.aboutText}>
+          <p className={styles.text}>
+            Als gecertificeerd fysiotherapeut en personal trainer combineer ik het beste van beide werelden.
+            Mijn filosofie is simpel: ik geloof niet in beperkingen opleggen, maar in mogelijkheden creëren.
+          </p>
+          <p className={styles.text}>
+            Of je nu herstelt van een blessure, je prestaties wilt verbeteren, of gewoon fitter wilt worden -
+            samen vinden we de weg die bij jou past.
+          </p>
+        </div>
+        <div className={styles.photoGrid}>
+          <div className={styles.photo}>
+            <img src="/img/maarten.png" alt="Maarten" className="img-cover" />
+          </div>
+          <div className={styles.photo}>
+            <img src="/img/run.png" alt="Training" className="img-cover" />
+          </div>
+          <div className={styles.photo}>
+            <img src="/img/RICKv2.png" alt="Sessie" className="img-cover" />
+          </div>
+        </div>
       </section>
 
       {/* Work Method */}
       <section className={styles.section}>
-        <h3 className={styles.sectionTitle}>Mijn Aanpak</h3>
-        <div className={styles.methodGrid}>
-          <div className={styles.methodCard}>
-            <span className={styles.methodNumber}>01</span>
-            <h4 className={styles.methodTitle}>Intake & Analyse</h4>
-            <p className={styles.methodText}>
-              We beginnen met een uitgebreide intake waarin ik je fysieke conditie,
-              doelen en eventuele beperkingen in kaart breng.
-            </p>
+        <div className={styles.aboutHeader}>
+          <span className={styles.aboutLabel}>Werkwijze</span>
+          <span className={styles.aboutNumber}>[02]</span>
+        </div>
+        <div className={styles.stepsList}>
+          <div className={styles.step}>
+            <span className={styles.stepNumber}>1</span>
+            <div className={styles.stepContent}>
+              <h4 className={styles.stepTitle}>Intake & Analyse</h4>
+              <p className={styles.stepText}>We beginnen met een uitgebreide intake waarin ik je fysieke conditie, doelen en eventuele beperkingen in kaart breng.</p>
+            </div>
           </div>
-          <div className={styles.methodCard}>
-            <span className={styles.methodNumber}>02</span>
-            <h4 className={styles.methodTitle}>Persoonlijk Plan</h4>
-            <p className={styles.methodText}>
-              Op basis van de analyse stel ik een volledig op maat gemaakt plan op
-              dat past bij jouw niveau en levensstijl.
-            </p>
+          <div className={styles.step}>
+            <span className={styles.stepNumber}>2</span>
+            <div className={styles.stepContent}>
+              <h4 className={styles.stepTitle}>Persoonlijk Plan</h4>
+              <p className={styles.stepText}>Op basis van de analyse stel ik een volledig op maat gemaakt plan op dat past bij jouw niveau en levensstijl.</p>
+            </div>
           </div>
-          <div className={styles.methodCard}>
-            <span className={styles.methodNumber}>03</span>
-            <h4 className={styles.methodTitle}>Begeleiding</h4>
-            <p className={styles.methodText}>
-              Tijdens de sessies werk ik intensief met je samen, waarbij ik
-              technieken uitleg en direct feedback geef.
-            </p>
+          <div className={styles.step}>
+            <span className={styles.stepNumber}>3</span>
+            <div className={styles.stepContent}>
+              <h4 className={styles.stepTitle}>Begeleiding</h4>
+              <p className={styles.stepText}>Tijdens de sessies werk ik intensief met je samen, waarbij ik technieken uitleg en direct feedback geef.</p>
+            </div>
           </div>
-          <div className={styles.methodCard}>
-            <span className={styles.methodNumber}>04</span>
-            <h4 className={styles.methodTitle}>Evaluatie & Bijsturing</h4>
-            <p className={styles.methodText}>
-              Regelmatige evaluaties zorgen ervoor dat we het plan aanpassen
-              aan jouw voortgang en veranderende behoeften.
-            </p>
+          <div className={styles.step}>
+            <span className={styles.stepNumber}>4</span>
+            <div className={styles.stepContent}>
+              <h4 className={styles.stepTitle}>Evaluatie & Bijsturing</h4>
+              <p className={styles.stepText}>Regelmatige evaluaties zorgen ervoor dat we het plan aanpassen aan jouw voortgang.</p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Specializations */}
+      {/* Credentials Timeline */}
       <section className={styles.section}>
-        <h3 className={styles.sectionTitle}>Specialisaties</h3>
-        <div className={styles.specList}>
-          <div className={styles.specItem}>
-            <span className={styles.specIcon}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-              </svg>
-            </span>
-            <span className={styles.specText}>Sportblessures & Revalidatie</span>
+        <div className={styles.aboutHeader}>
+          <span className={styles.aboutLabel}>Certificeringen</span>
+          <span className={styles.aboutNumber}>[03]</span>
+        </div>
+
+        <div className={styles.timelineContent}>
+          <div className={styles.timelineNav}>
+            <button className={styles.timelineArrow} onClick={goToPrev}>
+              <span>&#8592;</span>
+            </button>
+            <button className={styles.timelineArrow} onClick={goToNext}>
+              <span>&#8594;</span>
+            </button>
           </div>
-          <div className={styles.specItem}>
-            <span className={styles.specIcon}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="12" cy="12" r="10"/>
-                <path d="M12 6v6l4 2"/>
-              </svg>
-            </span>
-            <span className={styles.specText}>Strength & Conditioning</span>
-          </div>
-          <div className={styles.specItem}>
-            <span className={styles.specIcon}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M18 20V10"/>
-                <path d="M12 20V4"/>
-                <path d="M6 20v-6"/>
-              </svg>
-            </span>
-            <span className={styles.specText}>Performance Training</span>
-          </div>
-          <div className={styles.specItem}>
-            <span className={styles.specIcon}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-              </svg>
-            </span>
-            <span className={styles.specText}>Leefstijlcoaching</span>
+          <div className={styles.timelineMain}>
+            <h3 ref={titleRef} className={styles.timelineTitle}>
+              {credentials[activeCredential].text}
+            </h3>
           </div>
         </div>
-      </section>
 
-      {/* Credentials */}
-      <section className={styles.section}>
-        <h3 className={styles.sectionTitle}>Diploma's & Certificeringen</h3>
-        <ul className={styles.credentialsList}>
-          <li className={styles.credential}>
-            <span className={styles.credentialYear}>2016</span>
-            <span className={styles.credentialText}>Bachelor Fysiotherapie - Hogeschool Rotterdam</span>
-          </li>
-          <li className={styles.credential}>
-            <span className={styles.credentialYear}>2018</span>
-            <span className={styles.credentialText}>Master Sports Physiotherapy</span>
-          </li>
-          <li className={styles.credential}>
-            <span className={styles.credentialYear}>2019</span>
-            <span className={styles.credentialText}>Certified Strength & Conditioning Specialist (CSCS)</span>
-          </li>
-          <li className={styles.credential}>
-            <span className={styles.credentialYear}>2020</span>
-            <span className={styles.credentialText}>Dry Needling Certificaat</span>
-          </li>
-          <li className={styles.credential}>
-            <span className={styles.credentialYear}>2022</span>
-            <span className={styles.credentialText}>Leefstijlcoach Certificering</span>
-          </li>
-        </ul>
-      </section>
-
-      {/* Quote */}
-      <section className={styles.quoteSection}>
-        <blockquote className={styles.quote}>
-          "Mijn doel is niet om je afhankelijk te maken van mij, maar om je de
-          tools te geven waarmee je zelf de regie over je gezondheid neemt."
-        </blockquote>
-        <span className={styles.quoteAuthor}>— Maarten</span>
+        <div className={styles.timeline}>
+          {credentials.map((cred, index) => (
+            <button
+              key={cred.year}
+              className={`${styles.timelineItem} ${index === activeCredential ? styles.timelineItemActive : ''}`}
+              onClick={() => handleTimelineClick(index)}
+            >
+              <span className={styles.timelineYear}>{cred.year}</span>
+            </button>
+          ))}
+        </div>
       </section>
 
       {/* CTA */}
       <section className={styles.ctaSection}>
-        <h3 className={styles.ctaTitle}>Klaar om te beginnen?</h3>
         <p className={styles.ctaText}>
-          Plan een vrijblijvend kennismakingsgesprek en ontdek hoe ik je kan helpen.
+          Klaar om te beginnen? Plan een vrijblijvend kennismakingsgesprek.
         </p>
         <a href="#contact" className={styles.ctaButton}>
           <span>Plan een afspraak</span>

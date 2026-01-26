@@ -51,7 +51,7 @@
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 4em 3em;
+  padding: 5em 1em;
 
   /* Custom scrollbar */
   scrollbar-width: thin;

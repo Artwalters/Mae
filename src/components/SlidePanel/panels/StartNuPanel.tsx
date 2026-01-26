@@ -29,78 +29,37 @@ export default function StartNuPanel() {
 
   return (
     <div className={styles.panel}>
-      {/* Progress Indicator */}
-      <div className={styles.progress}>
-        <div className={`${styles.progressStep} ${currentStep !== 'choice' ? styles.completed : styles.active}`}>
-          <span className={styles.progressNumber}>1</span>
-          <span className={styles.progressLabel}>Keuze</span>
-        </div>
-        <div className={styles.progressLine} />
-        <div className={`${styles.progressStep} ${currentStep === 'contact' ? styles.completed : (currentStep !== 'choice' ? styles.active : '')}`}>
-          <span className={styles.progressNumber}>2</span>
-          <span className={styles.progressLabel}>Info</span>
-        </div>
-        <div className={styles.progressLine} />
-        <div className={`${styles.progressStep} ${currentStep === 'contact' ? styles.active : ''}`}>
-          <span className={styles.progressNumber}>3</span>
-          <span className={styles.progressLabel}>Contact</span>
-        </div>
-      </div>
-
       {/* Step 1: Choice */}
       {currentStep === 'choice' && (
         <div className={styles.stepContent}>
-          <div className={styles.header}>
-            <h2 className={styles.title}>Waar kunnen we je mee helpen?</h2>
-            <p className={styles.subtitle}>Kies het traject dat het beste bij jouw situatie past</p>
+          <div className={styles.stepHeader}>
+            <span className={styles.stepNumber}>1</span>
+            <div className={styles.stepInfo}>
+              <span className={styles.stepLabel}>Keuze</span>
+              <h2 className={styles.stepTitle}>Waar kunnen we je mee helpen?</h2>
+            </div>
           </div>
 
           <div className={styles.choiceGrid}>
-            <button className={styles.choiceCard} onClick={() => handleChoice('fysio')}>
-              <div className={styles.choiceIcon}>
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-                </svg>
+            <div className={styles.choiceCard} onClick={() => handleChoice('fysio')}>
+              <div className={styles.choiceContent}>
+                <h3 className={styles.choiceTitle}>Fysiotherapie</h3>
+                <p className={styles.choiceText}>
+                  Herstel van blessures, pijnklachten, of revalidatie na een operatie
+                </p>
               </div>
-              <h3 className={styles.choiceTitle}>Fysiotherapie</h3>
-              <p className={styles.choiceText}>
-                Herstel van blessures, pijnklachten, of revalidatie na een operatie
-              </p>
-              <ul className={styles.choiceList}>
-                <li>Sportblessures</li>
-                <li>Chronische pijn</li>
-                <li>Post-operatief herstel</li>
-                <li>Mobiliteitsklachten</li>
-              </ul>
-              <span className={styles.choiceArrow}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
-              </span>
-            </button>
+              <button className={styles.choiceButton}>Start traject</button>
+            </div>
 
-            <button className={styles.choiceCard} onClick={() => handleChoice('leefstijl')}>
-              <div className={styles.choiceIcon}>
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                </svg>
+            <div className={styles.choiceCard} onClick={() => handleChoice('leefstijl')}>
+              <div className={styles.choiceContent}>
+                <h3 className={styles.choiceTitle}>Leefstijl Coaching</h3>
+                <p className={styles.choiceText}>
+                  Meer energie, betere gewoontes en een gezondere levensstijl
+                </p>
               </div>
-              <h3 className={styles.choiceTitle}>Leefstijl Coaching</h3>
-              <p className={styles.choiceText}>
-                Meer energie, betere gewoontes en een gezondere levensstijl
-              </p>
-              <ul className={styles.choiceList}>
-                <li>Voedingsadvies</li>
-                <li>Bewegingsplan</li>
-                <li>Stressmanagement</li>
-                <li>Slaapoptimalisatie</li>
-              </ul>
-              <span className={styles.choiceArrow}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
-              </span>
-            </button>
+              <button className={styles.choiceButton}>Start traject</button>
+            </div>
           </div>
         </div>
       )}
@@ -108,16 +67,13 @@ export default function StartNuPanel() {
       {/* Step 2a: Fysiotherapie Info */}
       {currentStep === 'fysio' && (
         <div className={styles.stepContent}>
-          <button className={styles.backButton} onClick={goBack}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M19 12H5M12 19l-7-7 7-7"/>
-            </svg>
-            Terug
-          </button>
-
-          <div className={styles.header}>
-            <span className="label label-dark">[ Fysiotherapie ]</span>
-            <h2 className={styles.title}>Jouw herstel begint hier</h2>
+          <div className={styles.stepHeader}>
+            <span className={styles.stepNumber}>2</span>
+            <div className={styles.stepInfo}>
+              <span className={styles.stepLabel}>Info</span>
+              <h2 className={styles.stepTitle}>Fysiotherapie</h2>
+            </div>
+            <button className={styles.backButtonSmall} onClick={goBack}>Terug</button>
           </div>
 
           <div className={styles.infoSection}>
@@ -174,9 +130,6 @@ export default function StartNuPanel() {
 
           <button className={styles.continueButton} onClick={goToContact}>
             <span>Maak een afspraak</span>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
           </button>
         </div>
       )}
@@ -184,16 +137,13 @@ export default function StartNuPanel() {
       {/* Step 2b: Leefstijl Info */}
       {currentStep === 'leefstijl' && (
         <div className={styles.stepContent}>
-          <button className={styles.backButton} onClick={goBack}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M19 12H5M12 19l-7-7 7-7"/>
-            </svg>
-            Terug
-          </button>
-
-          <div className={styles.header}>
-            <span className="label label-dark">[ Leefstijl Coaching ]</span>
-            <h2 className={styles.title}>Bouw aan een gezonder leven</h2>
+          <div className={styles.stepHeader}>
+            <span className={styles.stepNumber}>2</span>
+            <div className={styles.stepInfo}>
+              <span className={styles.stepLabel}>Info</span>
+              <h2 className={styles.stepTitle}>Leefstijl Coaching</h2>
+            </div>
+            <button className={styles.backButtonSmall} onClick={goBack}>Terug</button>
           </div>
 
           <div className={styles.infoSection}>
@@ -260,9 +210,6 @@ export default function StartNuPanel() {
 
           <button className={styles.continueButton} onClick={goToContact}>
             <span>Plan een kennismaking</span>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
           </button>
         </div>
       )}
@@ -270,17 +217,13 @@ export default function StartNuPanel() {
       {/* Step 3: Contact Form */}
       {currentStep === 'contact' && (
         <div className={styles.stepContent}>
-          <button className={styles.backButton} onClick={goBack}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M19 12H5M12 19l-7-7 7-7"/>
-            </svg>
-            Terug
-          </button>
-
-          <div className={styles.header}>
-            <span className="label label-dark">[ {selectedPath === 'fysio' ? 'Fysiotherapie' : 'Leefstijl Coaching'} ]</span>
-            <h2 className={styles.title}>Laten we kennismaken</h2>
-            <p className={styles.subtitle}>Vul je gegevens in en we nemen binnen 24 uur contact op</p>
+          <div className={styles.stepHeader}>
+            <span className={styles.stepNumber}>3</span>
+            <div className={styles.stepInfo}>
+              <span className={styles.stepLabel}>Contact</span>
+              <h2 className={styles.stepTitle}>Laten we kennismaken</h2>
+            </div>
+            <button className={styles.backButtonSmall} onClick={goBack}>Terug</button>
           </div>
 
           <form className={styles.form} onSubmit={(e) => e.preventDefault()}>
