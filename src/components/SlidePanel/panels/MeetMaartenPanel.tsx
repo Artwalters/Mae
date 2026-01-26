@@ -8,10 +8,10 @@ export default function MeetMaartenPanel() {
       {/* Hero Section */}
       <div className={styles.hero}>
         <div className={styles.imageWrapper}>
-          <img src="/img/maarten.png" alt="Maarten" className={styles.image} />
+          <img src="/img/maarten.png" alt="Maarten" className="img-cover img-grayscale" />
         </div>
         <div className={styles.heroContent}>
-          <span className={styles.label}>[ Personal Trainer & Fysiotherapeut ]</span>
+          <span className="label label-dark">[ Personal Trainer & Fysiotherapeut ]</span>
           <h2 className={styles.name}>Maarten</h2>
           <p className={styles.tagline}>Beweging is de sleutel tot een gezond leven</p>
         </div>

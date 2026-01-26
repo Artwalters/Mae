@@ -120,7 +120,7 @@ export default function MaeSection() {
 
       {/* Header */}
       <div className={styles.header}>
-        <span className={styles.label}>
+        <span className="label label-dark">
           [ <ScrambleText retriggerAtEnd>VISIE EN MISSIE</ScrambleText> ]
         </span>
       </div>
@@ -168,7 +168,7 @@ export default function MaeSection() {
                   <img
                     src={item.image}
                     alt={item.title}
-                    className={styles.image}
+                    className="img-cover img-grayscale"
                   />
                 </div>
               </div>

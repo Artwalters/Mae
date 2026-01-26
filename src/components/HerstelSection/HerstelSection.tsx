@@ -59,23 +59,23 @@ export default function HerstelSection() {
     <section ref={sectionRef} className={styles.section}>
       {/* Left Content */}
       <div className={styles.content}>
-        <span className={styles.label}>
+        <span className="label label-light">
           [ <ScrambleText retriggerAtEnd>Fysiotherapie</ScrambleText> ]
         </span>
-        <h2 className={styles.title}>Herstel</h2>
-        <p className={styles.description}>
+        <h2 className={`title-chaney ${styles.title}`}>Herstel</h2>
+        <p className={`text-description ${styles.description}`}>
           Bij M.A.E. Fysiotherapie kijken we anders naar revalidatie. Waar veel
           zorgprofessionals vooral beperkingen opleggen, geloven wij in een
           doelgerichte, persoonlijke en stapsgewijze aanpak. Het doel: jou weer
           laten functioneren zonder belemmeringen.
         </p>
-        <button className={styles.accentButton} onClick={() => openPanel('start-nu')}><span>Start nu</span></button>
+        <button className="btn-accent" onClick={() => openPanel('start-nu')}><span>Start nu</span></button>
       </div>
 
       {/* Right Image */}
       <div className={styles.imageContainer}>
-        <div ref={bannerRef} className={styles.banner}>
-          <p className={styles.bannerText}>
+        <div ref={bannerRef} className={`banner-accent ${styles.banner}`}>
+          <p className="banner-text">
             Maarten is gespecialiseerd in sportblessures en revalidatie. Met jarenlange ervaring helpt hij sporters en actieve mensen om sterker terug te komen na een blessure.
           </p>
           <button className={`btn-bar ${styles.bannerButton}`} onClick={() => openPanel('meet-maarten')}>
@@ -85,7 +85,7 @@ export default function HerstelSection() {
         <img
           src="/img/run.png"
           alt="Hardlopers tijdens marathon"
-          className={styles.image}
+          className="img-cover img-grayscale"
         />
       </div>
     </section>

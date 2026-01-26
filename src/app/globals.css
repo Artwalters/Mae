@@ -319,6 +319,128 @@ body {
   width: 2.5em;
 }
 
+/* Accent Button - Used in sections */
+.btn-accent {
+  display: inline-block;
+  background: var(--color-accent);
+  color: var(--color-dark);
+  font-family: var(--font-secondary);
+  font-size: 0.65em;
+  font-weight: 500;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 0.6em 1.8em;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-accent:hover {
+  letter-spacing: 0.1em;
+  transform: skewX(-10deg);
+}
+
+.btn-accent span {
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.btn-accent:hover span {
+  transform: skewX(10deg);
+}
+
+/* Dark Button - Used in panels */
+.btn-dark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75em;
+  font-family: var(--font-secondary);
+  font-size: 0.65em;
+  font-weight: 500;
+  text-transform: uppercase;
+  padding: 0.6em 1.8em;
+  background: var(--color-dark);
+  color: var(--color-accent);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-dark:hover {
+  letter-spacing: 0.05em;
+  gap: 1em;
+}
+
+/* Label Utility - Used across sections */
+.label {
+  font-family: var(--font-secondary);
+  font-size: var(--font-tag);
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  display: block;
+  margin-bottom: 1em;
+}
+
+.label-light {
+  color: var(--color-white);
+}
+
+.label-dark {
+  color: var(--color-dark);
+}
+
+.label-gray {
+  color: var(--color-gray);
+}
+
+/* Title Utility - Chaney headings */
+.title-chaney {
+  font-family: 'Chaney Regular', var(--font-primary);
+  font-weight: 400;
+  line-height: 1;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+/* Image Grayscale Utility */
+.img-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.img-grayscale {
+  filter: grayscale(100%);
+}
+
+/* Description Text Utility */
+.text-description {
+  font-family: var(--font-secondary);
+  font-size: var(--font-par);
+  font-weight: 400;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Banner Utility - Accent colored info boxes */
+.banner-accent {
+  background: var(--color-accent);
+  padding: 1.2em;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.banner-text {
+  font-family: var(--font-par);
+  font-size: 0.65em;
+  font-weight: 400;
+  color: var(--color-dark);
+  line-height: 1.5;
+  margin: 0;
+}
+
 /* Container Classes */
 .container {
   max-width: var(--size-container);

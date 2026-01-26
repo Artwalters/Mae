@@ -116,7 +116,7 @@ export default function StartNuPanel() {
           </button>
 
           <div className={styles.header}>
-            <span className={styles.label}>[ Fysiotherapie ]</span>
+            <span className="label label-dark">[ Fysiotherapie ]</span>
             <h2 className={styles.title}>Jouw herstel begint hier</h2>
           </div>
 
@@ -192,7 +192,7 @@ export default function StartNuPanel() {
           </button>
 
           <div className={styles.header}>
-            <span className={styles.label}>[ Leefstijl Coaching ]</span>
+            <span className="label label-dark">[ Leefstijl Coaching ]</span>
             <h2 className={styles.title}>Bouw aan een gezonder leven</h2>
           </div>
 
@@ -278,7 +278,7 @@ export default function StartNuPanel() {
           </button>
 
           <div className={styles.header}>
-            <span className={styles.label}>[ {selectedPath === 'fysio' ? 'Fysiotherapie' : 'Leefstijl Coaching'} ]</span>
+            <span className="label label-dark">[ {selectedPath === 'fysio' ? 'Fysiotherapie' : 'Leefstijl Coaching'} ]</span>
             <h2 className={styles.title}>Laten we kennismaken</h2>
             <p className={styles.subtitle}>Vul je gegevens in en we nemen binnen 24 uur contact op</p>
           </div>

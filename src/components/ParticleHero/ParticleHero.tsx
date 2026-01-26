@@ -13,7 +13,7 @@ import styles from './ParticleHero.module.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
-type ScreenSize = 'mobile' | 'tablet-sm' | 'tablet' | 'desktop' | null;
+type ScreenSize = 'mobile' | 'tablet-sm' | 'tablet-md' | 'tablet' | 'desktop-sm' | 'desktop' | null;
 
 export default function ParticleHero() {
   const [screenSize, setScreenSize] = useState<ScreenSize>(null);
@@ -29,8 +29,12 @@ export default function ParticleHero() {
         setScreenSize('mobile');
       } else if (width < 900) {
         setScreenSize('tablet-sm');
+      } else if (width < 1000) {
+        setScreenSize('tablet-md');
       } else if (width < 1200) {
         setScreenSize('tablet');
+      } else if (width < 1500) {
+        setScreenSize('desktop-sm');
       } else {
         setScreenSize('desktop');
       }
@@ -111,8 +115,12 @@ export default function ParticleHero() {
         return { scale: 0.055, zoom: 180 };
       case 'tablet-sm':
         return { scale: 0.085, zoom: 200 };
+      case 'tablet-md':
+        return { scale: 0.095, zoom: 210 };
       case 'tablet':
         return { scale: 0.11, zoom: 220 };
+      case 'desktop-sm':
+        return { scale: 0.13, zoom: 250 };
       case 'desktop':
       default:
         return { scale: 0.15, zoom: 280 };

@@ -7,7 +7,7 @@ export default function CTASection() {
   return (
     <section id="cta-section" className={styles.section}>
       <div className={styles.header}>
-        <span className={styles.label}>
+        <span className="label label-dark">
           [ <ScrambleText retriggerAtEnd>READY?</ScrambleText> ]
         </span>
         <h2 className={styles.title}>

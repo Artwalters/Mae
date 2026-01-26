@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback, ElementType } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -9,7 +9,7 @@ gsap.registerPlugin(ScrollTrigger);
 interface ScrambleTextProps {
   children: string;
   className?: string;
-  as?: keyof JSX.IntrinsicElements;
+  as?: ElementType;
   trigger?: 'load' | 'scroll';
   retriggerAtEnd?: boolean;
   retriggerAtStart?: boolean;
@@ -180,9 +180,10 @@ export default function ScrambleText({
     };
   }, []);
 
+  const Component = Tag as any;
   return (
-    <Tag ref={elementRef as any} className={className}>
+    <Component ref={elementRef} className={className}>
       {displayText}
-    </Tag>
+    </Component>
   );
 }

@@ -7,13 +7,7 @@
   background: var(--color-dark);
 }
 
-.image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* Green Banner */
+/* Green Banner - Position only */
 .banner {
   position: absolute;
   top: 0.5em;
@@ -22,20 +16,6 @@
   width: 16em;
   min-height: 18em;
   z-index: 2;
-  background: var(--color-accent);
-  padding: 1.2em;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.bannerText {
-  font-family: var(--font-secondary);
-  font-size: 0.65em;
-  font-weight: 400;
-  color: var(--color-dark);
-  line-height: 1.5;
-  margin: 0;
 }
 
 .bannerButton {
@@ -57,10 +37,6 @@
     left: auto !important;
     width: 14em;
     min-height: 14em;
-  }
-
-  .bannerText {
-    font-size: 0.75em;
   }
 
   .bannerButton {

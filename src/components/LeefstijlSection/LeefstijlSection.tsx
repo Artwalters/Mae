@@ -59,8 +59,8 @@ export default function LeefstijlSection() {
     <section ref={sectionRef} className={styles.section}>
       {/* Left Image */}
       <div className={styles.imageContainer}>
-        <div ref={bannerRef} className={styles.banner}>
-          <p className={styles.bannerText}>
+        <div ref={bannerRef} className={`banner-accent ${styles.banner}`}>
+          <p className="banner-text">
             Ontdek hoe Maarten je helpt met een doelgerichte aanpak voor herstel en prestatie. Met jarenlange ervaring in fysiotherapie en sport begeleidt hij je stap voor stap naar je doelen.
           </p>
           <button className={`btn-bar ${styles.bannerButton}`} onClick={() => openPanel('meet-maarten')}>
@@ -70,23 +70,23 @@ export default function LeefstijlSection() {
         <img
           src="/img/run.png"
           alt="Leefstijl coaching"
-          className={styles.image}
+          className="img-cover img-grayscale"
         />
       </div>
 
       {/* Right Content */}
       <div className={styles.content}>
-        <span className={styles.label}>
+        <span className="label label-light">
           [ <ScrambleText retriggerAtEnd>Leefstijl</ScrambleText> ]
         </span>
-        <h2 className={styles.title}>Balans</h2>
-        <p className={styles.description}>
+        <h2 className={`title-chaney ${styles.title}`}>Balans</h2>
+        <p className={`text-description ${styles.description}`}>
           Bij M.A.E. Fysiotherapie kijken we anders naar revalidatie. Waar veel
           zorgprofessionals vooral beperkingen opleggen, geloven wij in een
           doelgerichte, persoonlijke en stapsgewijze aanpak. Het doel: jou weer
           laten functioneren zonder belemmeringen.
         </p>
-        <button className={styles.accentButton} onClick={() => openPanel('start-nu')}><span>Start nu</span></button>
+        <button className="btn-accent" onClick={() => openPanel('start-nu')}><span>Start nu</span></button>
       </div>
     </section>
   );

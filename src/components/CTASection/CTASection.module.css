@@ -13,17 +13,6 @@
   margin-bottom: 4em;
 }
 
-.label {
-  font-family: var(--font-secondary);
-  font-size: var(--font-tag);
-  font-weight: 300;
-  color: var(--color-dark);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  display: block;
-  margin-bottom: 1em;
-}
-
 .title {
   font-family: 'Chaney Regular', var(--font-primary);
   font-size: var(--font-h1);
