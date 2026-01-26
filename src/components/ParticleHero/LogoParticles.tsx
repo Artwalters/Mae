@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useRef } from 'react';
+import { useMemo, useRef, useEffect, useState } from 'react';
 import { useGLTF } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
@@ -14,27 +14,97 @@ interface Logo3DProps {
 
 export default function Logo3D({ scale = 1, scrollProgress = 0, isFooterArea = false, isVisible = true }: Logo3DProps) {
   const groupRef = useRef<THREE.Group>(null);
+  const [videoTexture, setVideoTexture] = useState<THREE.VideoTexture | null>(null);
 
   // Load GLB model
   const { scene } = useGLTF('/3D/maeuv.glb');
 
-  // Clone and setup in useMemo - solid white with shaded edges
+  // Create video texture
+  useEffect(() => {
+    const video = document.createElement('video');
+    video.src = '/img/AQMTzMDuVTIRrLNqrx8zf-LcH3kAxPTsS1MtYKHCy52bZWFvJsg398TWhL7vLuXlk7AjSlswzlKwC6bEATzRL6xg.mp4';
+    video.loop = true;
+    video.muted = true;
+    video.playsInline = true;
+    video.crossOrigin = 'anonymous';
+    video.play();
+
+    const texture = new THREE.VideoTexture(video);
+    texture.flipY = false;
+    texture.minFilter = THREE.LinearFilter;
+    texture.magFilter = THREE.LinearFilter;
+    texture.wrapS = THREE.ClampToEdgeWrapping;
+    texture.wrapT = THREE.ClampToEdgeWrapping;
+    texture.colorSpace = THREE.SRGBColorSpace;
+
+    setVideoTexture(texture);
+
+    return () => {
+      video.pause();
+      video.src = '';
+      texture.dispose();
+    };
+  }, []);
+
+  // Shader material met grijze randen
+  const videoMaterial = useMemo(() => {
+    if (!videoTexture) return null;
+
+    return new THREE.ShaderMaterial({
+      uniforms: {
+        map: { value: videoTexture },
+      },
+      vertexShader: `
+        varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `,
+      fragmentShader: `
+        uniform sampler2D map;
+        varying vec2 vUv;
+        void main() {
+          // Grijs voor gebieden buiten de hoofdtextuur (randen)
+          vec3 gray = vec3(0.5);
+
+          // Check of UV binnen valide bereik is (met marge voor randen)
+          float margin = 0.02;
+          bool isEdge = vUv.x < margin || vUv.x > 1.0 - margin ||
+                        vUv.y < margin || vUv.y > 1.0 - margin;
+
+          if (isEdge) {
+            gl_FragColor = vec4(gray, 1.0);
+          } else {
+            vec4 color = texture2D(map, vUv);
+            gl_FragColor = color;
+          }
+        }
+      `,
+    });
+  }, [videoTexture]);
+
+  // Clone and setup model with video texture
   const model = useMemo(() => {
     const cloned = scene.clone(true);
 
     cloned.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {
         const mesh = child as THREE.Mesh;
-        mesh.material = new THREE.MeshStandardMaterial({
-          color: 0xffffff,
-          roughness: 1,
-          metalness: 0,
-        });
+        if (videoMaterial) {
+          mesh.material = videoMaterial;
+        } else {
+          mesh.material = new THREE.MeshStandardMaterial({
+            color: 0xffffff,
+            roughness: 1,
+            metalness: 0,
+          });
+        }
       }
     });
 
     return cloned;
-  }, [scene]);
+  }, [scene, videoMaterial]);
 
   // Smooth rotation and visibility based on scroll
   useFrame(() => {
