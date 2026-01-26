@@ -65,8 +65,8 @@ export default function Logo3D({ scale = 1, scrollProgress = 0, isFooterArea = f
         uniform sampler2D map;
         varying vec2 vUv;
         void main() {
-          // Grijs voor gebieden buiten de hoofdtextuur (randen)
-          vec3 gray = vec3(0.5);
+          // Fel wit voor de randen
+          vec3 edgeColor = vec3(1.1);
 
           // Check of UV binnen valide bereik is (met marge voor randen)
           float margin = 0.02;
@@ -74,10 +74,25 @@ export default function Logo3D({ scale = 1, scrollProgress = 0, isFooterArea = f
                         vUv.y < margin || vUv.y > 1.0 - margin;
 
           if (isEdge) {
-            gl_FragColor = vec4(gray, 1.0);
+            gl_FragColor = vec4(edgeColor, 1.0);
           } else {
             vec4 color = texture2D(map, vUv);
-            gl_FragColor = color;
+
+            // Convert to grayscale
+            float luminance = dot(color.rgb, vec3(0.299, 0.587, 0.114));
+
+            // Increase contrast
+            float contrast = 1.8;
+            luminance = (luminance - 0.5) * contrast + 0.5;
+            luminance = clamp(luminance, 0.0, 1.0);
+
+            // Add emissive glow - boost bright areas
+            float emissive = pow(luminance, 0.8) * 1.4;
+            emissive = clamp(emissive, 0.0, 1.5);
+
+            vec3 finalColor = vec3(emissive);
+
+            gl_FragColor = vec4(finalColor, 1.0);
           }
         }
       `,
