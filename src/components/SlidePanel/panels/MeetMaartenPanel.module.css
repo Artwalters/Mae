@@ -249,7 +249,6 @@
 
 .timelineTitleWrapper {
   overflow: hidden;
-  height: 1.5em;
 }
 
 .timelineTitle {
@@ -259,6 +258,7 @@
   line-height: 1.2;
   margin: 0;
   text-align: left;
+  padding-bottom: 0.3em;
 }
 
 .timeline {
