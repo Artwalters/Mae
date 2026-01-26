@@ -194,19 +194,24 @@ export default function WaterEffect() {
           float causticScale = 6.0;
           float caustic1 = sin(vUv.x * causticScale + uTime * 0.3) * sin(vUv.y * causticScale + uTime * 0.2);
           float caustic2 = sin(vUv.x * causticScale * 1.3 - uTime * 0.25) * sin(vUv.y * causticScale * 0.8 + uTime * 0.18);
-          float caustic = (caustic1 + caustic2) * 0.5;
-          caustic = smoothstep(-0.5, 0.5, caustic);
-          caustic *= exp(-depth * 1.0) * 0.12;
+          float caustic3 = sin(vUv.x * causticScale * 0.7 + uTime * 0.35) * sin(vUv.y * causticScale * 1.1 - uTime * 0.15);
+          float caustic = (caustic1 + caustic2 + caustic3) * 0.33;
+          caustic = smoothstep(-0.8, 0.8, caustic);
+          caustic *= exp(-depth * 1.0) * 0.08;
 
           vec3 finalColor = sceneColor.rgb * waterColor;
           finalColor = mix(finalColor, scatterColor, volumetricScatter * 0.05);
-          finalColor += vec3(caustic) * 0.1;
+          finalColor += vec3(caustic) * 0.06;
 
-          float effectStrength = 0.04;
-          float pressureStrength = 0.01;
+          float effectStrength = 0.025;
+          float pressureStrength = 0.008;
 
           finalColor += vec3(spec) * effectStrength;
           finalColor += pressure * pressureStrength;
+
+          // Dithering om banding te verminderen
+          float dither = (fract(sin(dot(vUv, vec2(12.9898, 78.233))) * 43758.5453) - 0.5) * 0.015;
+          finalColor += dither;
 
           gl_FragColor = vec4(finalColor, 1.0);
         }
