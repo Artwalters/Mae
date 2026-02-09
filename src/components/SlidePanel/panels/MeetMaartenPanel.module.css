@@ -1,6 +1,5 @@
 .panel {
   color: var(--color-dark);
-  margin-top: -3em;
 }
 
 /* Hero Section */
@@ -194,7 +193,7 @@
 
 .stepTitle {
   font-family: 'Chaney Regular', var(--font-primary);
-  font-size: var(--font-par);
+  font-size: var(--font-h4);
   font-weight: 400;
   line-height: 1;
   margin: 0 0 0.5em 0;
@@ -253,7 +252,7 @@
 
 .timelineTitle {
   font-family: 'Chaney Regular', var(--font-primary);
-  font-size: var(--font-h4);
+  font-size: var(--font-h3);
   font-weight: 400;
   line-height: 1.2;
   margin: 0;
@@ -341,7 +340,7 @@
 /* Responsive - Mobile */
 @media screen and (max-width: 767px) {
   .panel {
-    margin-top: -2em;
+    margin-top: 0;
   }
 
   .name {
@@ -362,6 +361,10 @@
     padding: 1.5em 0;
   }
 
+  .stepTitle {
+    font-size: var(--font-par);
+  }
+
   .stepNumber {
     font-size: var(--font-small);
   }
@@ -373,7 +376,7 @@
   }
 
   .timelineTitle {
-    font-size: var(--font-par);
+    font-size: var(--font-h4);
   }
 
   .timelineYear {

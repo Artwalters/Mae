@@ -27,8 +27,8 @@
 
 .closeButton {
   position: absolute;
-  top: 1.5em;
-  right: 1.5em;
+  top: 1em;
+  right: 1em;
   width: 3em;
   height: 3em;
   background: var(--color-dark);
@@ -51,7 +51,7 @@
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 5em 1em;
+  padding: 5em 1em 3em;
 
   /* Custom scrollbar */
   scrollbar-width: thin;
@@ -91,6 +91,6 @@
   }
 
   .content {
-    padding: 3em 0.5em;
+    padding: 2em 1em;
   }
 }

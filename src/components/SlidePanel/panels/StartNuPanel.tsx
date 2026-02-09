@@ -32,13 +32,11 @@ export default function StartNuPanel() {
       {/* Step 1: Choice */}
       {currentStep === 'choice' && (
         <div className={styles.stepContent}>
-          <div className={styles.stepHeader}>
-            <span className={styles.stepNumber}>1</span>
-            <div className={styles.stepInfo}>
-              <span className={styles.stepLabel}>Keuze</span>
-              <h2 className={styles.stepTitle}>Waar kunnen we je mee helpen?</h2>
-            </div>
+          <div className={styles.sectionHeader}>
+            <span className={styles.sectionLabel}>Keuze</span>
+            <span className={styles.sectionNumber}>[01]</span>
           </div>
+          <h2 className={styles.sectionTitle}>Waar kunnen we je mee helpen?</h2>
 
           <div className={styles.choiceGrid}>
             <div className={styles.choiceCard} onClick={() => handleChoice('fysio')}>
@@ -48,7 +46,7 @@ export default function StartNuPanel() {
                   Herstel van blessures, pijnklachten, of revalidatie na een operatie
                 </p>
               </div>
-              <button className={styles.choiceButton}>Start traject</button>
+              <button className="btn-bar">Start traject</button>
             </div>
 
             <div className={styles.choiceCard} onClick={() => handleChoice('leefstijl')}>
@@ -58,7 +56,7 @@ export default function StartNuPanel() {
                   Meer energie, betere gewoontes en een gezondere levensstijl
                 </p>
               </div>
-              <button className={styles.choiceButton}>Start traject</button>
+              <button className="btn-bar">Start traject</button>
             </div>
           </div>
         </div>
@@ -67,68 +65,68 @@ export default function StartNuPanel() {
       {/* Step 2a: Fysiotherapie Info */}
       {currentStep === 'fysio' && (
         <div className={styles.stepContent}>
-          <div className={styles.stepHeader}>
-            <span className={styles.stepNumber}>2</span>
-            <div className={styles.stepInfo}>
-              <span className={styles.stepLabel}>Info</span>
-              <h2 className={styles.stepTitle}>Fysiotherapie</h2>
-            </div>
-            <button className={styles.backButtonSmall} onClick={goBack}>Terug</button>
+          <button className={styles.backButton} onClick={goBack}>
+            <span>&#8592;</span>
+          </button>
+          <div className={styles.sectionHeader}>
+            <span className={styles.sectionLabel}>Fysiotherapie</span>
+            <span className={styles.sectionNumber}>[02]</span>
           </div>
+          <h2 className={styles.sectionTitle}>Wat kun je verwachten?</h2>
 
-          <div className={styles.infoSection}>
-            <h3 className={styles.infoTitle}>Wat kun je verwachten?</h3>
-            <div className={styles.expectationList}>
-              <div className={styles.expectationItem}>
-                <span className={styles.expectationNumber}>01</span>
-                <div>
-                  <h4>Intake gesprek (45 min)</h4>
-                  <p>We bespreken je klachten, doelen en medische geschiedenis</p>
-                </div>
+          <div className={styles.expectationList}>
+            <div className={styles.expectationItem}>
+              <span className={styles.expectationNumber}>1</span>
+              <div className={styles.expectationContent}>
+                <h4 className={styles.expectationTitle}>Intake gesprek (45 min)</h4>
+                <p className={styles.expectationText}>We bespreken je klachten, doelen en medische geschiedenis</p>
               </div>
-              <div className={styles.expectationItem}>
-                <span className={styles.expectationNumber}>02</span>
-                <div>
-                  <h4>Fysiek onderzoek</h4>
-                  <p>Grondige analyse van je bewegingspatronen en pijnpunten</p>
-                </div>
+            </div>
+            <div className={styles.expectationItem}>
+              <span className={styles.expectationNumber}>2</span>
+              <div className={styles.expectationContent}>
+                <h4 className={styles.expectationTitle}>Fysiek onderzoek</h4>
+                <p className={styles.expectationText}>Grondige analyse van je bewegingspatronen en pijnpunten</p>
               </div>
-              <div className={styles.expectationItem}>
-                <span className={styles.expectationNumber}>03</span>
-                <div>
-                  <h4>Behandelplan</h4>
-                  <p>Een persoonlijk plan met concrete doelen en tijdlijn</p>
-                </div>
+            </div>
+            <div className={styles.expectationItem}>
+              <span className={styles.expectationNumber}>3</span>
+              <div className={styles.expectationContent}>
+                <h4 className={styles.expectationTitle}>Behandelplan</h4>
+                <p className={styles.expectationText}>Een persoonlijk plan met concrete doelen en tijdlijn</p>
               </div>
-              <div className={styles.expectationItem}>
-                <span className={styles.expectationNumber}>04</span>
-                <div>
-                  <h4>Behandelingen</h4>
-                  <p>Sessies van 30-45 minuten, meestal 1-2x per week</p>
-                </div>
+            </div>
+            <div className={styles.expectationItem}>
+              <span className={styles.expectationNumber}>4</span>
+              <div className={styles.expectationContent}>
+                <h4 className={styles.expectationTitle}>Behandelingen</h4>
+                <p className={styles.expectationText}>Sessies van 30-45 minuten, meestal 1-2x per week</p>
               </div>
             </div>
           </div>
 
-          <div className={styles.infoSection}>
-            <h3 className={styles.infoTitle}>Tarieven & Vergoeding</h3>
-            <div className={styles.priceCard}>
-              <div className={styles.priceRow}>
-                <span>Intake + eerste behandeling</span>
-                <span className={styles.price}>€65</span>
+          <section className={styles.section}>
+            <div className={styles.sectionHeader}>
+              <span className={styles.sectionLabel}>Tarieven & Vergoeding</span>
+              <span className={styles.sectionNumber}>[03]</span>
+            </div>
+            <div className={styles.priceGrid}>
+              <div className={styles.priceItem}>
+                <span className={styles.priceAmount}>€65</span>
+                <span className={styles.priceDescription}>Intake + eerste behandeling</span>
               </div>
-              <div className={styles.priceRow}>
-                <span>Vervolgbehandeling (30 min)</span>
-                <span className={styles.price}>€45</span>
-              </div>
-              <div className={styles.priceNote}>
-                Fysiotherapie wordt vaak (deels) vergoed vanuit je aanvullende verzekering.
-                Check je polis of neem contact op voor meer informatie.
+              <div className={styles.priceItem}>
+                <span className={styles.priceAmount}>€45</span>
+                <span className={styles.priceDescription}>Vervolgbehandeling (30 min)</span>
               </div>
             </div>
-          </div>
+            <p className={styles.priceNote}>
+              Fysiotherapie wordt vaak (deels) vergoed vanuit je aanvullende verzekering.
+              Check je polis of neem contact op voor meer informatie.
+            </p>
+          </section>
 
-          <button className={styles.continueButton} onClick={goToContact}>
+          <button className={styles.ctaButton} onClick={goToContact}>
             <span>Maak een afspraak</span>
           </button>
         </div>
@@ -137,51 +135,51 @@ export default function StartNuPanel() {
       {/* Step 2b: Leefstijl Info */}
       {currentStep === 'leefstijl' && (
         <div className={styles.stepContent}>
-          <div className={styles.stepHeader}>
-            <span className={styles.stepNumber}>2</span>
-            <div className={styles.stepInfo}>
-              <span className={styles.stepLabel}>Info</span>
-              <h2 className={styles.stepTitle}>Leefstijl Coaching</h2>
-            </div>
-            <button className={styles.backButtonSmall} onClick={goBack}>Terug</button>
+          <button className={styles.backButton} onClick={goBack}>
+            <span>&#8592;</span>
+          </button>
+          <div className={styles.sectionHeader}>
+            <span className={styles.sectionLabel}>Leefstijl Coaching</span>
+            <span className={styles.sectionNumber}>[02]</span>
           </div>
+          <h2 className={styles.sectionTitle}>Wat kun je verwachten?</h2>
 
-          <div className={styles.infoSection}>
-            <h3 className={styles.infoTitle}>Wat kun je verwachten?</h3>
-            <div className={styles.expectationList}>
-              <div className={styles.expectationItem}>
-                <span className={styles.expectationNumber}>01</span>
-                <div>
-                  <h4>Kennismakingsgesprek (gratis)</h4>
-                  <p>We bespreken je situatie en kijken of we een match zijn</p>
-                </div>
+          <div className={styles.expectationList}>
+            <div className={styles.expectationItem}>
+              <span className={styles.expectationNumber}>1</span>
+              <div className={styles.expectationContent}>
+                <h4 className={styles.expectationTitle}>Kennismakingsgesprek (gratis)</h4>
+                <p className={styles.expectationText}>We bespreken je situatie en kijken of we een match zijn</p>
               </div>
-              <div className={styles.expectationItem}>
-                <span className={styles.expectationNumber}>02</span>
-                <div>
-                  <h4>Uitgebreide intake</h4>
-                  <p>Analyse van je huidige leefstijl, gewoontes en doelen</p>
-                </div>
+            </div>
+            <div className={styles.expectationItem}>
+              <span className={styles.expectationNumber}>2</span>
+              <div className={styles.expectationContent}>
+                <h4 className={styles.expectationTitle}>Uitgebreide intake</h4>
+                <p className={styles.expectationText}>Analyse van je huidige leefstijl, gewoontes en doelen</p>
               </div>
-              <div className={styles.expectationItem}>
-                <span className={styles.expectationNumber}>03</span>
-                <div>
-                  <h4>Persoonlijk plan</h4>
-                  <p>Stapsgewijze aanpak voor voeding, beweging en mindset</p>
-                </div>
+            </div>
+            <div className={styles.expectationItem}>
+              <span className={styles.expectationNumber}>3</span>
+              <div className={styles.expectationContent}>
+                <h4 className={styles.expectationTitle}>Persoonlijk plan</h4>
+                <p className={styles.expectationText}>Stapsgewijze aanpak voor voeding, beweging en mindset</p>
               </div>
-              <div className={styles.expectationItem}>
-                <span className={styles.expectationNumber}>04</span>
-                <div>
-                  <h4>Begeleiding & Support</h4>
-                  <p>Wekelijkse check-ins en onbeperkt contact via WhatsApp</p>
-                </div>
+            </div>
+            <div className={styles.expectationItem}>
+              <span className={styles.expectationNumber}>4</span>
+              <div className={styles.expectationContent}>
+                <h4 className={styles.expectationTitle}>Begeleiding & Support</h4>
+                <p className={styles.expectationText}>Wekelijkse check-ins en onbeperkt contact via WhatsApp</p>
               </div>
             </div>
           </div>
 
-          <div className={styles.infoSection}>
-            <h3 className={styles.infoTitle}>Trajecten</h3>
+          <section className={styles.section}>
+            <div className={styles.sectionHeader}>
+              <span className={styles.sectionLabel}>Trajecten</span>
+              <span className={styles.sectionNumber}>[03]</span>
+            </div>
             <div className={styles.packageGrid}>
               <div className={styles.packageCard}>
                 <h4 className={styles.packageTitle}>Kickstart</h4>
@@ -206,9 +204,9 @@ export default function StartNuPanel() {
                 </ul>
               </div>
             </div>
-          </div>
+          </section>
 
-          <button className={styles.continueButton} onClick={goToContact}>
+          <button className={styles.ctaButton} onClick={goToContact}>
             <span>Plan een kennismaking</span>
           </button>
         </div>
@@ -217,14 +215,14 @@ export default function StartNuPanel() {
       {/* Step 3: Contact Form */}
       {currentStep === 'contact' && (
         <div className={styles.stepContent}>
-          <div className={styles.stepHeader}>
-            <span className={styles.stepNumber}>3</span>
-            <div className={styles.stepInfo}>
-              <span className={styles.stepLabel}>Contact</span>
-              <h2 className={styles.stepTitle}>Laten we kennismaken</h2>
-            </div>
-            <button className={styles.backButtonSmall} onClick={goBack}>Terug</button>
+          <button className={styles.backButton} onClick={goBack}>
+            <span>&#8592;</span>
+          </button>
+          <div className={styles.sectionHeader}>
+            <span className={styles.sectionLabel}>Contact</span>
+            <span className={styles.sectionNumber}>[03]</span>
           </div>
+          <h2 className={styles.sectionTitle}>Laten we kennismaken</h2>
 
           <form className={styles.form} onSubmit={(e) => e.preventDefault()}>
             <div className={styles.formRow}>
@@ -271,7 +269,7 @@ export default function StartNuPanel() {
               </div>
             </div>
 
-            <button type="submit" className={styles.submitButton}>
+            <button type="submit" className={styles.ctaButton}>
               <span>Verstuur aanvraag</span>
             </button>
           </form>
