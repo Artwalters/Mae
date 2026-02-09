@@ -31,9 +31,9 @@
   right: 1.5em;
   width: 3em;
   height: 3em;
-  background: transparent;
+  background: var(--color-dark);
   border: 1px solid var(--color-dark);
-  color: var(--color-dark);
+  color: var(--color-white);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -91,6 +91,6 @@
   }
 
   .content {
-    padding: 3em 1.5em;
+    padding: 3em 0.5em;
   }
 }

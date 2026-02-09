@@ -7,9 +7,6 @@ import * as THREE from 'three';
 
 const IMAGE_PATHS = [
   '/img/Artboard 1.png',
-  '/img/maarten.png',
-  '/img/run.png',
-  '/img/RICKv2.png',
 ];
 const INTERVAL = 0.15; // seconds between photo switches
 

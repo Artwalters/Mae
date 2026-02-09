@@ -126,7 +126,6 @@
 
 .card:hover .cardButton::before {
   width: 2.5em;
-  transform: skewX(-10deg);
 }
 
 /* Responsive - Tablet */
