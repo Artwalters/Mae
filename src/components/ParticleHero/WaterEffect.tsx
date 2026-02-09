@@ -105,15 +105,6 @@ export default function WaterEffect() {
             velocity += effect * dot(toMouse, flowDir) * 0.3;
           }
 
-          // Idle waves
-          float idleWaveStrength = 0.06;
-          float idleSpeed = 0.3;
-          float wave1 = sin(vUv.x * 12.0 + uTime * idleSpeed) * 0.4;
-          float wave2 = sin(vUv.y * 8.0 + uTime * idleSpeed * 0.7) * 0.3;
-          float wave3 = sin((vUv.x + vUv.y) * 6.0 + uTime * idleSpeed * 1.3) * 0.3;
-          float idleDisturbance = (wave1 + wave2 + wave3) * idleWaveStrength;
-          pressure += idleDisturbance;
-
           float gradX = (right - left) * 0.5;
           float gradY = (up - down) * 0.5;
 

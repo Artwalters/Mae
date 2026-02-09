@@ -169,7 +169,7 @@ export default function ParticleHero() {
 
   // Don't render water effect until we know the device type (prevents hydration mismatch)
   const isMobile = screenSize === 'mobile';
-  const WaterComponent = screenSize === null ? null : isMobile ? WaterEffectMobile : WaterEffect;
+  const WaterComponent = screenSize === null ? null : isMobile ? null : WaterEffect;
 
   // Responsive scale en zoom
   const getScaleAndZoom = () => {
