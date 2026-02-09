@@ -64,21 +64,14 @@ export default function Logo3D({ scale = 1, scrollProgress = 0, isFooterArea = f
               uniform sampler2D map;
               varying vec2 vUv;
               void main() {
-                vec3 edgeColor = vec3(1.1);
+                vec3 edgeColor = vec3(0.616, 0.941, 0.196);
                 float margin = 0.02;
                 bool isEdge = vUv.x < margin || vUv.x > 1.0 - margin ||
                               vUv.y < margin || vUv.y > 1.0 - margin;
                 if (isEdge) {
                   gl_FragColor = vec4(edgeColor, 1.0);
                 } else {
-                  vec4 color = texture2D(map, vUv);
-                  float luminance = dot(color.rgb, vec3(0.299, 0.587, 0.114));
-                  float contrast = 1.8;
-                  luminance = (luminance - 0.5) * contrast + 0.5;
-                  luminance = clamp(luminance, 0.0, 1.0);
-                  float emissive = pow(luminance, 0.8) * 1.4;
-                  emissive = clamp(emissive, 0.0, 1.5);
-                  gl_FragColor = vec4(vec3(emissive), 1.0);
+                  gl_FragColor = texture2D(map, vUv);
                 }
               }
             `,
