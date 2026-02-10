@@ -36,7 +36,7 @@ export default function DienstenSection() {
         <header className={styles.header}>
           <span className={styles.label}>Onze diensten</span>
           <h2 className={styles.title}>WAT WIJ BIEDEN</h2>
-          <p className={styles.intro}>
+          <p className={`${styles.intro} par`}>
             Bij MAE combineren we fysiotherapie, personal training en leefstijlcoaching
             voor een complete aanpak van jouw gezondheid en prestaties.
           </p>
@@ -47,7 +47,7 @@ export default function DienstenSection() {
             <article key={dienst.id} className={styles.card}>
               <span className={styles.cardNumber}>{dienst.id}</span>
               <h3 className={styles.cardTitle}>{dienst.title}</h3>
-              <p className={styles.cardDescription}>{dienst.description}</p>
+              <p className={`${styles.cardDescription} par`}>{dienst.description}</p>
               <ul className={styles.featureList}>
                 {dienst.features.map((feature, index) => (
                   <li key={index} className={styles.feature}>{feature}</li>

@@ -1,5 +1,6 @@
 import styles from "./page.module.css";
 import CTASection from "@/components/CTASection";
+import FAQSection from "@/components/FAQSection";
 import Hall13Section from "@/components/Hall13Section";
 import HerstelSection from "@/components/HerstelSection";
 import LeefstijlSection from "@/components/LeefstijlSection";
@@ -27,6 +28,7 @@ export default function Home() {
       <ShowreelSection />
       <LeefstijlSection />
       <ReviewsSection type="leefstijl" />
+      <FAQSection />
       <Hall13Section />
       <CTASection />
       <div className={styles.footerSpacer} />

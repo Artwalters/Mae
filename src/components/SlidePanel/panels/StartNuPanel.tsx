@@ -42,7 +42,7 @@ export default function StartNuPanel() {
             <div className={styles.choiceCard} onClick={() => handleChoice('fysio')}>
               <div className={styles.choiceContent}>
                 <h3 className={styles.choiceTitle}>Fysiotherapie</h3>
-                <p className={styles.choiceText}>
+                <p className={`${styles.choiceText} par`}>
                   Herstel van blessures, pijnklachten, of revalidatie na een operatie
                 </p>
               </div>
@@ -52,7 +52,7 @@ export default function StartNuPanel() {
             <div className={styles.choiceCard} onClick={() => handleChoice('leefstijl')}>
               <div className={styles.choiceContent}>
                 <h3 className={styles.choiceTitle}>Leefstijl Coaching</h3>
-                <p className={styles.choiceText}>
+                <p className={`${styles.choiceText} par`}>
                   Meer energie, betere gewoontes en een gezondere levensstijl
                 </p>
               </div>
@@ -79,28 +79,28 @@ export default function StartNuPanel() {
               <span className={styles.expectationNumber}>1</span>
               <div className={styles.expectationContent}>
                 <h4 className={styles.expectationTitle}>Intake gesprek (45 min)</h4>
-                <p className={styles.expectationText}>We bespreken je klachten, doelen en medische geschiedenis</p>
+                <p className={`${styles.expectationText} par`}>We bespreken je klachten, doelen en medische geschiedenis</p>
               </div>
             </div>
             <div className={styles.expectationItem}>
               <span className={styles.expectationNumber}>2</span>
               <div className={styles.expectationContent}>
                 <h4 className={styles.expectationTitle}>Fysiek onderzoek</h4>
-                <p className={styles.expectationText}>Grondige analyse van je bewegingspatronen en pijnpunten</p>
+                <p className={`${styles.expectationText} par`}>Grondige analyse van je bewegingspatronen en pijnpunten</p>
               </div>
             </div>
             <div className={styles.expectationItem}>
               <span className={styles.expectationNumber}>3</span>
               <div className={styles.expectationContent}>
                 <h4 className={styles.expectationTitle}>Behandelplan</h4>
-                <p className={styles.expectationText}>Een persoonlijk plan met concrete doelen en tijdlijn</p>
+                <p className={`${styles.expectationText} par`}>Een persoonlijk plan met concrete doelen en tijdlijn</p>
               </div>
             </div>
             <div className={styles.expectationItem}>
               <span className={styles.expectationNumber}>4</span>
               <div className={styles.expectationContent}>
                 <h4 className={styles.expectationTitle}>Behandelingen</h4>
-                <p className={styles.expectationText}>Sessies van 30-45 minuten, meestal 1-2x per week</p>
+                <p className={`${styles.expectationText} par`}>Sessies van 30-45 minuten, meestal 1-2x per week</p>
               </div>
             </div>
           </div>
@@ -113,14 +113,14 @@ export default function StartNuPanel() {
             <div className={styles.priceGrid}>
               <div className={styles.priceItem}>
                 <span className={styles.priceAmount}>€65</span>
-                <span className={styles.priceDescription}>Intake + eerste behandeling</span>
+                <span className={`${styles.priceDescription} par`}>Intake + eerste behandeling</span>
               </div>
               <div className={styles.priceItem}>
                 <span className={styles.priceAmount}>€45</span>
-                <span className={styles.priceDescription}>Vervolgbehandeling (30 min)</span>
+                <span className={`${styles.priceDescription} par`}>Vervolgbehandeling (30 min)</span>
               </div>
             </div>
-            <p className={styles.priceNote}>
+            <p className={`${styles.priceNote} par`}>
               Fysiotherapie wordt vaak (deels) vergoed vanuit je aanvullende verzekering.
               Check je polis of neem contact op voor meer informatie.
             </p>
@@ -149,28 +149,28 @@ export default function StartNuPanel() {
               <span className={styles.expectationNumber}>1</span>
               <div className={styles.expectationContent}>
                 <h4 className={styles.expectationTitle}>Kennismakingsgesprek (gratis)</h4>
-                <p className={styles.expectationText}>We bespreken je situatie en kijken of we een match zijn</p>
+                <p className={`${styles.expectationText} par`}>We bespreken je situatie en kijken of we een match zijn</p>
               </div>
             </div>
             <div className={styles.expectationItem}>
               <span className={styles.expectationNumber}>2</span>
               <div className={styles.expectationContent}>
                 <h4 className={styles.expectationTitle}>Uitgebreide intake</h4>
-                <p className={styles.expectationText}>Analyse van je huidige leefstijl, gewoontes en doelen</p>
+                <p className={`${styles.expectationText} par`}>Analyse van je huidige leefstijl, gewoontes en doelen</p>
               </div>
             </div>
             <div className={styles.expectationItem}>
               <span className={styles.expectationNumber}>3</span>
               <div className={styles.expectationContent}>
                 <h4 className={styles.expectationTitle}>Persoonlijk plan</h4>
-                <p className={styles.expectationText}>Stapsgewijze aanpak voor voeding, beweging en mindset</p>
+                <p className={`${styles.expectationText} par`}>Stapsgewijze aanpak voor voeding, beweging en mindset</p>
               </div>
             </div>
             <div className={styles.expectationItem}>
               <span className={styles.expectationNumber}>4</span>
               <div className={styles.expectationContent}>
                 <h4 className={styles.expectationTitle}>Begeleiding & Support</h4>
-                <p className={styles.expectationText}>Wekelijkse check-ins en onbeperkt contact via WhatsApp</p>
+                <p className={`${styles.expectationText} par`}>Wekelijkse check-ins en onbeperkt contact via WhatsApp</p>
               </div>
             </div>
           </div>
@@ -183,7 +183,7 @@ export default function StartNuPanel() {
             <div className={styles.packageGrid}>
               <div className={styles.packageCard}>
                 <h4 className={styles.packageTitle}>Kickstart</h4>
-                <p className={styles.packageDuration}>4 weken</p>
+                <p className={`${styles.packageDuration} par`}>4 weken</p>
                 <p className={styles.packagePrice}>€249</p>
                 <ul className={styles.packageFeatures}>
                   <li>Intake + eindgesprek</li>
@@ -194,7 +194,7 @@ export default function StartNuPanel() {
               <div className={`${styles.packageCard} ${styles.packageFeatured}`}>
                 <span className={styles.packageBadge}>Populair</span>
                 <h4 className={styles.packageTitle}>Transform</h4>
-                <p className={styles.packageDuration}>12 weken</p>
+                <p className={`${styles.packageDuration} par`}>12 weken</p>
                 <p className={styles.packagePrice}>€599</p>
                 <ul className={styles.packageFeatures}>
                   <li>Alles van Kickstart</li>

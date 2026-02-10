@@ -19,9 +19,6 @@
 }
 
 .text {
-  font-family: var(--font-secondary);
-  font-size: var(--font-small);
-  font-weight: 300;
   color: var(--color-white);
   text-transform: lowercase;
   letter-spacing: 0.2em;

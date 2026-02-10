@@ -63,7 +63,7 @@ export default function HerstelSection() {
           [ <ScrambleText retriggerAtEnd>Fysiotherapie</ScrambleText> ]
         </span>
         <h2 className={`title-chaney ${styles.title}`}>Herstel</h2>
-        <p className={`text-description ${styles.description}`}>
+        <p className={`text-description ${styles.description} par`}>
           Bij M.A.E. Fysiotherapie kijken we anders naar revalidatie. Waar veel
           zorgprofessionals vooral beperkingen opleggen, geloven wij in een
           doelgerichte, persoonlijke en stapsgewijze aanpak. Het doel: jou weer
@@ -75,7 +75,7 @@ export default function HerstelSection() {
       {/* Right Image */}
       <div className={styles.imageContainer}>
         <div ref={bannerRef} className={`banner-accent ${styles.banner}`}>
-          <p className="banner-text">
+          <p className="banner-text par">
             Maarten is gespecialiseerd in sportblessures en revalidatie. Met jarenlange ervaring helpt hij sporters en actieve mensen om sterker terug te komen na een blessure.
           </p>
           <button className={`btn-bar ${styles.bannerButton}`} onClick={() => openPanel('meet-maarten')}>

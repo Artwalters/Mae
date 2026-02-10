@@ -62,20 +62,11 @@
 }
 
 .reviewText {
-  font-family: var(--font-secondary);
-  font-size: var(--font-small);
-  font-weight: 500;
   color: var(--color-white);
-  line-height: 1.4;
-  margin: 0;
 }
 
 .reviewAuthor {
-  font-family: var(--font-secondary);
-  font-size: var(--font-small);
-  font-weight: 400;
   color: var(--color-white);
-  margin: 0;
 }
 
 /* Responsive - Tablet */
@@ -83,7 +74,6 @@
   .reviewCard {
     min-width: 15em;
     max-width: 15em;
-    padding: 1em;
   }
 
   .reviewImage {
@@ -101,7 +91,6 @@
   .reviewCard {
     min-width: 14em;
     max-width: 14em;
-    padding: 1em;
   }
 
   .reviewImage {

@@ -104,11 +104,6 @@
 }
 
 .choiceText {
-  font-family: var(--font-secondary);
-  font-size: var(--font-small);
-  font-weight: 300;
-  line-height: 1.5;
-  margin: 0;
   flex: 1;
 }
 
@@ -163,11 +158,6 @@
 }
 
 .expectationText {
-  font-family: var(--font-secondary);
-  font-size: var(--font-small);
-  font-weight: 300;
-  line-height: 1.6;
-  margin: 0;
 }
 
 /* Price Grid — no borders, big price numbers */
@@ -191,17 +181,9 @@
 }
 
 .priceDescription {
-  font-family: var(--font-secondary);
-  font-size: var(--font-par);
-  font-weight: 300;
-  line-height: 1.4;
 }
 
 .priceNote {
-  font-family: var(--font-secondary);
-  font-size: var(--font-small);
-  font-weight: 300;
-  line-height: 1.6;
   margin: 1.5em 0 0 0;
 }
 
@@ -213,7 +195,7 @@
 }
 
 .packageCard {
-  padding: 1.5em;
+  padding: 1em;
   border: 0.25px solid rgba(0, 0, 0, 0.3);
   position: relative;
 }
@@ -247,9 +229,6 @@
 }
 
 .packageDuration {
-  font-family: var(--font-secondary);
-  font-size: var(--font-par);
-  font-weight: 300;
   margin: 0 0 0.5em 0;
 }
 
@@ -269,7 +248,7 @@
 
 .packageFeatures li {
   font-family: var(--font-secondary);
-  font-size: var(--font-small);
+  font-size: var(--font-par);
   font-weight: 300;
   padding: 0.3em 0;
 }
@@ -410,7 +389,7 @@
 
   .formInput,
   .formTextarea {
-    font-size: var(--font-small);
+    font-size: var(--font-par);
   }
 
   .expectationTitle {

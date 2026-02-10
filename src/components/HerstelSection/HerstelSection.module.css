@@ -54,7 +54,7 @@
 }
 
 .bannerButton {
-  font-size: var(--font-tag);
+  font-size: var(--font-small);
 }
 
 /* Responsive - Tablet */
@@ -92,10 +92,6 @@
 
   .title {
     font-size: var(--font-h3);
-  }
-
-  .description {
-    font-size: var(--font-small);
   }
 
   .accentBar {

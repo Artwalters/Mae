@@ -37,11 +37,7 @@
 }
 
 .intro {
-  font-family: var(--font-secondary);
-  font-size: var(--font-par);
-  font-weight: 300;
   color: var(--color-gray);
-  line-height: 1.7;
   max-width: 40em;
   margin: 0 auto;
 }
@@ -54,7 +50,7 @@
 
 .card {
   background: var(--color-black);
-  padding: 3em;
+  padding: 1em;
   position: relative;
   transition: transform 0.3s ease;
 }
@@ -85,11 +81,7 @@
 }
 
 .cardDescription {
-  font-family: var(--font-secondary);
-  font-size: var(--font-par);
-  font-weight: 300;
   color: var(--color-gray);
-  line-height: 1.7;
   margin-bottom: 1.5em;
 }
 
@@ -104,7 +96,7 @@
 
 .feature {
   font-family: var(--font-secondary);
-  font-size: var(--font-small);
+  font-size: var(--font-par);
   font-weight: 400;
   color: var(--color-white);
   background: var(--color-dark);
@@ -113,7 +105,7 @@
 
 .cardButton {
   font-family: var(--font-secondary);
-  font-size: var(--font-tag);
+  font-size: var(--font-small);
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -141,7 +133,7 @@
   }
 
   .card {
-    padding: 2.5em;
+    padding: 1em;
   }
 
   .cardTitle {
@@ -168,7 +160,7 @@
   }
 
   .card {
-    padding: 2em;
+    padding: 1em;
   }
 
   .cardNumber {

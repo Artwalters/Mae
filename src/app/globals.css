@@ -227,8 +227,8 @@ html::-webkit-scrollbar {
   /* Typography - Golden Ratio (1.618) */
   --font-ratio: 1.618;
   --font-tag: 0.5em; /*tags and buttons*/
-  --font-small: 0.75em;
-  --font-par: 1em;
+  --font-small: 0.65em;
+  --font-par: 0.90em;
   --font-h4: 1.618em;
   --font-h3: 2.618em;
   --font-h2: 4.236em;
@@ -302,6 +302,15 @@ body {
 ::-moz-selection {
   background: var(--color-accent);
   color: var(--color-dark);
+}
+
+/* Paragraph — one class for all body text */
+.par {
+  font-family: var(--font-secondary);
+  font-size: var(--font-par);
+  font-weight: 300;
+  line-height: 1.6;
+  margin: 0;
 }
 
 /* Buttons */
@@ -517,19 +526,15 @@ body {
 /* Banner Utility - Accent colored info boxes */
 .banner-accent {
   background: var(--color-accent);
-  padding: 1.2em;
+  padding: 1em;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
 .banner-text {
-  font-family: var(--font-secondary);
-  font-size: var(--font-small);
-  font-weight: var(--font-weight);
   color: var(--color-dark);
   line-height: 1.5;
-  margin: 0;
 }
 
 /* Container Classes */

@@ -160,7 +160,7 @@ export default function MaeSection() {
                 <span className={styles.number}>{item.number}</span>
                 <div className={styles.textContent}>
                   <h2 className={styles.rowTitle}>{item.title}</h2>
-                  <p className={styles.description}>{item.description}</p>
+                  <p className={`${styles.description} par`}>{item.description}</p>
                   <div className={styles.keywords}>
                     {item.keywords.map((keyword, i) => (
                       <span key={i}>{keyword}{i < item.keywords.length - 1 ? ' /' : ''}</span>

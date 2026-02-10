@@ -90,11 +90,11 @@ export default function MeetMaartenPanel() {
           </div>
         </div>
         <div className={styles.aboutText}>
-          <p className={styles.text}>
+          <p className={`${styles.text} par`}>
             Als gecertificeerd fysiotherapeut en personal trainer combineer ik het beste van beide werelden.
             Mijn filosofie is simpel: ik geloof niet in beperkingen opleggen, maar in mogelijkheden creëren.
           </p>
-          <p className={styles.text}>
+          <p className={`${styles.text} par`}>
             Of je nu herstelt van een blessure, je prestaties wilt verbeteren, of gewoon fitter wilt worden -
             samen vinden we de weg die bij jou past.
           </p>
@@ -123,28 +123,28 @@ export default function MeetMaartenPanel() {
             <span className={styles.stepNumber}>1</span>
             <div className={styles.stepContent}>
               <h4 className={styles.stepTitle}>Intake & Analyse</h4>
-              <p className={styles.stepText}>We beginnen met een uitgebreide intake waarin ik je fysieke conditie, doelen en eventuele beperkingen in kaart breng.</p>
+              <p className={`${styles.stepText} par`}>We beginnen met een uitgebreide intake waarin ik je fysieke conditie, doelen en eventuele beperkingen in kaart breng.</p>
             </div>
           </div>
           <div className={styles.step}>
             <span className={styles.stepNumber}>2</span>
             <div className={styles.stepContent}>
               <h4 className={styles.stepTitle}>Persoonlijk Plan</h4>
-              <p className={styles.stepText}>Op basis van de analyse stel ik een volledig op maat gemaakt plan op dat past bij jouw niveau en levensstijl.</p>
+              <p className={`${styles.stepText} par`}>Op basis van de analyse stel ik een volledig op maat gemaakt plan op dat past bij jouw niveau en levensstijl.</p>
             </div>
           </div>
           <div className={styles.step}>
             <span className={styles.stepNumber}>3</span>
             <div className={styles.stepContent}>
               <h4 className={styles.stepTitle}>Begeleiding</h4>
-              <p className={styles.stepText}>Tijdens de sessies werk ik intensief met je samen, waarbij ik technieken uitleg en direct feedback geef.</p>
+              <p className={`${styles.stepText} par`}>Tijdens de sessies werk ik intensief met je samen, waarbij ik technieken uitleg en direct feedback geef.</p>
             </div>
           </div>
           <div className={styles.step}>
             <span className={styles.stepNumber}>4</span>
             <div className={styles.stepContent}>
               <h4 className={styles.stepTitle}>Evaluatie & Bijsturing</h4>
-              <p className={styles.stepText}>Regelmatige evaluaties zorgen ervoor dat we het plan aanpassen aan jouw voortgang.</p>
+              <p className={`${styles.stepText} par`}>Regelmatige evaluaties zorgen ervoor dat we het plan aanpassen aan jouw voortgang.</p>
             </div>
           </div>
         </div>
@@ -190,7 +190,7 @@ export default function MeetMaartenPanel() {
 
       {/* CTA */}
       <section className={styles.ctaSection}>
-        <p className={styles.ctaText}>
+        <p className={`${styles.ctaText} par`}>
           Klaar om te beginnen? Plan een vrijblijvend kennismakingsgesprek.
         </p>
         <a href="#contact" className={styles.ctaButton}>

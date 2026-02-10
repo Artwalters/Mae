@@ -19,7 +19,7 @@ export default function CTASection() {
       <div className={styles.cards}>
         <div className={`${styles.card} ${styles.cardLight}`}>
           <h3 className={styles.cardTitle}>Leefstijl</h3>
-          <p className={styles.cardText}>
+          <p className={`${styles.cardText} par`}>
             Meer energie, betere gewoontes en een gezonder leven. Persoonlijke begeleiding die past bij jouw situatie.
           </p>
           <a href="#leefstijl" className={`btn-bar ${styles.cardButton}`}>
@@ -29,7 +29,7 @@ export default function CTASection() {
 
         <div className={`${styles.card} ${styles.cardAccent}`}>
           <h3 className={styles.cardTitle}>Gecombineerd</h3>
-          <p className={styles.cardText}>
+          <p className={`${styles.cardText} par`}>
             De kracht van beide disciplines. Voor wie het maximale uit zichzelf wil halen, fysiek én mentaal.
           </p>
           <a href="#contact" className={`btn-bar ${styles.cardButton}`}>
@@ -39,7 +39,7 @@ export default function CTASection() {
 
         <div className={`${styles.card} ${styles.cardDark}`}>
           <h3 className={styles.cardTitle}>Fysiotherapie</h3>
-          <p className={styles.cardText}>
+          <p className={`${styles.cardText} par`}>
             Herstel van blessures, pijnklachten of na een operatie. Samen werken we aan jouw bewegingsvrijheid en kracht.
           </p>
           <a href="#fysio" className={`btn-bar ${styles.cardButton}`}>

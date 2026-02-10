@@ -57,11 +57,7 @@
 }
 
 .modalText {
-  font-family: var(--font-secondary);
-  font-size: var(--font-small);
-  font-weight: 400;
   color: var(--color-white);
-  line-height: 1.6;
   margin-bottom: 1.5em;
 }
 
@@ -73,7 +69,7 @@
 
 .modalLinks a {
   color: var(--color-white);
-  font-size: var(--font-small);
+  font-size: var(--font-par);
 }
 
 .modalLinks a::before {

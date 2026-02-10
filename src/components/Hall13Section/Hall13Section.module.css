@@ -19,7 +19,7 @@
 }
 
 .bannerButton {
-  font-size: var(--font-tag);
+  font-size: var(--font-small);
 }
 
 /* Responsive - Mobile */

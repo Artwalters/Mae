@@ -60,7 +60,7 @@ export default function LeefstijlSection() {
       {/* Left Image */}
       <div className={styles.imageContainer}>
         <div ref={bannerRef} className={`banner-accent ${styles.banner}`}>
-          <p className="banner-text">
+          <p className="banner-text par">
             Merel helpt je bij het vinden van een duurzame levensstijl die bij jou past. Geen diëten, maar echte verandering met zelfacceptatie als uitgangspunt.
           </p>
           <button className={`btn-bar ${styles.bannerButton}`} onClick={() => openPanel('meet-merel')}>
@@ -80,7 +80,7 @@ export default function LeefstijlSection() {
           [ <ScrambleText retriggerAtEnd>Leefstijlcoaching</ScrambleText> ]
         </span>
         <h2 className={`title-chaney ${styles.title}`}>Balans</h2>
-        <p className={`text-description ${styles.description}`}>
+        <p className={`text-description ${styles.description} par`}>
           Bij leefstijlcoaching nemen we jouw volledige levensstijl onder de loep.
           Geen diëten, maar duurzame verandering. Samen stellen we doelen op en
           ontvang je een persoonlijk leefstijlplan, voedingsplan en trainingsschema

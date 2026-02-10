@@ -81,8 +81,6 @@
 }
 
 .aboutText .text {
-  font-size: var(--font-par);
-  line-height: 1.6;
 }
 
 /* Photo Grid */
@@ -154,11 +152,6 @@
 }
 
 .text {
-  font-family: var(--font-secondary);
-  font-size: var(--font-par);
-  font-weight: 300;
-  line-height: 1.6;
-  margin: 0;
 }
 
 /* Steps List */
@@ -200,11 +193,6 @@
 }
 
 .stepText {
-  font-family: var(--font-secondary);
-  font-size: var(--font-small);
-  font-weight: 300;
-  line-height: 1.6;
-  margin: 0;
 }
 
 /* Timeline */
@@ -316,10 +304,6 @@
 }
 
 .ctaText {
-  font-family: var(--font-secondary);
-  font-size: var(--font-par);
-  font-weight: 300;
-  line-height: 1.6;
   margin: 0 0 1em 0;
 }
 

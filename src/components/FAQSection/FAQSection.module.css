@@ -4,52 +4,11 @@
   padding-top: 4em;
 }
 
-/* 3D Depth Edge */
-.depthEdge {
-  position: absolute;
-  top: -0.4em;
-  left: 0.8em;
-  right: 0;
-  height: 0.4em;
-  background: #c9c9c9;
-  pointer-events: none;
-  z-index: 10;
-}
-
-.depthEdge::before {
-  content: '';
-  position: absolute;
-  right: calc(100% - 1px);
-  bottom: 0;
-  width: calc(0.8em + 1px);
-  height: 0.4em;
-  background: #c9c9c9;
-  clip-path: polygon(100% 0%, 100% 100%, 0% 100%);
-}
-
-/* Swipe Indicator */
-.swipeIndicator {
-  display: none;
-}
-
-@media screen and (max-width: 767px) {
-  .swipeIndicator {
-    display: block;
-    width: 3em;
-    height: 2px;
-    background: var(--color-gray);
-    opacity: 0.5;
-    margin: -3.5em auto 3em;
-  }
-}
-
-/* Header */
 .header {
   text-align: center;
   margin-bottom: 1em;
 }
 
-/* Main Title */
 .title {
   font-family: 'Chaney Regular', var(--font-primary);
   font-size: var(--font-h1);
@@ -57,15 +16,15 @@
   color: var(--color-dark);
   text-align: center;
   line-height: 1;
-  margin-bottom: 0;
+  margin: 0;
 }
 
 .titleLine {
   display: block;
 }
 
-/* Content */
-.content {
+/* List */
+.list {
   max-width: 100em;
   margin: 0 auto;
 }
@@ -78,16 +37,22 @@
   overflow: hidden;
 }
 
-/* Light overlay - row 1, sits on top */
+/* Light overlay - sits on top, hides rows initially */
 .overlay {
   background: var(--color-light);
-  z-index: 4;
+  z-index: 6;
   position: relative;
   will-change: transform;
   min-height: 5em;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+  background: var(--color-gray);
 }
 
 /* Row */
@@ -114,102 +79,57 @@
   z-index: 5;
 }
 
-/* z-index: overlay=4, MOVE=3, ADAPT=2, EVOLVE=1 */
-.row:nth-child(2) {
-  z-index: 3;
-}
+/* z-index stacking: overlay=6, row1=5, row2=4, row3=3, row4=2, row5=1 */
+.row:nth-child(2) { z-index: 5; }
+.row:nth-child(3) { z-index: 4; }
+.row:nth-child(4) { z-index: 3; }
+.row:nth-child(5) { z-index: 2; }
+.row:nth-child(6) { z-index: 1; }
 
-.row:nth-child(3) {
-  z-index: 2;
-}
-
-.row:nth-child(4) {
-  z-index: 1;
-}
-
-.divider {
-  width: 100%;
-  height: 1px;
-  background: var(--color-gray);
-}
-
+/* Row Content */
 .rowContent {
   display: grid;
-  grid-template-columns: 14em 1fr auto;
+  grid-template-columns: 2fr 3fr;
   gap: 2em;
-  align-items: stretch;
+  align-items: start;
   padding: 1em;
 }
 
 /* Number */
 .number {
   font-family: 'Chaney Regular', var(--font-primary);
-  font-size: var(--font-h3);
+  font-size: var(--font-par);
   font-weight: 400;
   color: var(--color-dark);
   line-height: 1;
 }
 
-/* Text Content */
 .textContent {
   display: flex;
   flex-direction: column;
   gap: 1em;
   max-width: 40em;
-  height: 100%;
-  justify-content: space-between;
 }
 
-.rowTitle {
+/* Question as row title */
+.question {
   font-family: 'Chaney Regular', var(--font-primary);
-  font-size: var(--font-h3);
+  font-size: var(--font-par);
   font-weight: 400;
   color: var(--color-dark);
   text-transform: uppercase;
-  line-height: 1;
+  line-height: 1.2;
   margin: 0;
 }
 
-.description {
+.answer {
   color: var(--color-dark);
-}
-
-/* Keywords */
-.keywords {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5em;
-  font-family: 'Inter', sans-serif;
-  font-size: var(--font-small);
-  font-weight: 100;
-  font-style: italic;
-  color: var(--color-dark);
-}
-
-/* Image */
-.imageWrapper {
-  width: 16em;
-  height: 12em;
-  overflow: hidden;
 }
 
 /* Responsive - Tablet */
 @media screen and (max-width: 991px) {
   .title {
     font-size: var(--font-h2);
-  }
-
-  .number {
-    font-size: var(--font-h4);
-  }
-
-  .rowTitle {
-    font-size: var(--font-h4);
-  }
-
-  .imageWrapper {
-    width: 12em;
-    height: 9em;
   }
 }
 
@@ -235,26 +155,8 @@
     right: 0.5em;
   }
 
-  .textContent {
-    display: flex;
-    flex-direction: column;
-    gap: 1em;
+  .question {
+    font-size: var(--font-par);
   }
 
-  .rowTitle {
-    font-size: 2em;
-  }
-
-  .imageWrapper {
-    display: none;
-  }
-
-  .keywords {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 0.5em;
-    font-size: 0.5em;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
 }

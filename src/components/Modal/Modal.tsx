@@ -56,7 +56,7 @@ export default function Modal() {
         <span className={styles.modalDivider}>|</span>
         <img src="/icons/hal13.svg" alt="HAL XIII" className={styles.modalLogoHal} />
       </div>
-      <p className={styles.modalText}>
+      <p className={`${styles.modalText} par`}>
         Voor een complete benadering van gezondheid en fitness combineren wij fysiotherapeutische zorg met professionele coaching en trainingsmogelijkheden.
       </p>
       <div className={styles.modalLinks}>

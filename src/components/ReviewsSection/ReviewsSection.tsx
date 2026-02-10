@@ -91,8 +91,8 @@ function ReviewCard({ text, author, image }: ReviewCardProps) {
       <div className={styles.reviewImage}>
         <img src={image} alt={author} />
       </div>
-      <p className={styles.reviewText}>{text}</p>
-      <p className={styles.reviewAuthor}>{author}</p>
+      <p className={`${styles.reviewText} par`}>{text}</p>
+      <p className={`${styles.reviewAuthor} par`}>{author}</p>
     </div>
   );
 }
