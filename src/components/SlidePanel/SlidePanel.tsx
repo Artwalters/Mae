@@ -1,21 +1,37 @@
 'use client';
 
-import { useEffect, useRef, ReactNode } from 'react';
+import { useEffect, useRef, useCallback, ReactNode } from 'react';
 import { gsap } from 'gsap';
+import Lenis from 'lenis';
 import { useLenis } from '@/components/SmoothScroll';
+import { usePanel } from '@/context/PanelContext';
 import styles from './SlidePanel.module.css';
 
 interface SlidePanelProps {
   isOpen: boolean;
   onClose: () => void;
   children: ReactNode;
+  header?: ReactNode;
 }
 
-export default function SlidePanel({ isOpen, onClose, children }: SlidePanelProps) {
+export default function SlidePanel({ isOpen, onClose, children, header }: SlidePanelProps) {
   const panelRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const panelLenisRef = useRef<Lenis | null>(null);
   const lenis = useLenis();
+  const { activePanel, setProgress } = usePanel();
+
+  // Track scroll progress for meet-maarten
+  const handleScroll = useCallback(() => {
+    if (activePanel === 'meet-maarten' && contentRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = contentRef.current;
+      const max = scrollHeight - clientHeight;
+      if (max > 0) {
+        setProgress(scrollTop / max);
+      }
+    }
+  }, [activePanel, setProgress]);
 
   useEffect(() => {
     const panel = panelRef.current;
@@ -125,6 +141,51 @@ export default function SlidePanel({ isOpen, onClose, children }: SlidePanelProp
     };
   }, []);
 
+  // Panel-scoped Lenis smooth scroll
+  useEffect(() => {
+    if (isOpen && contentRef.current) {
+      // Small delay to ensure panel is visible before creating Lenis
+      const timer = setTimeout(() => {
+        if (!contentRef.current) return;
+
+        const panelLenis = new Lenis({
+          wrapper: contentRef.current,
+          content: contentRef.current.firstElementChild as HTMLElement || contentRef.current,
+          eventsTarget: contentRef.current,
+        });
+        panelLenisRef.current = panelLenis;
+
+        const tick = (time: number) => {
+          panelLenis.raf(time * 1000);
+        };
+        gsap.ticker.add(tick);
+
+        // Store tick ref for cleanup
+        (panelLenis as unknown as Record<string, unknown>)._tickRef = tick;
+      }, 100);
+
+      return () => {
+        clearTimeout(timer);
+      };
+    } else {
+      // Destroy panel Lenis when closing
+      if (panelLenisRef.current) {
+        const tick = (panelLenisRef.current as unknown as Record<string, unknown>)._tickRef as (time: number) => void;
+        if (tick) gsap.ticker.remove(tick);
+        panelLenisRef.current.destroy();
+        panelLenisRef.current = null;
+      }
+    }
+  }, [isOpen]);
+
+  // Scroll progress listener
+  useEffect(() => {
+    const el = contentRef.current;
+    if (!el || !isOpen) return;
+    el.addEventListener('scroll', handleScroll);
+    return () => el.removeEventListener('scroll', handleScroll);
+  }, [isOpen, handleScroll]);
+
   // Handle escape key
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -148,17 +209,24 @@ export default function SlidePanel({ isOpen, onClose, children }: SlidePanelProp
 
       {/* Panel */}
       <div ref={panelRef} className={styles.panel}>
-        {/* Close Button */}
-        <button className={styles.closeButton} onClick={onClose}>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <line x1="18" y1="6" x2="6" y2="18" />
-            <line x1="6" y1="6" x2="18" y2="18" />
-          </svg>
-        </button>
-
         {/* Scrollable Content */}
         <div ref={contentRef} className={styles.content} data-lenis-prevent>
-          {children}
+          {/* Sticky header: bar + divider + white space */}
+          <div className={styles.panelHeader}>
+            <div className={styles.panelHeaderInner}>
+              {header}
+              <button className={styles.closeButton} onClick={onClose}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+            </div>
+            <div className={styles.divider} />
+          </div>
+          <div className={styles.contentInner}>
+            {children}
+          </div>
         </div>
       </div>
     </>

@@ -6,9 +6,10 @@ import SlidePanel from './SlidePanel';
 import MeetMaartenPanel from './panels/MeetMaartenPanel';
 import MeetMerelPanel from './panels/MeetMerelPanel';
 import StartNuPanel from './panels/StartNuPanel';
+import styles from './GlobalPanel.module.css';
 
 export default function GlobalPanel() {
-  const { activePanel, closePanel } = usePanel();
+  const { activePanel, openPanel, closePanel, progress, onBack } = usePanel();
   const lastPanelRef = useRef<string | null>(null);
 
   // Only update lastPanel when a new panel opens
@@ -34,8 +35,42 @@ export default function GlobalPanel() {
     }
   };
 
+  const isMeetMaarten = panelToRender === 'meet-maarten';
+  const isStartNu = panelToRender === 'start-nu';
+
+  const activeGradient = (active: boolean) =>
+    active ? {
+      background: `linear-gradient(to right, var(--color-dark) ${progress * 100}%, rgba(0,0,0,0.15) ${progress * 100}%)`
+    } : undefined;
+
+  const navBar = (
+    <div className={styles.navBar}>
+      {onBack && (
+        <button className={styles.backButton} onClick={onBack}>
+          <span>&#8592;</span>
+        </button>
+      )}
+      <button
+        className={`${styles.navTab} ${isMeetMaarten ? styles.navTabActive : ''}`}
+        onClick={() => openPanel('meet-maarten')}
+        style={activeGradient(isMeetMaarten)}
+      >
+        <span>Meet Maarten</span>
+        <span className={styles.navTabNumber}>[01]</span>
+      </button>
+      <button
+        className={`${styles.navTab} ${isStartNu ? styles.navTabActive : ''}`}
+        onClick={() => openPanel('start-nu')}
+        style={activeGradient(isStartNu)}
+      >
+        <span>Start Nu</span>
+        <span className={styles.navTabNumber}>[02]</span>
+      </button>
+    </div>
+  );
+
   return (
-    <SlidePanel isOpen={activePanel !== null} onClose={closePanel}>
+    <SlidePanel isOpen={activePanel !== null} onClose={closePanel} header={navBar}>
       {renderPanelContent()}
     </SlidePanel>
   );

@@ -22,7 +22,7 @@ const faqs = [
   },
   {
     question: 'Wat kost een behandeling en wordt het vergoed?',
-    answer: 'Fysiotherapie wordt vaak (deels) vergoed vanuit je aanvullende verzekering. Leefstijlcoaching is een particuliere investering. Neem contact op voor de actuele tarieven — we denken graag met je mee.',
+    answer: 'Intake (prestatiecode 1864): €55 btw-vrij. Behandeling (prestatiecode 1000): €45 btw-vrij. Wij werken zonder contracten met zorgverzekeraars zodat we volledige vrijheid hebben in onze aanpak. Je kunt facturen met deze prestatiecodes mogelijk indienen bij je zorgverzekeraar voor een (gedeeltelijke) vergoeding vanuit je aanvullende verzekering.',
   },
   {
     question: 'Kan ik fysiotherapie en leefstijlcoaching combineren?',

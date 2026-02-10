@@ -6,8 +6,8 @@ const diensten = [
   {
     id: '01',
     title: 'Fysiotherapie',
-    description: 'Professionele behandeling voor optimaal herstel en preventie van blessures. Wij gebruiken evidence-based technieken om jou weer in beweging te krijgen.',
-    features: ['Manuele therapie', 'Dry needling', 'Sportblessures', 'Revalidatie'],
+    description: 'Meer dan een behandelplan. We kijken verder dan de symptomen en beginnen met écht luisteren. Wat zegt je lichaam? Waar zit de belemmering?',
+    features: ['Bewegingsonderzoek', 'Persoonlijk revalidatieplan', 'Begeleiding via WhatsApp', 'Geen standaardprotocols'],
   },
   {
     id: '02',
@@ -24,7 +24,7 @@ const diensten = [
   {
     id: '04',
     title: 'Sport Revalidatie',
-    description: 'Specialistische begeleiding voor snelle terugkeer naar sport. Van blessure tot topprestatie.',
+    description: 'Doelgerichte en persoonlijke revalidatie om belemmeringsvrij te functioneren en je weer krachtig in je lijf te voelen.',
     features: ['Return to sport', 'Krachttraining', 'Conditieopbouw', 'Blessurepreventie'],
   },
 ];

@@ -1,278 +1,319 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { usePanel } from '@/context/PanelContext';
 import styles from './StartNuPanel.module.css';
 
-type Step = 'choice' | 'fysio' | 'leefstijl' | 'contact';
+type Step = 'situatie' | 'verdieping' | 'contact' | 'bevestiging';
+type Situatie = 'pijn' | 'fitter' | 'leefstijl' | 'weet-niet' | null;
+
+const VERDIEPING_OPTIONS: Record<string, { question: string; options: string[] }[]> = {
+  pijn: [
+    {
+      question: 'Waar zit de klacht?',
+      options: ['Nek / schouder', 'Rug / onderrug', 'Knie', 'Heup', 'Enkel / voet', 'Elleboog / pols', 'Anders'],
+    },
+    {
+      question: 'Hoe lang heb je er al last van?',
+      options: ['Minder dan een week', 'Een paar weken', 'Een paar maanden', 'Langer dan een half jaar'],
+    },
+  ],
+  fitter: [
+    {
+      question: 'Wat wil je bereiken?',
+      options: ['Sterker worden', 'Afvallen', 'Betere conditie', 'Terugkomen na blessure', 'Algeheel fitter'],
+    },
+  ],
+  leefstijl: [
+    {
+      question: 'Waar wil je mee beginnen?',
+      options: ['Voeding', 'Meer bewegen', 'Meer energie', 'Beter slapen', 'Stressvermindering', 'Een totale reset'],
+    },
+  ],
+};
 
 export default function StartNuPanel() {
-  const [currentStep, setCurrentStep] = useState<Step>('choice');
-  const [selectedPath, setSelectedPath] = useState<'fysio' | 'leefstijl' | null>(null);
+  const { setProgress, setOnBack } = usePanel();
+  const [currentStep, setCurrentStep] = useState<Step>('situatie');
+  const [situatie, setSituatie] = useState<Situatie>(null);
+  const [answers, setAnswers] = useState<Record<number, string>>({});
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
+  const [extra, setExtra] = useState('');
 
-  const handleChoice = (choice: 'fysio' | 'leefstijl') => {
-    setSelectedPath(choice);
-    setCurrentStep(choice);
-  };
+  const handleSituatie = (choice: Situatie) => {
+    setSituatie(choice);
+    setAnswers({});
+    setCurrentQuestion(0);
 
-  const goToContact = () => {
-    setCurrentStep('contact');
-  };
-
-  const goBack = () => {
-    if (currentStep === 'contact') {
-      setCurrentStep(selectedPath || 'choice');
+    if (choice === 'weet-niet') {
+      setCurrentStep('contact');
     } else {
-      setCurrentStep('choice');
-      setSelectedPath(null);
+      setCurrentStep('verdieping');
     }
   };
 
+  const handleAnswer = (answer: string) => {
+    const newAnswers = { ...answers, [currentQuestion]: answer };
+    setAnswers(newAnswers);
+
+    const questions = VERDIEPING_OPTIONS[situatie || ''] || [];
+    if (currentQuestion < questions.length - 1) {
+      setCurrentQuestion(currentQuestion + 1);
+    } else {
+      setCurrentStep('contact');
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setCurrentStep('bevestiging');
+  };
+
+  const goBack = () => {
+    if (currentStep === 'bevestiging') {
+      setCurrentStep('contact');
+    } else if (currentStep === 'contact') {
+      if (situatie === 'weet-niet') {
+        setCurrentStep('situatie');
+      } else {
+        setCurrentStep('verdieping');
+        const questions = VERDIEPING_OPTIONS[situatie || ''] || [];
+        setCurrentQuestion(questions.length - 1);
+      }
+    } else if (currentStep === 'verdieping') {
+      if (currentQuestion > 0) {
+        setCurrentQuestion(currentQuestion - 1);
+      } else {
+        setCurrentStep('situatie');
+        setSituatie(null);
+      }
+    }
+  };
+
+  const questions = situatie ? VERDIEPING_OPTIONS[situatie] || [] : [];
+
+  // Evenly distributed progress after situatie
+  const stepsAfterSituatie =
+    situatie === 'weet-niet' ? 2 :
+    questions.length > 0 ? questions.length + 2 : 2;
+
+  const currentStepIndex =
+    currentStep === 'verdieping' ? 1 + currentQuestion :
+    currentStep === 'contact' ? (situatie === 'weet-niet' ? 1 : questions.length + 1) :
+    currentStep === 'bevestiging' ? stepsAfterSituatie :
+    0;
+
+  useEffect(() => {
+    if (currentStep === 'situatie') {
+      setProgress(0);
+    } else {
+      setProgress(currentStepIndex / stepsAfterSituatie);
+    }
+  }, [currentStep, currentStepIndex, stepsAfterSituatie, setProgress]);
+
+  // Register back handler in header bar
+  useEffect(() => {
+    if (currentStep === 'situatie') {
+      setOnBack(null);
+    } else {
+      setOnBack(() => goBack);
+    }
+    return () => setOnBack(null);
+  }, [currentStep, currentQuestion, situatie, setOnBack]);
+
   return (
     <div className={styles.panel}>
-      {/* Step 1: Choice */}
-      {currentStep === 'choice' && (
+      {/* Step 1: Situatie */}
+      {currentStep === 'situatie' && (
         <div className={styles.stepContent}>
           <div className={styles.sectionHeader}>
-            <span className={styles.sectionLabel}>Keuze</span>
+            <span className={styles.sectionLabel}>Start</span>
             <span className={styles.sectionNumber}>[01]</span>
           </div>
-          <h2 className={styles.sectionTitle}>Waar kunnen we je mee helpen?</h2>
+          <h2 className={styles.sectionTitle}>Wat speelt er bij jou?</h2>
+          <p className={`${styles.subtitle} par`}>
+            Kies wat het beste bij je situatie past. Wij stemmen alles af op jou.
+          </p>
 
           <div className={styles.choiceGrid}>
-            <div className={styles.choiceCard} onClick={() => handleChoice('fysio')}>
+            <div className={styles.choiceCard} onClick={() => handleSituatie('pijn')}>
               <div className={styles.choiceContent}>
-                <h3 className={styles.choiceTitle}>Fysiotherapie</h3>
+                <h3 className={styles.choiceTitle}>Ik heb pijn of een blessure</h3>
                 <p className={`${styles.choiceText} par`}>
-                  Herstel van blessures, pijnklachten, of revalidatie na een operatie
+                  Klachten, blessures of herstel na een operatie
                 </p>
               </div>
-              <button className="btn-bar">Start traject</button>
             </div>
 
-            <div className={styles.choiceCard} onClick={() => handleChoice('leefstijl')}>
+            <div className={styles.choiceCard} onClick={() => handleSituatie('fitter')}>
               <div className={styles.choiceContent}>
-                <h3 className={styles.choiceTitle}>Leefstijl Coaching</h3>
+                <h3 className={styles.choiceTitle}>Ik wil sterker of fitter worden</h3>
                 <p className={`${styles.choiceText} par`}>
-                  Meer energie, betere gewoontes en een gezondere levensstijl
+                  Krachtiger, betere conditie of terugkomen na een blessure
                 </p>
               </div>
-              <button className="btn-bar">Start traject</button>
+            </div>
+
+            <div className={styles.choiceCard} onClick={() => handleSituatie('leefstijl')}>
+              <div className={styles.choiceContent}>
+                <h3 className={styles.choiceTitle}>Ik wil mijn leefstijl veranderen</h3>
+                <p className={`${styles.choiceText} par`}>
+                  Meer energie, betere gewoontes, gezonder leven
+                </p>
+              </div>
+            </div>
+
+            <div className={styles.choiceCard} onClick={() => handleSituatie('weet-niet')}>
+              <div className={styles.choiceContent}>
+                <h3 className={styles.choiceTitle}>Ik weet het nog niet precies</h3>
+                <p className={`${styles.choiceText} par`}>
+                  Geen probleem — we zoeken het samen uit
+                </p>
+              </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* Step 2a: Fysiotherapie Info */}
-      {currentStep === 'fysio' && (
+      {/* Step 2: Verdieping */}
+      {currentStep === 'verdieping' && questions[currentQuestion] && (
         <div className={styles.stepContent}>
-          <button className={styles.backButton} onClick={goBack}>
-            <span>&#8592;</span>
-          </button>
+
           <div className={styles.sectionHeader}>
-            <span className={styles.sectionLabel}>Fysiotherapie</span>
-            <span className={styles.sectionNumber}>[02]</span>
+            <span className={styles.sectionLabel}>Verdieping</span>
+            <span className={styles.sectionNumber}>[{String(currentStepIndex).padStart(2, '0')}]</span>
           </div>
-          <h2 className={styles.sectionTitle}>Wat kun je verwachten?</h2>
+          <h2 className={styles.sectionTitle}>{questions[currentQuestion].question}</h2>
 
-          <div className={styles.expectationList}>
-            <div className={styles.expectationItem}>
-              <span className={styles.expectationNumber}>1</span>
-              <div className={styles.expectationContent}>
-                <h4 className={styles.expectationTitle}>Intake gesprek (45 min)</h4>
-                <p className={`${styles.expectationText} par`}>We bespreken je klachten, doelen en medische geschiedenis</p>
-              </div>
-            </div>
-            <div className={styles.expectationItem}>
-              <span className={styles.expectationNumber}>2</span>
-              <div className={styles.expectationContent}>
-                <h4 className={styles.expectationTitle}>Fysiek onderzoek</h4>
-                <p className={`${styles.expectationText} par`}>Grondige analyse van je bewegingspatronen en pijnpunten</p>
-              </div>
-            </div>
-            <div className={styles.expectationItem}>
-              <span className={styles.expectationNumber}>3</span>
-              <div className={styles.expectationContent}>
-                <h4 className={styles.expectationTitle}>Behandelplan</h4>
-                <p className={`${styles.expectationText} par`}>Een persoonlijk plan met concrete doelen en tijdlijn</p>
-              </div>
-            </div>
-            <div className={styles.expectationItem}>
-              <span className={styles.expectationNumber}>4</span>
-              <div className={styles.expectationContent}>
-                <h4 className={styles.expectationTitle}>Behandelingen</h4>
-                <p className={`${styles.expectationText} par`}>Sessies van 30-45 minuten, meestal 1-2x per week</p>
-              </div>
-            </div>
+          <div className={styles.optionGrid}>
+            {questions[currentQuestion].options.map((option) => (
+              <button
+                key={option}
+                className={styles.optionButton}
+                onClick={() => handleAnswer(option)}
+              >
+                {option}
+              </button>
+            ))}
           </div>
-
-          <section className={styles.section}>
-            <div className={styles.sectionHeader}>
-              <span className={styles.sectionLabel}>Tarieven & Vergoeding</span>
-              <span className={styles.sectionNumber}>[03]</span>
-            </div>
-            <div className={styles.priceGrid}>
-              <div className={styles.priceItem}>
-                <span className={styles.priceAmount}>€65</span>
-                <span className={`${styles.priceDescription} par`}>Intake + eerste behandeling</span>
-              </div>
-              <div className={styles.priceItem}>
-                <span className={styles.priceAmount}>€45</span>
-                <span className={`${styles.priceDescription} par`}>Vervolgbehandeling (30 min)</span>
-              </div>
-            </div>
-            <p className={`${styles.priceNote} par`}>
-              Fysiotherapie wordt vaak (deels) vergoed vanuit je aanvullende verzekering.
-              Check je polis of neem contact op voor meer informatie.
-            </p>
-          </section>
-
-          <button className={styles.ctaButton} onClick={goToContact}>
-            <span>Maak een afspraak</span>
-          </button>
         </div>
       )}
 
-      {/* Step 2b: Leefstijl Info */}
-      {currentStep === 'leefstijl' && (
-        <div className={styles.stepContent}>
-          <button className={styles.backButton} onClick={goBack}>
-            <span>&#8592;</span>
-          </button>
-          <div className={styles.sectionHeader}>
-            <span className={styles.sectionLabel}>Leefstijl Coaching</span>
-            <span className={styles.sectionNumber}>[02]</span>
-          </div>
-          <h2 className={styles.sectionTitle}>Wat kun je verwachten?</h2>
-
-          <div className={styles.expectationList}>
-            <div className={styles.expectationItem}>
-              <span className={styles.expectationNumber}>1</span>
-              <div className={styles.expectationContent}>
-                <h4 className={styles.expectationTitle}>Kennismakingsgesprek (gratis)</h4>
-                <p className={`${styles.expectationText} par`}>We bespreken je situatie en kijken of we een match zijn</p>
-              </div>
-            </div>
-            <div className={styles.expectationItem}>
-              <span className={styles.expectationNumber}>2</span>
-              <div className={styles.expectationContent}>
-                <h4 className={styles.expectationTitle}>Uitgebreide intake</h4>
-                <p className={`${styles.expectationText} par`}>Analyse van je huidige leefstijl, gewoontes en doelen</p>
-              </div>
-            </div>
-            <div className={styles.expectationItem}>
-              <span className={styles.expectationNumber}>3</span>
-              <div className={styles.expectationContent}>
-                <h4 className={styles.expectationTitle}>Persoonlijk plan</h4>
-                <p className={`${styles.expectationText} par`}>Stapsgewijze aanpak voor voeding, beweging en mindset</p>
-              </div>
-            </div>
-            <div className={styles.expectationItem}>
-              <span className={styles.expectationNumber}>4</span>
-              <div className={styles.expectationContent}>
-                <h4 className={styles.expectationTitle}>Begeleiding & Support</h4>
-                <p className={`${styles.expectationText} par`}>Wekelijkse check-ins en onbeperkt contact via WhatsApp</p>
-              </div>
-            </div>
-          </div>
-
-          <section className={styles.section}>
-            <div className={styles.sectionHeader}>
-              <span className={styles.sectionLabel}>Trajecten</span>
-              <span className={styles.sectionNumber}>[03]</span>
-            </div>
-            <div className={styles.packageGrid}>
-              <div className={styles.packageCard}>
-                <h4 className={styles.packageTitle}>Kickstart</h4>
-                <p className={`${styles.packageDuration} par`}>4 weken</p>
-                <p className={styles.packagePrice}>€249</p>
-                <ul className={styles.packageFeatures}>
-                  <li>Intake + eindgesprek</li>
-                  <li>Persoonlijk plan</li>
-                  <li>WhatsApp support</li>
-                </ul>
-              </div>
-              <div className={`${styles.packageCard} ${styles.packageFeatured}`}>
-                <span className={styles.packageBadge}>Populair</span>
-                <h4 className={styles.packageTitle}>Transform</h4>
-                <p className={`${styles.packageDuration} par`}>12 weken</p>
-                <p className={styles.packagePrice}>€599</p>
-                <ul className={styles.packageFeatures}>
-                  <li>Alles van Kickstart</li>
-                  <li>Wekelijkse coaching</li>
-                  <li>Voortgangsmetingen</li>
-                  <li>Trainingsschema</li>
-                </ul>
-              </div>
-            </div>
-          </section>
-
-          <button className={styles.ctaButton} onClick={goToContact}>
-            <span>Plan een kennismaking</span>
-          </button>
-        </div>
-      )}
-
-      {/* Step 3: Contact Form */}
+      {/* Step 3: Contact */}
       {currentStep === 'contact' && (
         <div className={styles.stepContent}>
-          <button className={styles.backButton} onClick={goBack}>
-            <span>&#8592;</span>
-          </button>
+
           <div className={styles.sectionHeader}>
             <span className={styles.sectionLabel}>Contact</span>
-            <span className={styles.sectionNumber}>[03]</span>
+            <span className={styles.sectionNumber}>[{String(currentStepIndex).padStart(2, '0')}]</span>
           </div>
-          <h2 className={styles.sectionTitle}>Laten we kennismaken</h2>
+          <h2 className={styles.sectionTitle}>Hoe kunnen we je bereiken?</h2>
+          <p className={`${styles.subtitle} par`}>
+            We nemen via WhatsApp contact met je op. Kort, persoonlijk en vrijblijvend.
+          </p>
 
-          <form className={styles.form} onSubmit={(e) => e.preventDefault()}>
-            <div className={styles.formRow}>
-              <div className={styles.formGroup}>
-                <label className={styles.formLabel}>Voornaam *</label>
-                <input type="text" className={styles.formInput} required />
-              </div>
-              <div className={styles.formGroup}>
-                <label className={styles.formLabel}>Achternaam *</label>
-                <input type="text" className={styles.formInput} required />
-              </div>
+          <form className={styles.form} onSubmit={handleSubmit}>
+            <div className={styles.formGrid}>
+              <input
+                type="text"
+                className={styles.formInput}
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                placeholder="Voornaam *"
+                required
+              />
+              <input
+                type="text"
+                className={styles.formInput}
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                placeholder="Achternaam *"
+                required
+              />
+              <input
+                type="email"
+                className={styles.formInput}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="E-mailadres *"
+                required
+              />
+              <input
+                type="tel"
+                className={styles.formInput}
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="Telefoonnummer *"
+                required
+              />
             </div>
 
-            <div className={styles.formGroup}>
-              <label className={styles.formLabel}>E-mail *</label>
-              <input type="email" className={styles.formInput} required />
-            </div>
+            <div className={styles.formDivider} />
 
-            <div className={styles.formGroup}>
-              <label className={styles.formLabel}>Telefoon</label>
-              <input type="tel" className={styles.formInput} />
+            <div className={styles.sectionHeader}>
+              <span className={styles.sectionLabel}>Extra</span>
+              <span className={styles.sectionNumber}>[{String(currentStepIndex + 1).padStart(2, '0')}]</span>
             </div>
+            <p className={`${styles.subtitle} par`}>
+              Wil je nog iets kwijt? Dat mag hier.
+            </p>
 
-            <div className={styles.formGroup}>
-              <label className={styles.formLabel}>Waar kunnen we je mee helpen?</label>
-              <textarea className={styles.formTextarea} rows={4} placeholder="Vertel kort over je situatie en doelen..." />
+            <textarea
+              className={styles.formTextarea}
+              value={extra}
+              onChange={(e) => setExtra(e.target.value)}
+              rows={4}
+              placeholder="Bijvoorbeeld: hoe lang je al klachten hebt, wat je al geprobeerd hebt..."
+            />
+
+            <div className={styles.formActions}>
+              <button type="submit" className={styles.ctaButton}>
+                <span>Verstuur</span>
+              </button>
             </div>
-
-            <div className={styles.formGroup}>
-              <label className={styles.formLabel}>Voorkeur voor contact</label>
-              <div className={styles.radioGroup}>
-                <label className={styles.radioLabel}>
-                  <input type="radio" name="contact" value="email" defaultChecked />
-                  <span>E-mail</span>
-                </label>
-                <label className={styles.radioLabel}>
-                  <input type="radio" name="contact" value="phone" />
-                  <span>Telefoon</span>
-                </label>
-                <label className={styles.radioLabel}>
-                  <input type="radio" name="contact" value="whatsapp" />
-                  <span>WhatsApp</span>
-                </label>
-              </div>
-            </div>
-
-            <button type="submit" className={styles.ctaButton}>
-              <span>Verstuur aanvraag</span>
-            </button>
           </form>
+        </div>
+      )}
+
+      {/* Step 4: Bevestiging */}
+      {currentStep === 'bevestiging' && (
+        <div className={styles.stepContent}>
+          <div className={styles.confirmationIcon}>&#10003;</div>
+          <h2 className={styles.sectionTitle}>
+            Bedankt{firstName ? ` ${firstName}` : ''}!
+          </h2>
+          <p className={`${styles.confirmationText} par`}>
+            We nemen binnen 24 uur contact met je op via WhatsApp.
+          </p>
+          <div className={styles.confirmationDetails}>
+            <div className={styles.sectionHeader}>
+              <span className={styles.sectionLabel}>Wat kun je verwachten?</span>
+            </div>
+            <div className={styles.expectationList}>
+              <div className={styles.expectationItem}>
+                <span className={styles.expectationNumber}>1</span>
+                <div className={styles.expectationContent}>
+                  <p className="par">Een kort persoonlijk bericht via WhatsApp</p>
+                </div>
+              </div>
+              <div className={styles.expectationItem}>
+                <span className={styles.expectationNumber}>2</span>
+                <div className={styles.expectationContent}>
+                  <p className="par">We bespreken samen wat de beste aanpak is</p>
+                </div>
+              </div>
+              <div className={styles.expectationItem}>
+                <span className={styles.expectationNumber}>3</span>
+                <div className={styles.expectationContent}>
+                  <p className="par">We plannen een eerste afspraak in — vrijblijvend</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>

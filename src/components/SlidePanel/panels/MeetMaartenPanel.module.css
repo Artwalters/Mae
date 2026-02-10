@@ -148,7 +148,6 @@
   font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--color-gray);
 }
 
 .text {
@@ -314,11 +313,16 @@
   font-weight: 500;
   text-transform: uppercase;
   padding: 0.6em 1.8em;
-  background: var(--color-dark);
-  color: var(--color-accent);
+  background: var(--color-accent);
+  color: var(--color-dark);
   border: none;
   cursor: pointer;
   text-decoration: none;
+  transition: opacity 0.3s ease;
+}
+
+.ctaButton:hover {
+  opacity: 0.85;
 }
 
 /* Responsive - Mobile */

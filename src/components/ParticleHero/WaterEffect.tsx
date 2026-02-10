@@ -12,19 +12,33 @@ export default function WaterEffect() {
   const mouseVelocity = useRef(new THREE.Vector2(0, 0));
   const mouseDown = useRef(false);
   const frameCounter = useRef(0);
-  const bgTextureRef = useRef<THREE.Texture | null>(null);
+  const bgTexturesRef = useRef<THREE.Texture[]>([]);
+  const bgIndexRef = useRef(0);
+  const bgTimerRef = useRef(0);
 
-  // Load background texture
+  // Load background textures
   useEffect(() => {
+    const paths = ['/img/Artboard 1.png', '/img/run.png', '/img/maarten.png', '/img/RICKv2.png'];
     const loader = new THREE.TextureLoader();
-    loader.load('/img/Artboard 1.png', (texture) => {
-      texture.minFilter = THREE.LinearFilter;
-      texture.magFilter = THREE.LinearFilter;
-      texture.wrapS = THREE.ClampToEdgeWrapping;
-      texture.wrapT = THREE.ClampToEdgeWrapping;
-      texture.colorSpace = THREE.SRGBColorSpace;
-      bgTextureRef.current = texture;
+    const textures: THREE.Texture[] = [];
+    let loaded = 0;
+
+    paths.forEach((path, i) => {
+      loader.load(path, (texture) => {
+        texture.minFilter = THREE.LinearFilter;
+        texture.magFilter = THREE.LinearFilter;
+        texture.wrapS = THREE.ClampToEdgeWrapping;
+        texture.wrapT = THREE.ClampToEdgeWrapping;
+        texture.colorSpace = THREE.SRGBColorSpace;
+        textures[i] = texture;
+        loaded++;
+        if (loaded === paths.length) {
+          bgTexturesRef.current = textures;
+        }
+      });
     });
+
+    return () => { textures.forEach((t) => t.dispose()); };
   }, []);
 
   // Create ping-pong buffers for water simulation + scene capture
@@ -192,14 +206,13 @@ export default function WaterEffect() {
           vec3 greenOffset = offsetColor.rgb * accentGreen;
           vec3 finalRgb = max(centerColor.rgb, greenOffset);
 
-          // Background photo (dark)
+          // Background photo (distortion only, no water color processing)
           vec2 bgUv = coverUv(distortedUv, uResolution, uBgAspect);
           vec3 bgColor = texture2D(uBackgroundTexture, bgUv).rgb * 0.08;
 
-          // Smooth composite: alpha 0 = background, alpha 1 = scene content
           float sceneBlend = smoothstep(0.0, 0.05, centerColor.a);
-          vec4 sceneColor = vec4(mix(bgColor, finalRgb, sceneBlend), 1.0);
 
+          // Water effects on scene content only
           vec3 waterColor = vec3(0.98, 0.99, 1.0);
 
           vec3 normal = normalize(vec3(-gradX, 0.1, -gradY));
@@ -221,15 +234,18 @@ export default function WaterEffect() {
           caustic = smoothstep(-0.8, 0.8, caustic);
           caustic *= exp(-depth * 1.0) * 0.08;
 
-          vec3 finalColor = sceneColor.rgb * waterColor;
-          finalColor = mix(finalColor, scatterColor, volumetricScatter * 0.05);
-          finalColor += vec3(caustic) * 0.06;
+          vec3 sceneProcessed = finalRgb * waterColor;
+          sceneProcessed = mix(sceneProcessed, scatterColor, volumetricScatter * 0.05);
+          sceneProcessed += vec3(caustic) * 0.06;
 
           float effectStrength = 0.025;
           float pressureStrength = 0.008;
 
-          finalColor += vec3(spec) * effectStrength;
-          finalColor += pressure * pressureStrength;
+          sceneProcessed += vec3(spec) * effectStrength;
+          sceneProcessed += pressure * pressureStrength;
+
+          // Composite: bg photo (deformation only) vs processed scene (full water)
+          vec3 finalColor = mix(bgColor, sceneProcessed, sceneBlend);
 
           // Dithering om banding te verminderen
           float dither = (fract(sin(dot(vUv, vec2(12.9898, 78.233))) * 43758.5453) - 0.5) * 0.015;
@@ -372,9 +388,15 @@ export default function WaterEffect() {
         material.uniforms.uTime.value = state.clock.elapsedTime;
         material.uniforms.uResolution.value.set(size.width, size.height);
 
-        if (bgTextureRef.current) {
-          material.uniforms.uBackgroundTexture.value = bgTextureRef.current;
-          const img = bgTextureRef.current.image as HTMLImageElement;
+        if (bgTexturesRef.current.length > 0) {
+          bgTimerRef.current += delta;
+          if (bgTimerRef.current >= 0.15) {
+            bgTimerRef.current = 0;
+            bgIndexRef.current = (bgIndexRef.current + 1) % bgTexturesRef.current.length;
+          }
+          const currentBgTex = bgTexturesRef.current[bgIndexRef.current];
+          material.uniforms.uBackgroundTexture.value = currentBgTex;
+          const img = currentBgTex.image as HTMLImageElement;
           if (img?.width && img?.height) {
             material.uniforms.uBgAspect.value = img.width / img.height;
           }

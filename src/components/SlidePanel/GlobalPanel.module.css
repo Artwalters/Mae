@@ -1,0 +1,71 @@
+/* Panel Navigation Bar */
+.navBar {
+  display: flex;
+  flex: 1;
+  gap: 0.3em;
+}
+
+.navTab {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  padding: 0 1em;
+  font-family: var(--font-secondary);
+  font-size: var(--font-tag);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border: none;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  background: rgba(0, 0, 0, 0.04);
+  color: var(--color-dark);
+}
+
+.navTab:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.navTabActive {
+  background: var(--color-dark);
+  color: var(--color-accent);
+}
+
+.navTabActive:hover {
+  background: var(--color-dark);
+}
+
+.backButton {
+  aspect-ratio: 1;
+  flex-shrink: 0;
+  background: var(--color-dark);
+  border: none;
+  color: var(--color-white);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-par);
+  transition: color 0.3s ease;
+}
+
+.backButton:hover {
+  color: var(--color-accent);
+}
+
+.navTabNumber {
+  font-family: var(--font-mono);
+  font-size: var(--font-tag);
+}
+
+@media screen and (max-width: 767px) {
+  .navBar {
+    height: 2.5em;
+  }
+
+  .navTab {
+    padding: 0 0.8em;
+  }
+}

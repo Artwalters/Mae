@@ -12,7 +12,7 @@
 
 .panel {
   position: fixed;
-  background: var(--color-accent);
+  background: var(--color-light);
   z-index: 999;
   display: flex;
   flex-direction: column;
@@ -25,12 +25,32 @@
   transform: translateX(100%);
 }
 
+/* Sticky header — bar + divider stay fixed at top */
+.panelHeader {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--color-light);
+  padding: 1em 1em 0;
+}
+
+.panelHeaderInner {
+  display: flex;
+  gap: 0.3em;
+  align-items: stretch;
+}
+
+.divider {
+  width: 100%;
+  height: 0.25px;
+  background: rgba(0, 0, 0, 0.3);
+  margin-top: 1em;
+}
+
 .closeButton {
-  position: absolute;
-  top: 1em;
-  right: 1em;
-  width: 3em;
-  height: 3em;
+  width: 3.3em;
+  height: 3.3em;
+  flex-shrink: 0;
   background: var(--color-dark);
   border: 1px solid var(--color-dark);
   color: var(--color-white);
@@ -39,7 +59,6 @@
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
-  z-index: 10;
 }
 
 .closeButton:hover {
@@ -51,7 +70,6 @@
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 5em 1em 3em;
 
   /* Custom scrollbar */
   scrollbar-width: thin;
@@ -71,6 +89,10 @@
   border-radius: 3px;
 }
 
+.contentInner {
+  padding: 1.5em 1em 3em;
+}
+
 /* Mobile: bottom sheet, full width */
 @media screen and (max-width: 767px) {
   .panel {
@@ -83,14 +105,7 @@
     transform: translateY(100%);
   }
 
-  .closeButton {
-    top: 1em;
-    right: 1em;
-    width: 2.5em;
-    height: 2.5em;
-  }
-
-  .content {
-    padding: 2em 1em;
+  .contentInner {
+    padding: 1em 1em 2em;
   }
 }

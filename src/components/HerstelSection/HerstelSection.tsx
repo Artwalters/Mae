@@ -60,14 +60,14 @@ export default function HerstelSection() {
       {/* Left Content */}
       <div className={styles.content}>
         <span className="label label-light">
-          [ <ScrambleText retriggerAtEnd>Fysiotherapie</ScrambleText> ]
+          [ <ScrambleText retriggerAtEnd>Fysiotherapie bij MAE</ScrambleText> ]
         </span>
         <h2 className={`title-chaney ${styles.title}`}>Herstel</h2>
         <p className={`text-description ${styles.description} par`}>
-          Bij M.A.E. Fysiotherapie kijken we anders naar revalidatie. Waar veel
-          zorgprofessionals vooral beperkingen opleggen, geloven wij in een
-          doelgerichte, persoonlijke en stapsgewijze aanpak. Het doel: jou weer
-          laten functioneren zonder belemmeringen.
+          Bij MAE zien we fysiotherapie niet als een vast stramien, maar als een ingang.
+          Een poort naar het échte gesprek, naar beweging, naar ervaren, en vooral: naar
+          verandering. Geen standaardprotocols of voorspelbare trajecten, maar een
+          behandeling die begint met écht luisteren.
         </p>
         <button className="btn-accent" onClick={() => openPanel('start-nu')}><span>Start nu</span></button>
       </div>
@@ -76,7 +76,7 @@ export default function HerstelSection() {
       <div className={styles.imageContainer}>
         <div ref={bannerRef} className={`banner-accent ${styles.banner}`}>
           <p className="banner-text par">
-            Maarten is gespecialiseerd in sportblessures en revalidatie. Met jarenlange ervaring helpt hij sporters en actieve mensen om sterker terug te komen na een blessure.
+            Jij bent niet je klacht. En herstel begint niet altijd met een behandelplan, maar met vertrouwen, inzicht en een fysiotherapeut die naast je staat.
           </p>
           <button className={`btn-bar ${styles.bannerButton}`} onClick={() => openPanel('meet-maarten')}>
             Meet Maarten
