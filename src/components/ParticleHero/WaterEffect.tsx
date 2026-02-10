@@ -12,6 +12,20 @@ export default function WaterEffect() {
   const mouseVelocity = useRef(new THREE.Vector2(0, 0));
   const mouseDown = useRef(false);
   const frameCounter = useRef(0);
+  const bgTextureRef = useRef<THREE.Texture | null>(null);
+
+  // Load background texture
+  useEffect(() => {
+    const loader = new THREE.TextureLoader();
+    loader.load('/img/Artboard 1.png', (texture) => {
+      texture.minFilter = THREE.LinearFilter;
+      texture.magFilter = THREE.LinearFilter;
+      texture.wrapS = THREE.ClampToEdgeWrapping;
+      texture.wrapT = THREE.ClampToEdgeWrapping;
+      texture.colorSpace = THREE.SRGBColorSpace;
+      bgTextureRef.current = texture;
+    });
+  }, []);
 
   // Create ping-pong buffers for water simulation + scene capture
   const buffers = useMemo(() => {
@@ -120,8 +134,10 @@ export default function WaterEffect() {
       uniforms: {
         uWaterTexture: { value: null },
         uSceneTexture: { value: null },
+        uBackgroundTexture: { value: null },
         uTime: { value: 0 },
-        uResolution: { value: new THREE.Vector2(size.width, size.height) }
+        uResolution: { value: new THREE.Vector2(size.width, size.height) },
+        uBgAspect: { value: 1.0 }
       },
       vertexShader: `
         varying vec2 vUv;
@@ -133,9 +149,22 @@ export default function WaterEffect() {
       fragmentShader: `
         uniform sampler2D uWaterTexture;
         uniform sampler2D uSceneTexture;
+        uniform sampler2D uBackgroundTexture;
         uniform float uTime;
         uniform vec2 uResolution;
+        uniform float uBgAspect;
         varying vec2 vUv;
+
+        vec2 coverUv(vec2 uv, vec2 screenRes, float imgAspect) {
+          float screenAspect = screenRes.x / screenRes.y;
+          vec2 scale = vec2(1.0);
+          if (screenAspect > imgAspect) {
+            scale.y = imgAspect / screenAspect;
+          } else {
+            scale.x = screenAspect / imgAspect;
+          }
+          return (uv - 0.5) * scale + 0.5;
+        }
 
         void main() {
           vec4 water = texture2D(uWaterTexture, vUv);
@@ -163,11 +192,13 @@ export default function WaterEffect() {
           vec3 greenOffset = offsetColor.rgb * accentGreen;
           vec3 finalRgb = max(centerColor.rgb, greenOffset);
 
-          vec4 sceneColor = vec4(finalRgb, centerColor.a);
+          // Background photo (dark)
+          vec2 bgUv = coverUv(distortedUv, uResolution, uBgAspect);
+          vec3 bgColor = texture2D(uBackgroundTexture, bgUv).rgb * 0.08;
 
-          if (sceneColor.a < 0.01) {
-            sceneColor = vec4(1.0, 1.0, 1.0, 1.0);
-          }
+          // Smooth composite: alpha 0 = background, alpha 1 = scene content
+          float sceneBlend = smoothstep(0.0, 0.05, centerColor.a);
+          vec4 sceneColor = vec4(mix(bgColor, finalRgb, sceneBlend), 1.0);
 
           vec3 waterColor = vec3(0.98, 0.99, 1.0);
 
@@ -322,7 +353,7 @@ export default function WaterEffect() {
         meshRef.current.visible = false;
 
         gl.setRenderTarget(buffers.scene);
-        gl.setClearColor(new THREE.Color(0x1a1a1a), 1.0);
+        gl.setClearColor(new THREE.Color(0x000000), 0.0);
         gl.clear();
         gl.render(scene, camera);
 
@@ -340,6 +371,14 @@ export default function WaterEffect() {
         material.uniforms.uSceneTexture.value = buffers.scene.texture;
         material.uniforms.uTime.value = state.clock.elapsedTime;
         material.uniforms.uResolution.value.set(size.width, size.height);
+
+        if (bgTextureRef.current) {
+          material.uniforms.uBackgroundTexture.value = bgTextureRef.current;
+          const img = bgTextureRef.current.image as HTMLImageElement;
+          if (img?.width && img?.height) {
+            material.uniforms.uBgAspect.value = img.width / img.height;
+          }
+        }
       }
     } catch (error) {
       console.warn('Display material error:', error);
