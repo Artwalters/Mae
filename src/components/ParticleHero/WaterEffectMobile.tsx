@@ -3,6 +3,7 @@
 import { useRef, useMemo, useEffect } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
+import basePath from '@/lib/basePath';
 
 export default function WaterEffectMobile() {
   const { gl, size, scene, camera } = useThree();
@@ -17,7 +18,7 @@ export default function WaterEffectMobile() {
   // Load background video
   useEffect(() => {
     const video = document.createElement('video');
-    video.src = '/img/hero.mp4';
+    video.src = `${basePath}/img/hero.mp4`;
     video.crossOrigin = 'anonymous';
     video.loop = true;
     video.muted = true;

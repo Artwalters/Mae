@@ -6,6 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import ScrambleText from '@/components/ScrambleText';
 import { usePanel } from '@/context/PanelContext';
 import styles from './HerstelSection.module.css';
+import basePath from '@/lib/basePath';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -83,7 +84,7 @@ export default function HerstelSection() {
           </button>
         </div>
         <img
-          src="/img/run.png"
+          src={`${basePath}/img/run.png`}
           alt="Hardlopers tijdens marathon"
           className="img-cover img-grayscale"
         />

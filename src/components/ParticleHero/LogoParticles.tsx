@@ -4,8 +4,9 @@ import { useMemo, useRef, useEffect, useState } from 'react';
 import { useGLTF } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
+import basePath from '@/lib/basePath';
 
-const VIDEO_PATH = '/img/hero.mp4';
+const VIDEO_PATH = `${basePath}/img/hero.mp4`;
 
 interface Logo3DProps {
   scale?: number;
@@ -21,7 +22,7 @@ export default function Logo3D({ scale = 1, scrollProgress = 0, isFooterArea = f
   const [ready, setReady] = useState(false);
 
   // Load GLB model
-  const { scene } = useGLTF('/3D/maeuv.glb');
+  const { scene } = useGLTF(`${basePath}/3D/maeuv.glb`);
 
   // Create video texture and material once
   useEffect(() => {
@@ -139,4 +140,4 @@ export default function Logo3D({ scale = 1, scrollProgress = 0, isFooterArea = f
 }
 
 // Preload model
-useGLTF.preload('/3D/maeuv.glb');
+useGLTF.preload(`${basePath}/3D/maeuv.glb`);

@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import styles from './MeetMaartenPanel.module.css';
+import basePath from '@/lib/basePath';
 
 const credentials = [
   { year: '2016', text: 'Bachelor Fysiotherapie' },
@@ -62,7 +63,7 @@ export default function MeetMaartenPanel() {
 
       {/* Hero Image */}
       <div className={styles.heroImage}>
-        <img src="/img/maarten.png" alt="Maarten" className="img-cover" />
+        <img src={`${basePath}/img/maarten.png`} alt="Maarten" className="img-cover" />
       </div>
 
       {/* Over Maarten Section */}
@@ -101,13 +102,13 @@ export default function MeetMaartenPanel() {
         </div>
         <div className={styles.photoGrid}>
           <div className={styles.photo}>
-            <img src="/img/maarten.png" alt="Maarten" className="img-cover" />
+            <img src={`${basePath}/img/maarten.png`} alt="Maarten" className="img-cover" />
           </div>
           <div className={styles.photo}>
-            <img src="/img/run.png" alt="Training" className="img-cover" />
+            <img src={`${basePath}/img/run.png`} alt="Training" className="img-cover" />
           </div>
           <div className={styles.photo}>
-            <img src="/img/RICKv2.png" alt="Sessie" className="img-cover" />
+            <img src={`${basePath}/img/RICKv2.png`} alt="Sessie" className="img-cover" />
           </div>
         </div>
       </section>

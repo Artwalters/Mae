@@ -6,6 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import ScrambleText from '@/components/ScrambleText';
 import { usePanel } from '@/context/PanelContext';
 import styles from './LeefstijlSection.module.css';
+import basePath from '@/lib/basePath';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -68,7 +69,7 @@ export default function LeefstijlSection() {
           </button>
         </div>
         <img
-          src="/img/run.png"
+          src={`${basePath}/img/run.png`}
           alt="Leefstijl coaching"
           className="img-cover img-grayscale"
         />

@@ -5,6 +5,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import ScrambleText from '@/components/ScrambleText';
 import styles from './MaeSection.module.css';
+import basePath from '@/lib/basePath';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -13,21 +14,21 @@ const maeData = [
     number: '01',
     title: 'MOVE',
     description: 'Verandering begint met beweging. Niet alleen fysiek, maar ook mentaal. De eerste stap is vaak het lastigst, en de weg ernaartoe gaat niet altijd in een rechte lijn. Dat hoort erbij. Wij zijn er om je te begeleiden, te motiveren wanneer het tegenzit, en je te helpen volhouden.',
-    image: '/img/maarten.png',
+    image: `${basePath}/img/maarten.png`,
     keywords: ['Mobiliteit', 'Beweging', 'Motivatie', 'Begeleiding']
   },
   {
     number: '02',
     title: 'ADAPT',
     description: 'Iedereen is anders. Daarom krijg je een plan dat volledig is afgestemd op jouw situatie, doelen en niveau. En omdat jij verandert, verandert je plan mee. We evalueren regelmatig en sturen bij waar nodig, zodat je altijd blijft groeien.',
-    image: '/img/run.png',
+    image: `${basePath}/img/run.png`,
     keywords: ['Persoonlijk', 'Maatwerk', 'Progressie', 'Evaluatie']
   },
   {
     number: '03',
     title: 'EVOLVE',
     description: 'Dit gaat verder dan alleen trainen. Het gaat om bouwen aan een sterkere, gezondere versie van jezelf. Niet voor even, maar voor de lange termijn. Meer energie, meer zelfvertrouwen, en een lichaam waar je je goed in voelt.',
-    image: '/img/RICKv2.png',
+    image: `${basePath}/img/RICKv2.png`,
     keywords: ['Transformatie', 'Energie', 'Zelfvertrouwen', 'Lange termijn']
   }
 ];

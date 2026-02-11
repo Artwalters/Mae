@@ -4,6 +4,7 @@ import SmoothScroll from "@/components/SmoothScroll";
 import { PanelProvider } from "@/context/PanelContext";
 import GlobalPanel from "@/components/SlidePanel/GlobalPanel";
 import TitleRotator from "@/components/TitleRotator";
+import FontStyles from "@/components/FontStyles";
 
 export const metadata: Metadata = {
   title: "Move Adapt Evolve",
@@ -17,6 +18,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <FontStyles />
+      </head>
       <body>
         <TitleRotator />
         <PanelProvider>

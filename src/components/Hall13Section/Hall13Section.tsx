@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import styles from './Hall13Section.module.css';
+import basePath from '@/lib/basePath';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -67,7 +68,7 @@ export default function Hall13Section() {
         </a>
       </div>
       <img
-        src="/img/run.png"
+        src={`${basePath}/img/run.png`}
         alt="Hall 13"
         className="img-cover"
       />

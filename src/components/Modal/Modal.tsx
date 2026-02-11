@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import styles from './Modal.module.css';
+import basePath from '@/lib/basePath';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -52,9 +53,9 @@ export default function Modal() {
         </svg>
       </button>
       <div className={styles.modalLogos}>
-        <img src="/icons/mae.svg" alt="MAE" className={styles.modalLogo} />
+        <img src={`${basePath}/icons/mae.svg`} alt="MAE" className={styles.modalLogo} />
         <span className={styles.modalDivider}>|</span>
-        <img src="/icons/hal13.svg" alt="HAL XIII" className={styles.modalLogoHal} />
+        <img src={`${basePath}/icons/hal13.svg`} alt="HAL XIII" className={styles.modalLogoHal} />
       </div>
       <p className={`${styles.modalText} par`}>
         Voor een complete benadering van gezondheid en fitness combineren wij fysiotherapeutische zorg met professionele coaching en trainingsmogelijkheden.
