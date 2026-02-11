@@ -11,33 +11,38 @@ export default function WaterEffectMobile() {
   const mouseDown = useRef(false);
   const lastInteractionTime = useRef(Date.now());
   const isInactive = useRef(false);
-  const bgTexturesRef = useRef<THREE.Texture[]>([]);
-  const bgIndexRef = useRef(0);
-  const bgTimerRef = useRef(0);
+  const bgVideoTextureRef = useRef<THREE.VideoTexture | null>(null);
+  const bgVideoRef = useRef<HTMLVideoElement | null>(null);
 
-  // Load background textures
+  // Load background video
   useEffect(() => {
-    const paths = ['/img/Artboard 1.png', '/img/run.png', '/img/maarten.png', '/img/RICKv2.png'];
-    const loader = new THREE.TextureLoader();
-    const textures: THREE.Texture[] = [];
-    let loaded = 0;
+    const video = document.createElement('video');
+    video.src = '/img/hero.mp4';
+    video.crossOrigin = 'anonymous';
+    video.loop = true;
+    video.muted = true;
+    video.playsInline = true;
+    video.autoplay = true;
+    bgVideoRef.current = video;
 
-    paths.forEach((path, i) => {
-      loader.load(path, (texture) => {
-        texture.minFilter = THREE.LinearFilter;
-        texture.magFilter = THREE.LinearFilter;
-        texture.wrapS = THREE.ClampToEdgeWrapping;
-        texture.wrapT = THREE.ClampToEdgeWrapping;
-        texture.colorSpace = THREE.SRGBColorSpace;
-        textures[i] = texture;
-        loaded++;
-        if (loaded === paths.length) {
-          bgTexturesRef.current = textures;
-        }
-      });
-    });
+    video.addEventListener('canplay', () => {
+      const videoTexture = new THREE.VideoTexture(video);
+      videoTexture.minFilter = THREE.LinearFilter;
+      videoTexture.magFilter = THREE.LinearFilter;
+      videoTexture.wrapS = THREE.ClampToEdgeWrapping;
+      videoTexture.wrapT = THREE.ClampToEdgeWrapping;
+      videoTexture.colorSpace = THREE.SRGBColorSpace;
+      bgVideoTextureRef.current = videoTexture;
+    }, { once: true });
 
-    return () => { textures.forEach((t) => t.dispose()); };
+    video.play().catch(() => {});
+
+    return () => {
+      video.pause();
+      video.removeAttribute('src');
+      video.load();
+      bgVideoTextureRef.current?.dispose();
+    };
   }, []);
 
   // Mobile-safe buffers with proper WebGL extension checking
@@ -494,17 +499,11 @@ export default function WaterEffectMobile() {
         material.uniforms.uTime.value = state.clock.elapsedTime;
         material.uniforms.uResolution.value.set(size.width, size.height);
 
-        if (bgTexturesRef.current.length > 0) {
-          bgTimerRef.current += delta;
-          if (bgTimerRef.current >= 0.15) {
-            bgTimerRef.current = 0;
-            bgIndexRef.current = (bgIndexRef.current + 1) % bgTexturesRef.current.length;
-          }
-          const currentBgTex = bgTexturesRef.current[bgIndexRef.current];
-          material.uniforms.uBackgroundTexture.value = currentBgTex;
-          const img = currentBgTex.image as HTMLImageElement;
-          if (img?.width && img?.height) {
-            material.uniforms.uBgAspect.value = img.width / img.height;
+        if (bgVideoTextureRef.current) {
+          material.uniforms.uBackgroundTexture.value = bgVideoTextureRef.current;
+          const video = bgVideoRef.current;
+          if (video?.videoWidth && video?.videoHeight) {
+            material.uniforms.uBgAspect.value = video.videoWidth / video.videoHeight;
           }
         }
       }

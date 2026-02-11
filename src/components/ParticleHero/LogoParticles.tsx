@@ -5,13 +5,7 @@ import { useGLTF } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
-const IMAGE_PATHS = [
-  '/img/Artboard 1.png',
-  '/img/run.png',
-  '/img/maarten.png',
-  '/img/RICKv2.png',
-];
-const INTERVAL = 0.15; // seconds between photo switches
+const VIDEO_PATH = '/img/hero.mp4';
 
 interface Logo3DProps {
   scale?: number;
@@ -22,81 +16,72 @@ interface Logo3DProps {
 
 export default function Logo3D({ scale = 1, scrollProgress = 0, isFooterArea = false, isVisible = true }: Logo3DProps) {
   const groupRef = useRef<THREE.Group>(null);
-  const texturesRef = useRef<THREE.Texture[]>([]);
   const materialRef = useRef<THREE.ShaderMaterial | null>(null);
-  const indexRef = useRef(0);
-  const timerRef = useRef(0);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
   const [ready, setReady] = useState(false);
 
   // Load GLB model
   const { scene } = useGLTF('/3D/maeuv.glb');
 
-  // Load all image textures and create material once
+  // Create video texture and material once
   useEffect(() => {
-    const loader = new THREE.TextureLoader();
-    const textures: THREE.Texture[] = [];
-    let loaded = 0;
+    const video = document.createElement('video');
+    video.src = VIDEO_PATH;
+    video.crossOrigin = 'anonymous';
+    video.loop = true;
+    video.muted = true;
+    video.playsInline = true;
+    video.autoplay = true;
+    videoRef.current = video;
 
-    IMAGE_PATHS.forEach((path, i) => {
-      loader.load(path, (tex) => {
-        tex.flipY = false;
-        tex.minFilter = THREE.LinearFilter;
-        tex.magFilter = THREE.LinearFilter;
-        tex.wrapS = THREE.ClampToEdgeWrapping;
-        tex.wrapT = THREE.ClampToEdgeWrapping;
-        tex.colorSpace = THREE.SRGBColorSpace;
-        textures[i] = tex;
-        loaded++;
-        if (loaded === IMAGE_PATHS.length) {
-          texturesRef.current = textures;
-          materialRef.current = new THREE.ShaderMaterial({
-            uniforms: {
-              map: { value: textures[0] },
-            },
-            vertexShader: `
-              varying vec2 vUv;
-              void main() {
-                vUv = uv;
-                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-              }
-            `,
-            fragmentShader: `
-              uniform sampler2D map;
-              varying vec2 vUv;
-              void main() {
-                vec3 edgeColor = vec3(0.616, 0.941, 0.196);
-                float margin = 0.02;
-                bool isEdge = vUv.x < margin || vUv.x > 1.0 - margin ||
-                              vUv.y < margin || vUv.y > 1.0 - margin;
-                if (isEdge) {
-                  gl_FragColor = vec4(edgeColor, 1.0);
-                } else {
-                  gl_FragColor = texture2D(map, vUv);
-                }
-              }
-            `,
-          });
-          setReady(true);
-        }
+    video.addEventListener('canplay', () => {
+      const videoTexture = new THREE.VideoTexture(video);
+      videoTexture.flipY = false;
+      videoTexture.minFilter = THREE.LinearFilter;
+      videoTexture.magFilter = THREE.LinearFilter;
+      videoTexture.wrapS = THREE.ClampToEdgeWrapping;
+      videoTexture.wrapT = THREE.ClampToEdgeWrapping;
+      videoTexture.colorSpace = THREE.SRGBColorSpace;
+
+      materialRef.current = new THREE.ShaderMaterial({
+        uniforms: {
+          map: { value: videoTexture },
+        },
+        vertexShader: `
+          varying vec2 vUv;
+          void main() {
+            vUv = uv;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+          }
+        `,
+        fragmentShader: `
+          uniform sampler2D map;
+          varying vec2 vUv;
+          void main() {
+            vec3 edgeColor = vec3(0.616, 0.941, 0.196);
+            float margin = 0.02;
+            bool isEdge = vUv.x < margin || vUv.x > 1.0 - margin ||
+                          vUv.y < margin || vUv.y > 1.0 - margin;
+            if (isEdge) {
+              gl_FragColor = vec4(edgeColor, 1.0);
+            } else {
+              gl_FragColor = texture2D(map, vUv);
+            }
+          }
+        `,
       });
-    });
+      setReady(true);
+    }, { once: true });
+
+    video.play().catch(() => {});
 
     return () => {
-      textures.forEach((t) => t.dispose());
+      video.pause();
+      video.removeAttribute('src');
+      video.load();
       materialRef.current?.dispose();
     };
   }, []);
-
-  // Cycle through images in the render loop (no React re-renders)
-  useFrame((_, delta) => {
-    if (texturesRef.current.length === 0 || !materialRef.current) return;
-    timerRef.current += delta;
-    if (timerRef.current >= INTERVAL) {
-      timerRef.current = 0;
-      indexRef.current = (indexRef.current + 1) % texturesRef.current.length;
-      materialRef.current.uniforms.map.value = texturesRef.current[indexRef.current];
-    }
-  });
 
   // Clone and setup model with image texture
   const model = useMemo(() => {
