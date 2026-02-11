@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, ReactNode } from 'react';
 
-export type PanelType = 'meet-maarten' | 'start-nu' | null;
+export type PanelType = 'meet-maarten' | 'meet-merel' | 'start-nu' | null;
 
 interface PanelContextType {
   activePanel: PanelType;
