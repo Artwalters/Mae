@@ -1,2 +1,2 @@
-const basePath = process.env.NODE_ENV === 'production' ? '/Mae' : '';
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 export default basePath;
