@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useCallback, ReactNode } from 'react';
 import { gsap } from 'gsap';
-import Lenis from 'lenis';
 import { useLenis } from '@/components/SmoothScroll';
 import { usePanel } from '@/context/PanelContext';
 import styles from './SlidePanel.module.css';
@@ -18,9 +17,12 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
   const panelRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  const panelLenisRef = useRef<Lenis | null>(null);
+  const isOpenRef = useRef(isOpen);
   const lenis = useLenis();
   const { activePanel, setProgress } = usePanel();
+
+  // Keep ref in sync for use in onComplete callbacks
+  isOpenRef.current = isOpen;
 
   // Track scroll progress for meet-maarten
   const handleScroll = useCallback(() => {
@@ -39,11 +41,20 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
 
     if (!panel || !overlay) return;
 
+    // Kill any ongoing animations to prevent race conditions
+    gsap.killTweensOf(panel);
+    gsap.killTweensOf(overlay);
+
     if (isOpen) {
       // Stop Lenis smooth scroll and prevent all scrolling
       lenis?.stop();
       document.documentElement.style.overflow = 'hidden';
       document.body.style.overflow = 'hidden';
+
+      // Reset scroll position
+      if (contentRef.current) {
+        contentRef.current.scrollTop = 0;
+      }
 
       // Check if mobile or desktop for animation
       const isMobile = window.innerWidth <= 767;
@@ -90,17 +101,23 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
       // Check if mobile or desktop for animation direction
       const isMobile = window.innerWidth <= 767;
 
+      const onCloseComplete = () => {
+        // Only restart Lenis if panel is still closed (prevents race condition)
+        if (!isOpenRef.current) {
+          lenis?.start();
+          document.documentElement.style.overflow = '';
+          document.body.style.overflow = '';
+        }
+        gsap.set(panel, { skewX: 0 });
+      };
+
       if (isMobile) {
         gsap.to(panel, {
           x: '0%',
           y: '100%',
           duration: 0.5,
           ease: 'power3.in',
-          onComplete: () => {
-            lenis?.start();
-            document.documentElement.style.overflow = '';
-            document.body.style.overflow = '';
-          }
+          onComplete: onCloseComplete
         });
       } else {
         // Desktop: skewed animation out
@@ -109,12 +126,7 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
           skewX: -10,
           duration: 0.5,
           ease: 'power3.in',
-          onComplete: () => {
-            lenis?.start();
-            document.documentElement.style.overflow = '';
-            document.body.style.overflow = '';
-            gsap.set(panel, { skewX: 0 });
-          }
+          onComplete: onCloseComplete
         });
       }
     }
@@ -140,43 +152,6 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
       window.removeEventListener('resize', setInitialPosition);
     };
   }, []);
-
-  // Panel-scoped Lenis smooth scroll
-  useEffect(() => {
-    if (isOpen && contentRef.current) {
-      // Small delay to ensure panel is visible before creating Lenis
-      const timer = setTimeout(() => {
-        if (!contentRef.current) return;
-
-        const panelLenis = new Lenis({
-          wrapper: contentRef.current,
-          content: contentRef.current.firstElementChild as HTMLElement || contentRef.current,
-          eventsTarget: contentRef.current,
-        });
-        panelLenisRef.current = panelLenis;
-
-        const tick = (time: number) => {
-          panelLenis.raf(time * 1000);
-        };
-        gsap.ticker.add(tick);
-
-        // Store tick ref for cleanup
-        (panelLenis as unknown as Record<string, unknown>)._tickRef = tick;
-      }, 100);
-
-      return () => {
-        clearTimeout(timer);
-      };
-    } else {
-      // Destroy panel Lenis when closing
-      if (panelLenisRef.current) {
-        const tick = (panelLenisRef.current as unknown as Record<string, unknown>)._tickRef as (time: number) => void;
-        if (tick) gsap.ticker.remove(tick);
-        panelLenisRef.current.destroy();
-        panelLenisRef.current = null;
-      }
-    }
-  }, [isOpen]);
 
   // Scroll progress listener
   useEffect(() => {
