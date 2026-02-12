@@ -23,13 +23,13 @@
 
 /* Spacer zodat hero initieel zichtbaar is */
 .heroSpacer {
-  height: 100svh;
+  height: 101svh;
   pointer-events: none;
 }
 
 @media screen and (max-width: 767px) {
   .heroSpacer {
-    height: 94svh;
+    height: 101svh;
   }
 }
 

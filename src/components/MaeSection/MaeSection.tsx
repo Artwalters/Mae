@@ -116,12 +116,6 @@ export default function MaeSection() {
 
   return (
     <section ref={sectionRef} id="mae-section" className={styles.section}>
-      {/* 3D Depth Edge */}
-      <div className={styles.depthEdge} />
-
-      {/* Swipe indicator - mobile only */}
-      <div className={styles.swipeIndicator} />
-
       {/* Header */}
       <div className={styles.header}>
         <span className="label label-dark">

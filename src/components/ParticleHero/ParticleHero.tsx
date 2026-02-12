@@ -9,6 +9,7 @@ import Logo3D from './LogoParticles';
 import WaterEffect from './WaterEffect';
 import WaterEffectMobile from './WaterEffectMobile';
 import ScrambleText from '@/components/ScrambleText';
+import basePath from '@/lib/basePath';
 import styles from './ParticleHero.module.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -21,7 +22,6 @@ export default function ParticleHero() {
   const [isFooterArea, setIsFooterArea] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
-  const menuRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -90,7 +90,7 @@ export default function ParticleHero() {
       trigger: document.body,
       start: `bottom-=${footerStartOffset} bottom`,
       end: 'bottom bottom',
-      scrub: 1.5,
+      scrub: true,
       onEnter: () => setIsFooterArea(true),
       onLeaveBack: () => setIsFooterArea(false),
       onUpdate: (self) => {
@@ -106,66 +106,6 @@ export default function ParticleHero() {
     };
   }, []);
 
-  // Menu hide on scroll with stagger effect
-  useEffect(() => {
-    const menu = menuRef.current;
-    if (!menu) return;
-
-    const menuItems = menu.querySelectorAll('a');
-    let menuHidden = false;
-
-    // Set initial state
-    gsap.set(menuItems, { yPercent: 0, opacity: 1 });
-
-    const showMenu = () => {
-      if (!menuHidden) return;
-      menuHidden = false;
-      gsap.to(menuItems, {
-        yPercent: 0,
-        opacity: 1,
-        duration: 0.5,
-        stagger: 0.08,
-        ease: 'expo.out',
-        overwrite: true
-      });
-    };
-
-    const hideMenu = () => {
-      if (menuHidden) return;
-      menuHidden = true;
-      gsap.to(menuItems, {
-        yPercent: -110,
-        opacity: 0,
-        duration: 0.4,
-        stagger: 0.05,
-        ease: 'power2.inOut',
-        overwrite: true
-      });
-    };
-
-    // Top trigger - hide when scrolling away from top
-    const topTrigger = ScrollTrigger.create({
-      trigger: document.body,
-      start: 'top top',
-      end: '100px top',
-      onLeave: hideMenu,
-      onEnterBack: showMenu
-    });
-
-    // Footer trigger - show when reaching footer
-    const footerTrigger = ScrollTrigger.create({
-      trigger: document.body,
-      start: 'bottom bottom+=200',
-      end: 'bottom bottom',
-      onEnter: showMenu,
-      onLeaveBack: hideMenu
-    });
-
-    return () => {
-      topTrigger.kill();
-      footerTrigger.kill();
-    };
-  }, []);
 
   // Don't render water effect until we know the device type (prevents hydration mismatch)
   const isMobile = screenSize === 'mobile';
@@ -204,13 +144,17 @@ export default function ParticleHero() {
 
   return (
     <div ref={containerRef} className={styles.container}>
-      {/* Menu */}
-      <nav ref={menuRef} className={styles.menu}>
-        <a href="#home" className={styles.menuItem}>HOME</a>
-        <a href="#trajecten" className={styles.menuItem}>TRAJECTEN</a>
-        <a href="#over" className={styles.menuItem}>OVER</a>
-        <a href="#contact" className={styles.menuItem}>CONTACT</a>
-      </nav>
+      {/* Mobile video background */}
+      {isMobile && (
+        <video
+          className={styles.mobileVideo}
+          src={`${basePath}/img/hero.mp4`}
+          autoPlay
+          muted
+          loop
+          playsInline
+        />
+      )}
 
       {/* Side Labels */}
       <div className={`${styles.sideLabels} ${isVisible ? styles.visible : styles.hidden}`}>
