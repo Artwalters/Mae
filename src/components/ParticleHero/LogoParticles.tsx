@@ -13,16 +13,17 @@ interface Logo3DProps {
   scrollProgress?: number;
   isFooterArea?: boolean;
   isVisible?: boolean;
+  isMobile?: boolean;
 }
 
-export default function Logo3D({ scale = 1, scrollProgress = 0, isFooterArea = false, isVisible = true }: Logo3DProps) {
+export default function Logo3D({ scale = 1, scrollProgress = 0, isFooterArea = false, isVisible = true, isMobile = false }: Logo3DProps) {
   const groupRef = useRef<THREE.Group>(null);
   const materialRef = useRef<THREE.ShaderMaterial | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [ready, setReady] = useState(false);
 
   // Load GLB model
-  const { scene } = useGLTF(`${basePath}/3D/maeuv.glb`);
+  const { scene } = useGLTF(`${basePath}/3D/maelogo.glb`);
 
   // Create video texture and material once
   useEffect(() => {
@@ -47,6 +48,7 @@ export default function Logo3D({ scale = 1, scrollProgress = 0, isFooterArea = f
       materialRef.current = new THREE.ShaderMaterial({
         uniforms: {
           map: { value: videoTexture },
+          rotateUV: { value: 0.0 },
         },
         vertexShader: `
           varying vec2 vUv;
@@ -57,16 +59,21 @@ export default function Logo3D({ scale = 1, scrollProgress = 0, isFooterArea = f
         `,
         fragmentShader: `
           uniform sampler2D map;
+          uniform float rotateUV;
           varying vec2 vUv;
           void main() {
             vec3 edgeColor = vec3(0.616, 0.941, 0.196);
             float margin = 0.02;
             bool isEdge = vUv.x < margin || vUv.x > 1.0 - margin ||
                           vUv.y < margin || vUv.y > 1.0 - margin;
+            vec2 uv = vUv;
+            if (rotateUV > 0.5) {
+              uv = vec2(vUv.y, 1.0 - vUv.x);
+            }
             if (isEdge) {
               gl_FragColor = vec4(edgeColor, 1.0);
             } else {
-              gl_FragColor = texture2D(map, vUv);
+              gl_FragColor = texture2D(map, uv);
             }
           }
         `,
@@ -107,7 +114,7 @@ export default function Logo3D({ scale = 1, scrollProgress = 0, isFooterArea = f
   }, [scene, ready]);
 
   // Smooth rotation and visibility based on scroll
-  useFrame(() => {
+  useFrame((_, delta) => {
     if (groupRef.current) {
       // Handle visibility with smooth fade
       const targetScale = isVisible ? scale : 0;
@@ -115,20 +122,29 @@ export default function Logo3D({ scale = 1, scrollProgress = 0, isFooterArea = f
       const newScale = currentScale + (targetScale - currentScale) * 0.1;
       groupRef.current.scale.set(newScale, newScale, newScale);
 
-      // Handle rotation
-      let targetRotationX: number;
-      const maxTilt = Math.PI * 0.25;
-
-      if (isFooterArea) {
-        // Footer: start tilted backwards, scroll to upright
-        targetRotationX = -maxTilt * (1 - scrollProgress);
-      } else {
-        // Top: start upright, scroll to tilted backwards
-        targetRotationX = scrollProgress * -maxTilt;
+      // Update UV rotation uniform
+      if (materialRef.current) {
+        materialRef.current.uniforms.rotateUV.value = isMobile ? 1.0 : 0.0;
       }
 
-      // Smooth interpolation
-      groupRef.current.rotation.x += (targetRotationX - groupRef.current.rotation.x) * 0.1;
+      if (isMobile) {
+        // Mobile: stand vertical (portrait) and auto-rotate
+        groupRef.current.rotation.x = 0;
+        groupRef.current.rotation.z = Math.PI / 2;
+        groupRef.current.rotation.y += delta * 0.6;
+      } else {
+        // Desktop: scroll-based tilt
+        let targetRotationX: number;
+        const maxTilt = Math.PI * 0.25;
+
+        if (isFooterArea) {
+          targetRotationX = -maxTilt * (1 - scrollProgress);
+        } else {
+          targetRotationX = scrollProgress * -maxTilt;
+        }
+
+        groupRef.current.rotation.x += (targetRotationX - groupRef.current.rotation.x) * 0.1;
+      }
     }
   });
 
@@ -140,4 +156,4 @@ export default function Logo3D({ scale = 1, scrollProgress = 0, isFooterArea = f
 }
 
 // Preload model
-useGLTF.preload(`${basePath}/3D/maeuv.glb`);
+useGLTF.preload(`${basePath}/3D/maelogo.glb`);

@@ -115,7 +115,7 @@ export default function ParticleHero() {
   const getScaleAndZoom = () => {
     switch (screenSize) {
       case 'mobile':
-        return { scale: 0.055, zoom: 180 };
+        return { scale: 0.1, zoom: 180 };
       case 'tablet-sm':
         return { scale: 0.085, zoom: 200 };
       case 'tablet-md':
@@ -189,7 +189,7 @@ export default function ParticleHero() {
         <Suspense fallback={null}>
           <group position={[0, getLogoYOffset(), 0]}>
             <Center precise>
-              <Logo3D scale={scale} scrollProgress={scrollProgress} isFooterArea={isFooterArea} isVisible={isVisible} />
+              <Logo3D scale={scale} scrollProgress={scrollProgress} isFooterArea={isFooterArea} isVisible={isVisible} isMobile={isMobile} />
             </Center>
           </group>
           {WaterComponent && <WaterComponent />}
