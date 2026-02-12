@@ -152,11 +152,12 @@
     font-size: var(--font-par);
     position: absolute;
     top: 2em;
-    right: 0.5em;
+    right: 1em;
   }
 
   .question {
     font-size: var(--font-par);
+    max-width: 90%;
   }
 
 }

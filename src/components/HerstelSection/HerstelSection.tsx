@@ -69,7 +69,7 @@ export default function HerstelSection() {
       </div>
 
       {/* Right Image */}
-      <div className={styles.imageContainer}>
+      <div id="herstel-image" className={styles.imageContainer}>
         <div ref={bannerRef} className={`banner-accent ${styles.banner}`}>
           <p className="banner-text par">
             Jij bent niet je klacht. En herstel begint niet altijd met een behandelplan, maar met vertrouwen, inzicht en een fysiotherapeut die naast je staat.

@@ -243,8 +243,9 @@
     top: 1em;
     right: 1em;
     z-index: 200;
-    background: var(--color-dark);
+    background: #3a3a3a;
     border: none;
+    transition: background-color 0.4s ease;
     cursor: pointer;
     width: 5em;
     height: 5em;
@@ -255,8 +256,8 @@
   .hamburgerBar {
     display: block;
     position: absolute;
-    width: 2em;
-    height: 2px;
+    width: 2.4em;
+    height: 3px;
     background: var(--color-gray);
     transition: transform 0.5s cubic-bezier(.7, 0, .3, 1);
   }

@@ -54,7 +54,7 @@ export default function LeefstijlSection() {
   return (
     <section ref={sectionRef} id="leefstijl-section" className={styles.section}>
       {/* Left Image */}
-      <div className={styles.imageContainer}>
+      <div id="leefstijl-image" className={styles.imageContainer}>
         <div ref={bannerRef} className={`banner-accent ${styles.banner}`}>
           <p className="banner-text par">
             Merel helpt je bij het vinden van een duurzame levensstijl die bij jou past. Geen diëten, maar echte verandering met zelfacceptatie als uitgangspunt.
@@ -71,7 +71,7 @@ export default function LeefstijlSection() {
       </div>
 
       {/* Right Content */}
-      <div className={styles.content}>
+      <div id="leefstijl-content" className={styles.content}>
         <span className="label label-light">
           [ <ScrambleText retriggerAtEnd>Leefstijlcoaching</ScrambleText> ]
         </span>

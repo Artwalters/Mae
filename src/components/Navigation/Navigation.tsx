@@ -1,8 +1,12 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useLenis } from '@/components/SmoothScroll';
 import styles from './Navigation.module.css';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const navItems = [
   { label: 'Home', target: 'top' },
@@ -12,8 +16,20 @@ const navItems = [
   { label: 'Contact', target: 'cta-section', accent: true },
 ];
 
+const sectionColors: { id: string; bg: string }[] = [
+  { id: 'mae-section', bg: '#d7d7d7' },           // --color-light darkened
+  { id: 'herstel-section', bg: '#3a3a3a' },       // dark grey like hero
+  { id: 'herstel-image', bg: '#d7d7d7' },         // light darkened
+  { id: 'leefstijl-content', bg: '#3a3a3a' },     // dark grey like hero
+  { id: 'leefstijl-image', bg: '#d7d7d7' },       // light darkened
+  { id: 'faq-section', bg: '#d7d7d7' },           // light darkened
+  { id: 'cta-section', bg: '#d7d7d7' },           // light darkened
+  { id: 'footer-section', bg: '#3a3a3a' },        // dark grey like hero
+];
+
 export default function Navigation() {
   const [active, setActive] = useState(false);
+  const hamburgerRef = useRef<HTMLButtonElement>(null);
   const lenis = useLenis();
 
   const open = useCallback(() => {
@@ -74,6 +90,41 @@ export default function Navigation() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [active, close]);
 
+  // Hamburger adapts background color to current section
+  useEffect(() => {
+    const btn = hamburgerRef.current;
+    if (!btn) return;
+
+    const heroColor = '#3a3a3a';
+    btn.style.backgroundColor = heroColor;
+
+    const triggers = sectionColors.map(({ id, bg }, index) => {
+      const el = document.getElementById(id);
+      if (!el) return null;
+
+      const color = bg;
+
+      // Find the previous section's color (or hero color)
+      const prevColor = index === 0
+        ? heroColor
+        : sectionColors[index - 1].bg;
+
+      return ScrollTrigger.create({
+        trigger: el,
+        start: 'top top+=80',
+        end: 'bottom top+=80',
+        onEnter: () => { btn.style.backgroundColor = color; },
+        onEnterBack: () => { btn.style.backgroundColor = color; },
+        onLeave: () => {},
+        onLeaveBack: () => { btn.style.backgroundColor = prevColor; },
+      });
+    });
+
+    return () => {
+      triggers.forEach(t => t?.kill());
+    };
+  }, []);
+
   return (
     <nav
       className={styles.nav}
@@ -94,6 +145,7 @@ export default function Navigation() {
 
       {/* Hamburger (mobile) */}
       <button
+        ref={hamburgerRef}
         className={styles.hamburger}
         onClick={toggle}
         aria-label={active ? 'Close menu' : 'Open menu'}

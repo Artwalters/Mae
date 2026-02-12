@@ -30,7 +30,7 @@ export default function Home() {
     <Hall13Section />
     <CTASection />
 
-    <div className={styles.hero}>
+    <div id="footer-section" className={styles.hero}>
       <div className={styles.logoContainer}>
         <ParticleFooter />
       </div>
