@@ -21,33 +21,28 @@ export default function HerstelSection() {
 
     if (!section || !banner) return;
 
+    const container = banner.offsetParent as HTMLElement;
+    if (!container) return;
+
+    // Read CSS-defined top value as reference (0.5em in correct font-size context)
+    const initialTop = parseFloat(getComputedStyle(banner).top) || 0;
+
     const trigger = ScrollTrigger.create({
       trigger: section,
       start: 'top bottom',
       end: 'bottom bottom',
       onUpdate: () => {
-        const sectionRect = section.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
         const bannerHeight = banner.offsetHeight;
         const viewportHeight = window.innerHeight;
 
-        const bannerTopPosition = sectionRect.top + parseFloat(getComputedStyle(document.documentElement).fontSize) * 0.5;
+        // Keep banner absolute, calculate top to simulate sticky-to-viewport-bottom
+        const desiredTop = viewportHeight - bannerHeight - containerRect.top;
+        const minTop = initialTop;
+        const maxTop = containerRect.height - bannerHeight - initialTop;
 
-        if (bannerTopPosition < viewportHeight - bannerHeight && sectionRect.bottom > viewportHeight) {
-          banner.style.position = 'fixed';
-          banner.style.top = 'auto';
-          banner.style.bottom = '0';
-          banner.style.right = '0.5em';
-        } else if (sectionRect.bottom <= viewportHeight) {
-          banner.style.position = 'absolute';
-          banner.style.top = 'auto';
-          banner.style.bottom = '0.5em';
-          banner.style.right = '0.5em';
-        } else {
-          banner.style.position = 'absolute';
-          banner.style.top = '0.5em';
-          banner.style.bottom = 'auto';
-          banner.style.right = '0.5em';
-        }
+        banner.style.top = Math.max(minTop, Math.min(desiredTop, maxTop)) + 'px';
+        banner.style.bottom = 'auto';
       }
     });
 

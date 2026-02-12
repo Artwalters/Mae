@@ -18,6 +18,9 @@ export default function Hall13Section() {
 
     if (!section || !banner) return;
 
+    // Read CSS-defined top value as reference (0.5em in correct font-size context)
+    const initialTop = parseFloat(getComputedStyle(banner).top) || 0;
+
     const trigger = ScrollTrigger.create({
       trigger: section,
       start: 'top bottom',
@@ -27,28 +30,13 @@ export default function Hall13Section() {
         const bannerHeight = banner.offsetHeight;
         const viewportHeight = window.innerHeight;
 
-        // Calculate where the banner would be if positioned at top
-        const bannerTopPosition = sectionRect.top + parseFloat(getComputedStyle(document.documentElement).fontSize) * 0.5;
+        // Keep banner absolute, calculate top to simulate sticky-to-viewport-bottom
+        const desiredTop = viewportHeight - bannerHeight - sectionRect.top;
+        const minTop = initialTop;
+        const maxTop = sectionRect.height - bannerHeight - initialTop;
 
-        if (bannerTopPosition < viewportHeight - bannerHeight && sectionRect.bottom > viewportHeight) {
-          // Stick to bottom of viewport
-          banner.style.position = 'fixed';
-          banner.style.top = 'auto';
-          banner.style.bottom = '0';
-          banner.style.right = '0.5em';
-        } else if (sectionRect.bottom <= viewportHeight) {
-          // Stop at bottom of section
-          banner.style.position = 'absolute';
-          banner.style.top = 'auto';
-          banner.style.bottom = '0.5em';
-          banner.style.right = '0.5em';
-        } else {
-          // Default position at top
-          banner.style.position = 'absolute';
-          banner.style.top = '0.5em';
-          banner.style.bottom = 'auto';
-          banner.style.right = '0.5em';
-        }
+        banner.style.top = Math.max(minTop, Math.min(desiredTop, maxTop)) + 'px';
+        banner.style.bottom = 'auto';
       }
     });
 

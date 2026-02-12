@@ -71,22 +71,13 @@
   overflow-y: auto;
   overflow-x: hidden;
 
-  /* Custom scrollbar */
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-dark) transparent;
+  /* Hide scrollbar */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .content::-webkit-scrollbar {
-  width: 6px;
-}
-
-.content::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.content::-webkit-scrollbar-thumb {
-  background: var(--color-dark);
-  border-radius: 3px;
+  display: none;
 }
 
 .contentInner {
