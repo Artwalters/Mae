@@ -122,6 +122,22 @@ export default function ParticleHero() {
         </span>
       </div>
 
+      {/* Hero bottom labels */}
+      <div className={styles.heroBottom} style={{ opacity: Math.max(0, 1 - scrollProgress * 3) }}>
+        <span className={styles.scrollDown}>
+          [<ScrambleText trigger="load" retriggerAtEnd retriggerAtStart>SCROLL DOWN</ScrambleText>]
+        </span>
+        <button
+          className={styles.contact}
+          onClick={() => {
+            const el = document.getElementById('cta-section');
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+          }}
+        >
+          [<ScrambleText trigger="load" retriggerAtEnd retriggerAtStart>CONTACT</ScrambleText>]
+        </button>
+      </div>
+
       <Canvas
         orthographic
         camera={{ position: [0, 0, 100], zoom, near: 0.1, far: 200 }}

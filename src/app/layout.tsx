@@ -5,6 +5,7 @@ import { PanelProvider } from "@/context/PanelContext";
 import GlobalPanel from "@/components/SlidePanel/GlobalPanel";
 import TitleRotator from "@/components/TitleRotator";
 import FontStyles from "@/components/FontStyles";
+import Navigation from "@/components/Navigation";
 
 export const metadata: Metadata = {
   title: "Move Adapt Evolve",
@@ -25,6 +26,7 @@ export default function RootLayout({
         <TitleRotator />
         <PanelProvider>
           <SmoothScroll>
+            <Navigation />
             {children}
             <GlobalPanel />
           </SmoothScroll>

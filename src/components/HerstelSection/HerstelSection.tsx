@@ -52,7 +52,7 @@ export default function HerstelSection() {
   }, []);
 
   return (
-    <section ref={sectionRef} className={styles.section}>
+    <section ref={sectionRef} id="herstel-section" className={styles.section}>
       {/* Left Content */}
       <div className={styles.content}>
         <span className="label label-light">

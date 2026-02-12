@@ -52,7 +52,7 @@ export default function LeefstijlSection() {
   }, []);
 
   return (
-    <section ref={sectionRef} className={styles.section}>
+    <section ref={sectionRef} id="leefstijl-section" className={styles.section}>
       {/* Left Image */}
       <div className={styles.imageContainer}>
         <div ref={bannerRef} className={`banner-accent ${styles.banner}`}>

@@ -109,7 +109,7 @@ export default function FAQSection() {
   }, []);
 
   return (
-    <section ref={sectionRef} className={styles.section}>
+    <section ref={sectionRef} id="faq-section" className={styles.section}>
       <div className={styles.header}>
         <span className="label label-dark">[ Veelgestelde vragen ]</span>
       </div>
