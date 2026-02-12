@@ -68,7 +68,7 @@
 .tileContent {
   display: flex;
   flex-direction: column;
-  padding: 1.5em 2em;
+  padding: 1em;
   position: relative;
 }
 
@@ -76,8 +76,8 @@
 
 .closeBtn {
   position: absolute;
-  top: 1.5em;
-  right: 2em;
+  top: 0;
+  right: 0;
   font-family: var(--font-secondary);
   font-size: var(--font-par);
   font-weight: 500;
@@ -88,6 +88,11 @@
   z-index: 101;
   transition: opacity 0.3s ease;
   letter-spacing: 0.1em;
+  width: 3.5em;
+  height: 3.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .closeBtn:hover {
@@ -123,7 +128,7 @@
 
 .menuLink {
   font-family: var(--font-primary);
-  font-size: var(--font-h1);
+  font-size: var(--font-h3);
   font-weight: 400;
   text-transform: uppercase;
   color: var(--color-white);
@@ -235,15 +240,14 @@
     align-items: center;
     justify-content: center;
     position: fixed;
-    top: 1.5em;
-    right: 1.5em;
+    top: 1em;
+    right: 1em;
     z-index: 200;
-    background: none;
+    background: var(--color-dark);
     border: none;
     cursor: pointer;
-    padding: 0.5em;
-    width: 2.5em;
-    height: 2em;
+    width: 5em;
+    height: 5em;
     pointer-events: auto;
   }
 
@@ -251,54 +255,31 @@
   .hamburgerBar {
     display: block;
     position: absolute;
-    width: 1.5em;
-    height: 1px;
+    width: 2em;
+    height: 2px;
     background: var(--color-gray);
-    transform: translate(0, 0) rotate(0.001deg);
     transition: transform 0.5s cubic-bezier(.7, 0, .3, 1);
   }
 
   .hamburgerBar:nth-child(1) {
-    transform: translate(0, -0.35em) scale(1, 1) rotate(0.001deg);
+    transform: translateY(-0.3em);
   }
 
-  .hamburgerBar:nth-child(3) {
-    transform: translate(0, 0.35em) scale(1, 1) rotate(0.001deg);
+  .hamburgerBar:nth-child(2) {
+    transform: translateY(0.3em);
   }
 
-  /* Hamburger hover */
-  .hamburger:hover .hamburgerBar:nth-child(1) {
-    transform: translate(0, -0.35em) scale(0.5, 1) rotate(0.001deg);
-  }
-
-  .hamburger:hover .hamburgerBar:nth-child(3) {
-    transform: translate(0, 0.35em) scale(0.5, 1) rotate(0.001deg);
-  }
-
-  /* Hamburger active (X shape) */
+  /* Active (X shape) */
   [data-navigation-status="active"] .hamburgerBar:nth-child(1) {
-    transform: translate(0, 0) rotate(45deg) scale(1, 1);
+    transform: translateY(0) rotate(45deg);
   }
 
   [data-navigation-status="active"] .hamburgerBar:nth-child(2) {
-    transform: translate(-150%, 0) rotate(0.001deg) scale(1, 1);
-  }
-
-  [data-navigation-status="active"] .hamburgerBar:nth-child(3) {
-    transform: translate(0, 0) rotate(-45deg) scale(1, 1);
-  }
-
-  /* Hamburger active + hover */
-  [data-navigation-status="active"] .hamburger:hover .hamburgerBar:nth-child(1) {
-    transform: translate(0, 0) rotate(45deg) scale(0.7, 1);
-  }
-
-  [data-navigation-status="active"] .hamburger:hover .hamburgerBar:nth-child(3) {
-    transform: translate(0, 0) rotate(-45deg) scale(0.7, 1);
+    transform: translateY(0) rotate(-45deg);
   }
 
   .menuLink {
-    font-size: var(--font-h2);
+    font-size: var(--font-h3);
   }
 
   .menuContactLink {

@@ -52,6 +52,28 @@ export default function Navigation() {
     return () => document.removeEventListener('keydown', handleKey);
   }, [active, close]);
 
+  // Click outside tile closes navigation
+  useEffect(() => {
+    if (!active) return;
+    const handleClick = (e: MouseEvent) => {
+      const tile = document.querySelector(`.${styles.tile}`);
+      const hamburger = document.querySelector(`.${styles.hamburger}`);
+      if (tile && !tile.contains(e.target as Node) && hamburger && !hamburger.contains(e.target as Node)) {
+        close();
+      }
+    };
+    document.addEventListener('click', handleClick);
+    return () => document.removeEventListener('click', handleClick);
+  }, [active, close]);
+
+  // Scroll closes navigation
+  useEffect(() => {
+    if (!active) return;
+    const handleScroll = () => close();
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [active, close]);
+
   return (
     <nav
       className={styles.nav}
@@ -76,7 +98,6 @@ export default function Navigation() {
         onClick={toggle}
         aria-label={active ? 'Close menu' : 'Open menu'}
       >
-        <span className={styles.hamburgerBar} />
         <span className={styles.hamburgerBar} />
         <span className={styles.hamburgerBar} />
       </button>
