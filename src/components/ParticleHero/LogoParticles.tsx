@@ -23,7 +23,7 @@ export default function Logo3D({ scale = 1, scrollProgress = 0, isFooterArea = f
   const [ready, setReady] = useState(false);
 
   // Load GLB model
-  const { scene } = useGLTF(`${basePath}/3D/maelogo.glb`);
+  const { scene } = useGLTF(`${basePath}/3D/maelogo2.glb`);
 
   // Create video texture and material once
   useEffect(() => {
@@ -156,4 +156,4 @@ export default function Logo3D({ scale = 1, scrollProgress = 0, isFooterArea = f
 }
 
 // Preload model
-useGLTF.preload(`${basePath}/3D/maelogo.glb`);
+useGLTF.preload(`${basePath}/3D/maelogo2.glb`);

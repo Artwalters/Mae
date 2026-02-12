@@ -54,20 +54,20 @@ export default function MaeSection() {
 
     const allElements = [overlay, ...rows];
     const heights = allElements.map(el => el.offsetHeight);
+    const isMobile = window.innerWidth < 768;
 
     // Set initial state: all stacked at top with rotation
-    // Later cards have more rotation
-    // Extra offset to hide cards behind overlay
-    const extraOffset = 50;
+    // Minimal animation on mobile
+    const extraOffset = isMobile ? 20 : 50;
 
     allElements.forEach((el, index) => {
       if (index > 0) {
-        // Move up by sum of all previous heights + extra offset
         const offset = heights.slice(0, index).reduce((sum, h) => sum + h, 0) + extraOffset;
         gsap.set(el, {
           y: -offset,
-          rotation: -3 - (index - 1) * 1.5,
-          transformOrigin: 'right top'
+          rotation: isMobile ? 0 : -3 - (index - 1) * 1.5,
+          transformOrigin: 'right top',
+          force3d: true,
         });
       }
     });
@@ -76,14 +76,12 @@ export default function MaeSection() {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: rowsWrapper,
-        start: 'top 90%',
-        end: 'bottom 90%',
-        scrub: true,
+        start: 'top bottom',
+        end: 'center center',
+        scrub: 1,
       },
     });
 
-    // Animate all elements (except first) to y: 0 and rotation: 0
-    // Later cards have slight delay and are slower
     const shadows = shadowsRef.current;
 
     allElements.forEach((el, index) => {
@@ -94,12 +92,13 @@ export default function MaeSection() {
         tl.to(el, {
           y: 0,
           rotation: 0,
-          ease: 'power1.inOut',
+          ease: isMobile ? 'none' : 'power1.inOut',
           duration: duration,
+          force3d: true,
         }, delay);
 
-        // Fade out shadow overlay
-        if (shadows[index - 1]) {
+        // Fade out shadow overlay (skip on mobile)
+        if (!isMobile && shadows[index - 1]) {
           tl.to(shadows[index - 1], {
             opacity: 0,
             ease: 'power1.inOut',
@@ -108,6 +107,11 @@ export default function MaeSection() {
         }
       }
     });
+
+    // On mobile, hide shadows immediately
+    if (isMobile) {
+      shadows.forEach(s => { if (s) s.style.display = 'none'; });
+    }
 
     return () => {
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());

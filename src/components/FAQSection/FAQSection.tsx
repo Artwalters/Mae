@@ -47,16 +47,18 @@ export default function FAQSection() {
 
     const allElements = [overlay, ...rows];
     const heights = allElements.map(el => el.offsetHeight);
+    const isMobile = window.innerWidth < 768;
 
-    const extraOffset = 50;
+    const extraOffset = isMobile ? 20 : 50;
 
     allElements.forEach((el, index) => {
       if (index > 0) {
         const offset = heights.slice(0, index).reduce((sum, h) => sum + h, 0) + extraOffset;
         gsap.set(el, {
           y: -offset,
-          rotation: -3 - (index - 1) * 1.5,
-          transformOrigin: 'right top'
+          rotation: isMobile ? 0 : -3 - (index - 1) * 1.5,
+          transformOrigin: 'right top',
+          force3d: true,
         });
       }
     });
@@ -64,9 +66,9 @@ export default function FAQSection() {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: rowsWrapper,
-        start: 'top 90%',
-        end: 'bottom 90%',
-        scrub: true,
+        start: 'top bottom',
+        end: 'center center',
+        scrub: 1,
       },
     });
 
@@ -80,11 +82,13 @@ export default function FAQSection() {
         tl.to(el, {
           y: 0,
           rotation: 0,
-          ease: 'power1.inOut',
+          ease: isMobile ? 'none' : 'power1.inOut',
           duration: duration,
+          force3d: true,
         }, delay);
 
-        if (shadows[index - 1]) {
+        // Skip shadow animation on mobile
+        if (!isMobile && shadows[index - 1]) {
           tl.to(shadows[index - 1], {
             opacity: 0,
             ease: 'power1.inOut',
@@ -93,6 +97,11 @@ export default function FAQSection() {
         }
       }
     });
+
+    // On mobile, hide shadows immediately
+    if (isMobile) {
+      shadows.forEach(s => { if (s) s.style.display = 'none'; });
+    }
 
     return () => {
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
