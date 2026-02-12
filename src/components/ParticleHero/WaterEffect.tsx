@@ -5,7 +5,11 @@ import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import basePath from '@/lib/basePath';
 
-export default function WaterEffect() {
+interface WaterEffectProps {
+  brightness?: number;
+}
+
+export default function WaterEffect({ brightness = 0.08 }: WaterEffectProps) {
   const { gl, size, scene, camera } = useThree();
   const meshRef = useRef<THREE.Mesh>(null);
   const mouse = useRef(new THREE.Vector2(0.5, 0.5));
@@ -157,7 +161,8 @@ export default function WaterEffect() {
         uBackgroundTexture: { value: null },
         uTime: { value: 0 },
         uResolution: { value: new THREE.Vector2(size.width, size.height) },
-        uBgAspect: { value: 1.0 }
+        uBgAspect: { value: 1.0 },
+        uBrightness: { value: brightness }
       },
       vertexShader: `
         varying vec2 vUv;
@@ -173,6 +178,7 @@ export default function WaterEffect() {
         uniform float uTime;
         uniform vec2 uResolution;
         uniform float uBgAspect;
+        uniform float uBrightness;
         varying vec2 vUv;
 
         vec2 coverUv(vec2 uv, vec2 screenRes, float imgAspect) {
@@ -214,7 +220,7 @@ export default function WaterEffect() {
 
           // Background photo (distortion only, no water color processing)
           vec2 bgUv = coverUv(distortedUv, uResolution, uBgAspect);
-          vec3 bgColor = texture2D(uBackgroundTexture, bgUv).rgb * 0.08;
+          vec3 bgColor = texture2D(uBackgroundTexture, bgUv).rgb * uBrightness;
 
           float sceneBlend = smoothstep(0.0, 0.05, centerColor.a);
 

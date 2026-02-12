@@ -14,24 +14,25 @@ export default function Home() {
   return (
     <>
     <div className={styles.hero}>
-      {/* Center Logo with Particle Effect */}
       <div className={styles.logoContainer}>
         <ParticleHero />
       </div>
     </div>
 
-    <div className={styles.content}>
-      <div className={styles.heroSpacer} />
-      <MaeSection />
-      <HerstelSection />
-      <ReviewsSection type="fysio" />
-      <ShowreelSection />
-      <LeefstijlSection />
-      <ReviewsSection type="leefstijl" />
-      <FAQSection />
-      <Hall13Section />
-      <CTASection />
-      <div className={styles.footerSpacer} />
+    <MaeSection />
+    <HerstelSection />
+    <ReviewsSection type="fysio" />
+    <ShowreelSection />
+    <LeefstijlSection />
+    <ReviewsSection type="leefstijl" />
+    <FAQSection />
+    <Hall13Section />
+    <CTASection />
+
+    <div className={styles.hero}>
+      <div className={styles.logoContainer}>
+        <ParticleHero />
+      </div>
     </div>
 
     <Modal />

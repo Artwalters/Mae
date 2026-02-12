@@ -1,7 +1,19 @@
 .section {
-  background: transparent;
+  background: #1a1a1a;
   padding: 0 0 0.5em 0;
   overflow: hidden;
+  position: relative;
+}
+
+.bgVideo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  pointer-events: none;
 }
 
 .sectionNoPaddingBottom {
