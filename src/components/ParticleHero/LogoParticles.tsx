@@ -67,7 +67,7 @@ export default function Logo3D({ scale = 1, scrollProgress = 0, mode = 'hero', i
                           vUv.y < margin || vUv.y > 1.0 - margin;
             vec2 uv = vUv;
             if (rotateUV > 0.5) {
-              uv = vec2(vUv.y, 1.0 - vUv.x);
+              uv = vec2(1.0 - vUv.y, vUv.x);
             }
             if (isEdge) {
               gl_FragColor = vec4(edgeColor, 1.0);
