@@ -1,6 +1,6 @@
 .section {
   background: var(--color-light);
-  height: 100vh;
+  height: calc(var(--avh, 1vh) * 100);
   display: flex;
   align-items: center;
   justify-content: center;

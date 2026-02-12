@@ -1,6 +1,6 @@
 .section {
   background: var(--color-light);
-  min-height: 100vh;
+  min-height: calc(var(--avh, 1vh) * 100);
   display: flex;
   flex-direction: column;
   padding: 4em 2em 0 2em;

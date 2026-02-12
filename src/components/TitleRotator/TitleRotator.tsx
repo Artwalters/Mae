@@ -9,6 +9,12 @@ const titles = [
 ];
 
 export default function TitleRotator() {
+  // Viewport height fix — calculate once on load, never changes on resize
+  useEffect(() => {
+    const avh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--avh', `${avh}px`);
+  }, []);
+
   useEffect(() => {
     const originalTitle = 'Move Adapt Evolve';
 
