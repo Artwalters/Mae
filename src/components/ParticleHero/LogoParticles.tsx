@@ -11,12 +11,11 @@ const VIDEO_PATH = `${basePath}/img/hero.mp4`;
 interface Logo3DProps {
   scale?: number;
   scrollProgress?: number;
-  isFooterArea?: boolean;
-  isVisible?: boolean;
+  mode?: 'hero' | 'footer';
   isMobile?: boolean;
 }
 
-export default function Logo3D({ scale = 1, scrollProgress = 0, isFooterArea = false, isVisible = true, isMobile = false }: Logo3DProps) {
+export default function Logo3D({ scale = 1, scrollProgress = 0, mode = 'hero', isMobile = false }: Logo3DProps) {
   const groupRef = useRef<THREE.Group>(null);
   const materialRef = useRef<THREE.ShaderMaterial | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -113,43 +112,43 @@ export default function Logo3D({ scale = 1, scrollProgress = 0, isFooterArea = f
     return cloned;
   }, [scene, ready]);
 
-  // Smooth rotation and visibility based on scroll
+  // Smooth rotation and position based on scroll
   useFrame((_, delta) => {
-    if (groupRef.current) {
-      // Handle visibility with smooth fade
-      const targetScale = isVisible ? scale : 0;
-      const currentScale = groupRef.current.scale.x;
-      const newScale = currentScale + (targetScale - currentScale) * 0.1;
-      groupRef.current.scale.set(newScale, newScale, newScale);
+    if (!groupRef.current) return;
 
-      // Update UV rotation uniform
-      if (materialRef.current) {
-        materialRef.current.uniforms.rotateUV.value = isMobile ? 1.0 : 0.0;
-      }
+    // Update UV rotation uniform
+    if (materialRef.current) {
+      materialRef.current.uniforms.rotateUV.value = isMobile ? 1.0 : 0.0;
+    }
 
-      if (isMobile) {
-        // Mobile: stand vertical (portrait) and auto-rotate
-        groupRef.current.rotation.x = 0;
-        groupRef.current.rotation.z = Math.PI / 2;
-        groupRef.current.rotation.y += delta * 0.6;
+    if (isMobile) {
+      // Mobile: stand vertical (portrait) and auto-rotate
+      groupRef.current.rotation.x = 0;
+      groupRef.current.rotation.z = Math.PI / 2;
+      groupRef.current.rotation.y += delta * 0.6;
+    } else {
+      const maxTilt = Math.PI * 0.25;
+      const maxDrop = 1.5;
+      let targetRotationX: number;
+      let targetY: number;
+
+      if (mode === 'hero') {
+        // Hero: starts centered, tilts backward + drops down
+        targetRotationX = scrollProgress * -maxTilt;
+        targetY = -(scrollProgress * scrollProgress) * maxDrop;
       } else {
-        // Desktop: scroll-based tilt
-        let targetRotationX: number;
-        const maxTilt = Math.PI * 0.25;
-
-        if (isFooterArea) {
-          targetRotationX = -maxTilt * (1 - scrollProgress);
-        } else {
-          targetRotationX = scrollProgress * -maxTilt;
-        }
-
-        groupRef.current.rotation.x += (targetRotationX - groupRef.current.rotation.x) * 0.1;
+        // Footer: starts above + tilted, comes down to center
+        targetRotationX = -maxTilt * (1 - scrollProgress);
+        targetY = maxDrop * (1 - scrollProgress);
       }
+
+      groupRef.current.rotation.x += (targetRotationX - groupRef.current.rotation.x) * 0.1;
+      groupRef.current.position.y += (targetY - groupRef.current.position.y) * 0.1;
     }
   });
 
   return (
-    <group ref={groupRef} scale={isVisible ? scale : 0}>
+    <group ref={groupRef} scale={scale}>
       <primitive object={model} />
     </group>
   );

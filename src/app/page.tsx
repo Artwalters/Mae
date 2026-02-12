@@ -7,6 +7,7 @@ import LeefstijlSection from "@/components/LeefstijlSection";
 import MaeSection from "@/components/MaeSection";
 import Modal from "@/components/Modal";
 import ParticleHero from "@/components/ParticleHero";
+import { ParticleFooter } from "@/components/ParticleHero";
 import ReviewsSection from "@/components/ReviewsSection";
 import ShowreelSection from "@/components/ShowreelSection";
 
@@ -31,7 +32,7 @@ export default function Home() {
 
     <div className={styles.hero}>
       <div className={styles.logoContainer}>
-        <ParticleHero />
+        <ParticleFooter />
       </div>
     </div>
 

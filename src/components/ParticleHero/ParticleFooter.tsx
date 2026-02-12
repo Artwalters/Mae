@@ -15,7 +15,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 type ScreenSize = 'mobile' | 'tablet-sm' | 'tablet-md' | 'tablet' | 'desktop-sm' | 'desktop' | 'desktop-lg' | null;
 
-export default function ParticleHero() {
+export default function ParticleFooter() {
   const [screenSize, setScreenSize] = useState<ScreenSize>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -44,15 +44,15 @@ export default function ParticleHero() {
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
 
-  // Scroll-based: tilt + drop when scrolling away from hero
+  // Scroll-based: logo comes from above into center
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
     const trigger = ScrollTrigger.create({
       trigger: container,
-      start: 'top top',
-      end: 'bottom top',
+      start: 'top bottom',
+      end: 'bottom bottom',
       scrub: true,
       onUpdate: (self) => {
         setScrollProgress(self.progress);
@@ -112,14 +112,14 @@ export default function ParticleHero() {
         />
       )}
 
-      {/* Side Labels - fade out as you scroll */}
-      <div className={styles.sideLabels} style={{ opacity: Math.max(0, 1 - scrollProgress * 3) }}>
-        <span className={`${styles.sideLabel} ${styles.left}`}>
-          [<ScrambleText trigger="load" retriggerAtEnd retriggerAtStart>FYSIOTHERAPIE</ScrambleText>]
-        </span>
-        <span className={`${styles.sideLabel} ${styles.right}`}>
-          [<ScrambleText trigger="load" retriggerAtEnd retriggerAtStart>LEEFSTIJL</ScrambleText>]
-        </span>
+      {/* Footer Tags - fade in when logo reaches center */}
+      <div className={styles.footerTags} style={{ opacity: Math.max(0, (scrollProgress - 0.7) / 0.3) }}>
+        <a href="#fysio" className={styles.footerTag}>
+          [<ScrambleText retriggerAtEnd>START FYSIOTHERAPIE</ScrambleText>]
+        </a>
+        <a href="#leefstijl" className={styles.footerTag}>
+          [<ScrambleText retriggerAtEnd>START LEEFSTIJL COACHING</ScrambleText>]
+        </a>
       </div>
 
       <Canvas
@@ -134,7 +134,7 @@ export default function ParticleHero() {
         <Suspense fallback={null}>
           <group position={[0, getLogoYOffset(), 0]}>
             <Center precise>
-              <Logo3D scale={scale} scrollProgress={scrollProgress} mode="hero" isMobile={isMobile} />
+              <Logo3D scale={scale} scrollProgress={scrollProgress} mode="footer" isMobile={isMobile} />
             </Center>
           </group>
           {WaterComponent && <WaterComponent />}
