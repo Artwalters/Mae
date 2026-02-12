@@ -46,9 +46,10 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
 
     if (!panel || !overlay) return;
 
-    // Kill any ongoing animations to prevent race conditions
-    gsap.killTweensOf(panel);
+    // Kill any ongoing overlay animations
     gsap.killTweensOf(overlay);
+
+    let transitionHandler: ((e: TransitionEvent) => void) | null = null;
 
     if (isOpen) {
       // Stop Lenis smooth scroll and prevent all scrolling
@@ -61,42 +62,19 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
         contentRef.current.scrollTop = 0;
       }
 
-      // Check if mobile or desktop for animation
-      const isMobile = window.innerWidth <= 767;
+      // Trigger clip-path animation via data attribute
+      panel.setAttribute('data-panel-open', 'true');
 
-      // Show panel and animate in
-      gsap.set(panel, { visibility: 'visible' });
       gsap.to(overlay, {
         opacity: 1,
         duration: 0.3,
         ease: 'power2.out',
         pointerEvents: 'auto'
       });
-
-      if (isMobile) {
-        gsap.to(panel, {
-          x: '0%',
-          y: '0%',
-          duration: 0.5,
-          ease: 'power3.out'
-        });
-      } else {
-        // Desktop: skewed animation
-        gsap.fromTo(panel,
-          {
-            x: '100%',
-            skewX: -10,
-          },
-          {
-            x: '0%',
-            skewX: 0,
-            duration: 0.6,
-            ease: 'power3.out'
-          }
-        );
-      }
     } else {
-      // Animate out
+      // Trigger clip-path close animation
+      panel.setAttribute('data-panel-open', 'false');
+
       gsap.to(overlay, {
         opacity: 0,
         duration: 0.3,
@@ -104,63 +82,26 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
         pointerEvents: 'none'
       });
 
-      // Check if mobile or desktop for animation direction
-      const isMobile = window.innerWidth <= 767;
-
-      const onCloseComplete = () => {
-        // Only restart Lenis if panel is still closed (prevents race condition)
+      // Wait for CSS transition to finish, then restart Lenis
+      transitionHandler = (e: TransitionEvent) => {
+        if (e.propertyName !== 'clip-path') return;
+        panel.removeEventListener('transitionend', transitionHandler!);
         if (!isOpenRef.current) {
           lenis?.start();
           document.documentElement.style.overflow = '';
           document.body.style.overflow = '';
-          // Re-sync ScrollTrigger with current scroll position after Lenis restart
           ScrollTrigger.refresh();
-          gsap.set(panel, { visibility: 'hidden' });
         }
-        gsap.set(panel, { skewX: 0 });
       };
-
-      if (isMobile) {
-        gsap.to(panel, {
-          x: '0%',
-          y: '100%',
-          duration: 0.5,
-          ease: 'power3.in',
-          onComplete: onCloseComplete
-        });
-      } else {
-        // Desktop: skewed animation out
-        gsap.to(panel, {
-          x: '100%',
-          skewX: -10,
-          duration: 0.5,
-          ease: 'power3.in',
-          onComplete: onCloseComplete
-        });
-      }
+      panel.addEventListener('transitionend', transitionHandler);
     }
-  }, [isOpen, lenis]);
-
-  // Set initial position based on screen size
-  useEffect(() => {
-    const panel = panelRef.current;
-    if (!panel) return;
-
-    const setInitialPosition = () => {
-      const isMobile = window.innerWidth <= 767;
-      gsap.set(panel, {
-        x: isMobile ? '0%' : '100%',
-        y: isMobile ? '100%' : '0%'
-      });
-    };
-
-    setInitialPosition();
-    window.addEventListener('resize', setInitialPosition);
 
     return () => {
-      window.removeEventListener('resize', setInitialPosition);
+      if (transitionHandler && panel) {
+        panel.removeEventListener('transitionend', transitionHandler);
+      }
     };
-  }, []);
+  }, [isOpen, lenis]);
 
   // Panel-scoped Lenis smooth scroll
   useEffect(() => {

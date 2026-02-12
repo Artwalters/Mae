@@ -124,7 +124,7 @@ export default function Logo3D({ scale = 1, scrollProgress = 0, mode = 'hero', i
     if (isMobile) {
       // Mobile: stand vertical (portrait) and auto-rotate
       groupRef.current.rotation.x = 0;
-      groupRef.current.rotation.z = Math.PI / 2;
+      groupRef.current.rotation.z = -Math.PI / 2;
       groupRef.current.rotation.y += delta * 0.6;
     } else {
       const maxTilt = Math.PI * 0.25;
