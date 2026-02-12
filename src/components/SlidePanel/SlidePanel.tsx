@@ -2,9 +2,13 @@
 
 import { useEffect, useRef, useCallback, ReactNode } from 'react';
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Lenis from 'lenis';
 import { useLenis } from '@/components/SmoothScroll';
 import { usePanel } from '@/context/PanelContext';
 import styles from './SlidePanel.module.css';
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface SlidePanelProps {
   isOpen: boolean;
@@ -17,6 +21,7 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
   const panelRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const panelLenisRef = useRef<Lenis | null>(null);
   const isOpenRef = useRef(isOpen);
   const lenis = useLenis();
   const { activePanel, setProgress } = usePanel();
@@ -59,7 +64,8 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
       // Check if mobile or desktop for animation
       const isMobile = window.innerWidth <= 767;
 
-      // Animate in
+      // Show panel and animate in
+      gsap.set(panel, { visibility: 'visible' });
       gsap.to(overlay, {
         opacity: 1,
         duration: 0.3,
@@ -107,6 +113,9 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
           lenis?.start();
           document.documentElement.style.overflow = '';
           document.body.style.overflow = '';
+          // Re-sync ScrollTrigger with current scroll position after Lenis restart
+          ScrollTrigger.refresh();
+          gsap.set(panel, { visibility: 'hidden' });
         }
         gsap.set(panel, { skewX: 0 });
       };
@@ -152,6 +161,40 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
       window.removeEventListener('resize', setInitialPosition);
     };
   }, []);
+
+  // Panel-scoped Lenis smooth scroll
+  useEffect(() => {
+    if (!isOpen || !contentRef.current) return;
+
+    // Reset scroll position when panel content changes
+    contentRef.current.scrollTop = 0;
+
+    const timer = setTimeout(() => {
+      if (!contentRef.current) return;
+
+      const panelLenis = new Lenis({
+        wrapper: contentRef.current,
+        eventsTarget: contentRef.current,
+      });
+      panelLenisRef.current = panelLenis;
+
+      const tick = (time: number) => {
+        panelLenis.raf(time * 1000);
+      };
+      gsap.ticker.add(tick);
+      (panelLenis as unknown as Record<string, unknown>)._tickRef = tick;
+    }, 100);
+
+    return () => {
+      clearTimeout(timer);
+      if (panelLenisRef.current) {
+        const tick = (panelLenisRef.current as unknown as Record<string, unknown>)._tickRef as (time: number) => void;
+        if (tick) gsap.ticker.remove(tick);
+        panelLenisRef.current.destroy();
+        panelLenisRef.current = null;
+      }
+    };
+  }, [isOpen, activePanel]);
 
   // Scroll progress listener
   useEffect(() => {
