@@ -90,13 +90,13 @@
 /* Hero Bottom */
 .heroBottom {
   position: absolute;
-  bottom: 2em;
+  bottom: 1em;
   left: 0;
   width: 100%;
   z-index: 10;
   pointer-events: none;
   text-align: center;
-  padding: 0 2em;
+  padding: 0 1em;
 }
 
 .scrollDown {

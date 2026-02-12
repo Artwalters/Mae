@@ -92,7 +92,7 @@ export default function ParticleHero() {
   const getLogoYOffset = () => {
     switch (screenSize) {
       case 'mobile':
-        return 0.30;
+        return 0.05;
       default:
         return 0;
     }
