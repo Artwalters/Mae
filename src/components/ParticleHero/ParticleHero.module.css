@@ -6,9 +6,36 @@
   justify-content: center;
 }
 
-/* Side Labels - verborgen op desktop, alleen op mobile zichtbaar via footerTags */
+/* Side Labels */
 .sideLabels {
-  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.sideLabel {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-secondary);
+  font-size: var(--font-tag);
+  font-weight: var(--font-weight);
+  text-transform: uppercase;
+  color: var(--color-gray);
+  letter-spacing: 0.2em;
+  white-space: nowrap;
+}
+
+.sideLabel.left {
+  left: 2em;
+}
+
+.sideLabel.right {
+  right: 2em;
 }
 
 /* Footer Tags - op desktop links/rechts, op mobile onderin */
@@ -73,6 +100,21 @@
 }
 
 @media screen and (max-width: 767px) {
+  .sideLabels {
+    top: auto;
+    bottom: 8svh;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+  }
+
+  .sideLabel {
+    position: static;
+    transform: none;
+    font-size: var(--font-small);
+  }
+
   .footerTags {
     display: none;
   }
