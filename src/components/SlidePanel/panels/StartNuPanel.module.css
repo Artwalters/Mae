@@ -313,8 +313,24 @@
     padding: 1.2em;
   }
 
+  .choiceCard:hover {
+    background: transparent;
+    color: var(--color-dark);
+    border-color: rgba(0, 0, 0, 0.2);
+  }
+
+  .choiceCard:hover .choiceText {
+    opacity: 0.5;
+  }
+
   .optionButton {
     padding: 1.2em;
+  }
+
+  .optionButton:hover {
+    background: transparent;
+    color: var(--color-dark);
+    border-color: rgba(0, 0, 0, 0.2);
   }
 
   .formGrid {

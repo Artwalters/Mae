@@ -70,7 +70,7 @@ export default function ParticleHero() {
   const getScaleAndZoom = () => {
     switch (screenSize) {
       case 'mobile':
-        return { scale: 0.1, zoom: 180 };
+        return { scale: 0.07, zoom: 180 };
       case 'tablet-sm':
         return { scale: 0.085, zoom: 200 };
       case 'tablet-md':
