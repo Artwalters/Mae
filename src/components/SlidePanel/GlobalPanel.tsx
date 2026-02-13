@@ -9,8 +9,9 @@ import StartNuPanel from './panels/StartNuPanel';
 import styles from './GlobalPanel.module.css';
 
 export default function GlobalPanel() {
-  const { activePanel, openPanel, closePanel, progress, onBack } = usePanel();
+  const { activePanel, openPanel, closePanel, onBack } = usePanel();
   const lastPanelRef = useRef<string | null>(null);
+  const navBarRef = useRef<HTMLDivElement>(null);
 
   // Only update lastPanel when a new panel opens
   useEffect(() => {
@@ -38,17 +39,11 @@ export default function GlobalPanel() {
   const isMeetMaarten = panelToRender === 'meet-maarten';
   const isStartNu = panelToRender === 'start-nu';
 
-  const activeGradient = (active: boolean) =>
-    active ? {
-      background: `linear-gradient(120deg, var(--color-accent) ${progress * 100}%, color-mix(in srgb, var(--color-accent) 90%, var(--color-dark)) ${progress * 100}%)`
-    } : undefined;
-
   const navBar = (
-    <div className={styles.navBar}>
+    <div ref={navBarRef} className={styles.navBar}>
       <button
         className={`${styles.navTab} ${isMeetMaarten ? styles.navTabActive : ''}`}
         onClick={() => openPanel('meet-maarten')}
-        style={activeGradient(isMeetMaarten)}
       >
         <span>Meet Maarten</span>
         <span className={styles.navTabNumber}>[01]</span>
@@ -64,7 +59,6 @@ export default function GlobalPanel() {
       <button
         className={`${styles.navTab} ${isStartNu ? styles.navTabActive : ''}`}
         onClick={() => openPanel('start-nu')}
-        style={activeGradient(isStartNu)}
       >
         <span>Start Nu</span>
         <span className={styles.navTabNumber}>[02]</span>

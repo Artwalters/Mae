@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useCallback, ReactNode } from 'react';
+import { useEffect, useRef, ReactNode } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
@@ -23,24 +23,26 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
   const contentRef = useRef<HTMLDivElement>(null);
   const panelLenisRef = useRef<Lenis | null>(null);
   const isOpenRef = useRef(isOpen);
+  const isMobileRef = useRef(false);
   const lenis = useLenis();
   const lenisRef = useRef(lenis);
-  const { activePanel, setProgress } = usePanel();
+  const { activePanel, progress } = usePanel();
+  const activePanelRef = useRef(activePanel);
 
   // Keep refs in sync for use in callbacks
   isOpenRef.current = isOpen;
   lenisRef.current = lenis;
+  activePanelRef.current = activePanel;
 
-  // Track scroll progress for meet-maarten
-  const handleScroll = useCallback(() => {
-    if (activePanel === 'meet-maarten' && contentRef.current) {
-      const { scrollTop, scrollHeight, clientHeight } = contentRef.current;
-      const max = scrollHeight - clientHeight;
-      if (max > 0) {
-        setProgress(scrollTop / max);
-      }
+  // Update progress as CSS custom property directly on the panel (no React re-render)
+  const updateProgress = () => {
+    if (activePanelRef.current !== 'meet-maarten' || !contentRef.current || !panelRef.current) return;
+    const { scrollTop, scrollHeight, clientHeight } = contentRef.current;
+    const max = scrollHeight - clientHeight;
+    if (max > 0) {
+      panelRef.current.style.setProperty('--panel-progress', String(scrollTop / max));
     }
-  }, [activePanel, setProgress]);
+  };
 
   useEffect(() => {
     const panel = panelRef.current;
@@ -57,13 +59,14 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
     if (isOpen) {
       // Stop Lenis smooth scroll and prevent all scrolling
       lenisRef.current?.stop();
-      document.documentElement.style.overflow = 'hidden';
-      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflowY = 'hidden';
+      document.body.style.overflowY = 'hidden';
 
-      // Reset scroll position
+      // Reset scroll position and progress
       if (contentRef.current) {
         contentRef.current.scrollTop = 0;
       }
+      panel.style.setProperty('--panel-progress', '0');
 
       // Trigger clip-path animation via data attribute
       panel.setAttribute('data-panel-open', 'true');
@@ -92,8 +95,8 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
         restored = true;
         if (!isOpenRef.current) {
           lenisRef.current?.start();
-          document.documentElement.style.overflow = '';
-          document.body.style.overflow = '';
+          document.documentElement.style.overflowY = '';
+          document.body.style.overflowY = '';
           ScrollTrigger.refresh();
         }
       };
@@ -118,12 +121,18 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
     };
   }, [isOpen]);
 
-  // Panel-scoped Lenis smooth scroll
+  // Panel-scoped Lenis smooth scroll (desktop only)
   useEffect(() => {
     if (!isOpen || !contentRef.current) return;
 
+    const isMobile = window.innerWidth < 768;
+    isMobileRef.current = isMobile;
+
     // Reset scroll position when panel content changes
     contentRef.current.scrollTop = 0;
+
+    // No panel Lenis on mobile — native scroll is smoother
+    if (isMobile) return;
 
     const timer = setTimeout(() => {
       if (!contentRef.current) return;
@@ -133,6 +142,9 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
         eventsTarget: contentRef.current,
       });
       panelLenisRef.current = panelLenis;
+
+      // Track progress via Lenis scroll callback (direct DOM, no React re-render)
+      panelLenis.on('scroll', updateProgress);
 
       const tick = (time: number) => {
         panelLenis.raf(time * 1000);
@@ -152,13 +164,20 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
     };
   }, [isOpen, activePanel]);
 
-  // Scroll progress listener
+  // Scroll progress listener (mobile only — desktop uses Lenis callback)
   useEffect(() => {
     const el = contentRef.current;
-    if (!el || !isOpen) return;
-    el.addEventListener('scroll', handleScroll);
-    return () => el.removeEventListener('scroll', handleScroll);
-  }, [isOpen, handleScroll]);
+    if (!el || !isOpen || !isMobileRef.current) return;
+    el.addEventListener('scroll', updateProgress, { passive: true });
+    return () => el.removeEventListener('scroll', updateProgress);
+  }, [isOpen, activePanel]);
+
+  // Sync context progress (from StartNuPanel steps) to CSS variable
+  useEffect(() => {
+    if (activePanelRef.current !== 'meet-maarten' && panelRef.current) {
+      panelRef.current.style.setProperty('--panel-progress', String(progress));
+    }
+  }, [progress]);
 
   // Handle escape key
   useEffect(() => {

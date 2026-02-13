@@ -30,12 +30,20 @@
 }
 
 .navTabActive {
-  background: var(--color-accent);
+  background: linear-gradient(
+    120deg,
+    var(--color-accent) calc(var(--panel-progress, 0) * 100%),
+    color-mix(in srgb, var(--color-accent) 90%, var(--color-dark)) calc(var(--panel-progress, 0) * 100%)
+  );
   color: var(--color-white);
 }
 
 .navTabActive:hover {
-  background: var(--color-accent);
+  background: linear-gradient(
+    120deg,
+    var(--color-accent) calc(var(--panel-progress, 0) * 100%),
+    color-mix(in srgb, var(--color-accent) 90%, var(--color-dark)) calc(var(--panel-progress, 0) * 100%)
+  );
 }
 
 .backButton {
@@ -68,9 +76,6 @@
 }
 
 @media screen and (max-width: 767px) {
-  .navBar {
-  }
-
   .navTab {
     padding: 0 0.8em;
     display: none;
@@ -78,5 +83,9 @@
 
   .navTabActive {
     display: flex;
+  }
+
+  .backButton {
+    display: none;
   }
 }
