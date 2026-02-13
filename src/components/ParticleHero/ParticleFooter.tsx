@@ -8,6 +8,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Logo3D from './LogoParticles';
 import WaterEffect from './WaterEffect';
 import ScrambleText from '@/components/ScrambleText';
+import { useSharedVideo } from '@/context/SharedVideoContext';
 import basePath from '@/lib/basePath';
 import styles from './ParticleHero.module.css';
 
@@ -17,8 +18,10 @@ type ScreenSize = 'mobile' | 'tablet-sm' | 'tablet-md' | 'tablet' | 'desktop-sm'
 
 export default function ParticleFooter() {
   const [screenSize, setScreenSize] = useState<ScreenSize>(null);
-  const [scrollProgress, setScrollProgress] = useState(0);
+  const scrollProgressRef = useRef(0);
   const containerRef = useRef<HTMLDivElement>(null);
+  const footerTagsRef = useRef<HTMLDivElement>(null);
+  const { video: sharedVideo, texture: sharedTexture } = useSharedVideo();
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -55,7 +58,11 @@ export default function ParticleFooter() {
       end: 'bottom bottom',
       scrub: true,
       onUpdate: (self) => {
-        setScrollProgress(self.progress);
+        scrollProgressRef.current = self.progress;
+        // Update footer tags opacity directly via DOM
+        if (footerTagsRef.current) {
+          footerTagsRef.current.style.opacity = String(Math.max(0, (self.progress - 0.7) / 0.3));
+        }
       }
     });
 
@@ -113,7 +120,7 @@ export default function ParticleFooter() {
       )}
 
       {/* Footer Tags - fade in when logo reaches center */}
-      <div className={styles.footerTags} style={{ opacity: Math.max(0, (scrollProgress - 0.7) / 0.3) }}>
+      <div ref={footerTagsRef} className={styles.footerTags} style={{ opacity: 0 }}>
         <a href="#fysio" className={styles.footerTag}>
           [<ScrambleText retriggerAtEnd>START FYSIOTHERAPIE</ScrambleText>]
         </a>
@@ -134,10 +141,10 @@ export default function ParticleFooter() {
         <Suspense fallback={null}>
           <group position={[0, getLogoYOffset(), 0]}>
             <Center precise>
-              <Logo3D scale={scale} scrollProgress={scrollProgress} mode="footer" isMobile={isMobile} />
+              <Logo3D scale={scale} scrollProgressRef={scrollProgressRef} mode="footer" isMobile={isMobile} sharedTexture={sharedTexture} />
             </Center>
           </group>
-          {WaterComponent && <WaterComponent />}
+          {WaterComponent && <WaterComponent sharedTexture={sharedTexture} sharedVideo={sharedVideo} />}
         </Suspense>
       </Canvas>
     </div>

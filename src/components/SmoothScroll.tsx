@@ -44,8 +44,6 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
     };
     gsap.ticker.add(tick);
 
-    gsap.ticker.lagSmoothing(0);
-
     return () => {
       gsap.ticker.remove(tick);
       lenis.destroy();

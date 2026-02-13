@@ -3,13 +3,14 @@
 import { useRef, useMemo, useEffect } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
-import basePath from '@/lib/basePath';
 
 interface WaterEffectProps {
   brightness?: number;
+  sharedTexture?: THREE.VideoTexture | null;
+  sharedVideo?: HTMLVideoElement | null;
 }
 
-export default function WaterEffect({ brightness = 0.08 }: WaterEffectProps) {
+export default function WaterEffect({ brightness = 0.08, sharedTexture, sharedVideo }: WaterEffectProps) {
   const { gl, size, scene, camera } = useThree();
   const meshRef = useRef<THREE.Mesh>(null);
   const mouse = useRef(new THREE.Vector2(0.5, 0.5));
@@ -17,39 +18,6 @@ export default function WaterEffect({ brightness = 0.08 }: WaterEffectProps) {
   const mouseVelocity = useRef(new THREE.Vector2(0, 0));
   const mouseDown = useRef(false);
   const frameCounter = useRef(0);
-  const bgVideoTextureRef = useRef<THREE.VideoTexture | null>(null);
-  const bgVideoRef = useRef<HTMLVideoElement | null>(null);
-
-  // Load background video
-  useEffect(() => {
-    const video = document.createElement('video');
-    video.src = `${basePath}/img/hero.mp4`;
-    video.crossOrigin = 'anonymous';
-    video.loop = true;
-    video.muted = true;
-    video.playsInline = true;
-    video.autoplay = true;
-    bgVideoRef.current = video;
-
-    video.addEventListener('canplay', () => {
-      const videoTexture = new THREE.VideoTexture(video);
-      videoTexture.minFilter = THREE.LinearFilter;
-      videoTexture.magFilter = THREE.LinearFilter;
-      videoTexture.wrapS = THREE.ClampToEdgeWrapping;
-      videoTexture.wrapT = THREE.ClampToEdgeWrapping;
-      videoTexture.colorSpace = THREE.SRGBColorSpace;
-      bgVideoTextureRef.current = videoTexture;
-    }, { once: true });
-
-    video.play().catch(() => {});
-
-    return () => {
-      video.pause();
-      video.removeAttribute('src');
-      video.load();
-      bgVideoTextureRef.current?.dispose();
-    };
-  }, []);
 
   // Create ping-pong buffers for water simulation + scene capture
   const buffers = useMemo(() => {
@@ -403,11 +371,10 @@ export default function WaterEffect({ brightness = 0.08 }: WaterEffectProps) {
         material.uniforms.uTime.value = state.clock.elapsedTime;
         material.uniforms.uResolution.value.set(size.width, size.height);
 
-        if (bgVideoTextureRef.current) {
-          material.uniforms.uBackgroundTexture.value = bgVideoTextureRef.current;
-          const video = bgVideoRef.current;
-          if (video?.videoWidth && video?.videoHeight) {
-            material.uniforms.uBgAspect.value = video.videoWidth / video.videoHeight;
+        if (sharedTexture) {
+          material.uniforms.uBackgroundTexture.value = sharedTexture;
+          if (sharedVideo?.videoWidth && sharedVideo?.videoHeight) {
+            material.uniforms.uBgAspect.value = sharedVideo.videoWidth / sharedVideo.videoHeight;
           }
         }
       }

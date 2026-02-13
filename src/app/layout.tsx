@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import { PanelProvider } from "@/context/PanelContext";
+import { SharedVideoProvider } from "@/context/SharedVideoContext";
 import GlobalPanel from "@/components/SlidePanel/GlobalPanel";
 import TitleRotator from "@/components/TitleRotator";
 import FontStyles from "@/components/FontStyles";
@@ -24,13 +25,15 @@ export default function RootLayout({
       </head>
       <body>
         <TitleRotator />
-        <PanelProvider>
-          <SmoothScroll>
-            <Navigation />
-            {children}
-            <GlobalPanel />
-          </SmoothScroll>
-        </PanelProvider>
+        <SharedVideoProvider>
+          <PanelProvider>
+            <SmoothScroll>
+              <Navigation />
+              {children}
+              <GlobalPanel />
+            </SmoothScroll>
+          </PanelProvider>
+        </SharedVideoProvider>
       </body>
     </html>
   );

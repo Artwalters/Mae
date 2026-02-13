@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState, useCallback, ElementType } from 'react';
+import React, { useEffect, useRef, useCallback, ElementType, memo } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -18,7 +18,7 @@ interface ScrambleTextProps {
   chars?: string;
 }
 
-export default function ScrambleText({
+function ScrambleText({
   children,
   className,
   as: Tag = 'span',
@@ -30,18 +30,15 @@ export default function ScrambleText({
   chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 }: ScrambleTextProps) {
   const elementRef = useRef<HTMLElement>(null);
-  const [displayText, setDisplayText] = useState(children);
   const originalText = children;
   const isAnimating = useRef(false);
   const hasInitialAnimated = useRef(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const scramble = useCallback(() => {
-    // Prevent overlapping animations
-    if (isAnimating.current) return;
+    if (isAnimating.current || !elementRef.current) return;
     isAnimating.current = true;
 
-    // Clear any existing interval
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
@@ -49,29 +46,21 @@ export default function ScrambleText({
     const textLength = originalText.length;
     let iteration = 0;
     const totalIterations = duration * speed;
+    const el = elementRef.current;
 
     intervalRef.current = setInterval(() => {
-      setDisplayText(
-        originalText
-          .split('')
-          .map((char, index) => {
-            // Keep spaces and brackets as-is
-            if (char === ' ' || char === '[' || char === ']') {
-              return char;
-            }
+      const text = originalText
+        .split('')
+        .map((char, index) => {
+          if (char === ' ' || char === '[' || char === ']') return char;
+          const revealThreshold = (iteration / totalIterations) * textLength;
+          if (index < revealThreshold) return originalText[index];
+          return chars[Math.floor(Math.random() * chars.length)];
+        })
+        .join('');
 
-            // Gradually reveal characters from left to right
-            const revealThreshold = (iteration / totalIterations) * textLength;
-            if (index < revealThreshold) {
-              return originalText[index];
-            }
-
-            // Random character from chars set
-            return chars[Math.floor(Math.random() * chars.length)];
-          })
-          .join('')
-      );
-
+      // Direct DOM update — no React re-render
+      el.textContent = text;
       iteration++;
 
       if (iteration >= totalIterations) {
@@ -79,7 +68,7 @@ export default function ScrambleText({
           clearInterval(intervalRef.current);
           intervalRef.current = null;
         }
-        setDisplayText(originalText);
+        el.textContent = originalText;
         isAnimating.current = false;
       }
     }, 1000 / speed);
@@ -90,32 +79,25 @@ export default function ScrambleText({
     const element = elementRef.current;
     if (!element) return;
 
+    let trigger_: ScrollTrigger | null = null;
+
     if (trigger === 'load') {
       if (!hasInitialAnimated.current) {
         hasInitialAnimated.current = true;
         scramble();
       }
     } else {
-      // Scroll trigger - fires on enter and when scrolling back up
-      ScrollTrigger.create({
+      trigger_ = ScrollTrigger.create({
         trigger: element,
         start: 'top 90%',
         end: 'top 10%',
-        onEnter: () => {
-          scramble();
-        },
-        onEnterBack: () => {
-          scramble();
-        }
+        onEnter: () => scramble(),
+        onEnterBack: () => scramble()
       });
     }
 
     return () => {
-      ScrollTrigger.getAll().forEach(st => {
-        if (st.trigger === element) {
-          st.kill();
-        }
-      });
+      trigger_?.kill();
     };
   }, [trigger, scramble]);
 
@@ -123,23 +105,15 @@ export default function ScrambleText({
   useEffect(() => {
     if (!retriggerAtEnd) return;
 
-    // Find the footer spacer element
     const footerSpacer = document.querySelector('[class*="footerSpacer"]');
-
     if (!footerSpacer) return;
 
-    // Create a ScrollTrigger that fires when the footer spacer comes into view
-    // and when scrolling back up
     const footerTrigger = ScrollTrigger.create({
       trigger: footerSpacer,
       start: 'top 80%',
       end: 'top 20%',
-      onEnter: () => {
-        scramble();
-      },
-      onLeaveBack: () => {
-        scramble();
-      }
+      onEnter: () => scramble(),
+      onLeaveBack: () => scramble()
     });
 
     return () => {
@@ -151,19 +125,14 @@ export default function ScrambleText({
   useEffect(() => {
     if (!retriggerAtStart) return;
 
-    // Find the hero spacer element
     const heroSpacer = document.querySelector('[class*="heroSpacer"]');
-
     if (!heroSpacer) return;
 
-    // Create a ScrollTrigger that fires when scrolling back up to the hero
     const heroTrigger = ScrollTrigger.create({
       trigger: heroSpacer,
       start: 'bottom 80%',
       end: 'top top',
-      onEnterBack: () => {
-        scramble();
-      }
+      onEnterBack: () => scramble()
     });
 
     return () => {
@@ -180,10 +149,13 @@ export default function ScrambleText({
     };
   }, []);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const Component = Tag as any;
   return (
     <Component ref={elementRef} className={className}>
-      {displayText}
+      {originalText}
     </Component>
   );
 }
+
+export default memo(ScrambleText);

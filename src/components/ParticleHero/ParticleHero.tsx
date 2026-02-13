@@ -8,6 +8,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Logo3D from './LogoParticles';
 import WaterEffect from './WaterEffect';
 import ScrambleText from '@/components/ScrambleText';
+import { useSharedVideo } from '@/context/SharedVideoContext';
 import basePath from '@/lib/basePath';
 import styles from './ParticleHero.module.css';
 
@@ -17,8 +18,11 @@ type ScreenSize = 'mobile' | 'tablet-sm' | 'tablet-md' | 'tablet' | 'desktop-sm'
 
 export default function ParticleHero() {
   const [screenSize, setScreenSize] = useState<ScreenSize>(null);
-  const [scrollProgress, setScrollProgress] = useState(0);
+  const scrollProgressRef = useRef(0);
   const containerRef = useRef<HTMLDivElement>(null);
+  const sideLabelsRef = useRef<HTMLDivElement>(null);
+  const heroBottomRef = useRef<HTMLDivElement>(null);
+  const { video: sharedVideo, texture: sharedTexture } = useSharedVideo();
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -55,7 +59,11 @@ export default function ParticleHero() {
       end: 'bottom top',
       scrub: true,
       onUpdate: (self) => {
-        setScrollProgress(self.progress);
+        scrollProgressRef.current = self.progress;
+        // Update label opacity directly via DOM
+        const opacity = String(Math.max(0, 1 - self.progress * 3));
+        if (sideLabelsRef.current) sideLabelsRef.current.style.opacity = opacity;
+        if (heroBottomRef.current) heroBottomRef.current.style.opacity = opacity;
       }
     });
 
@@ -113,7 +121,7 @@ export default function ParticleHero() {
       )}
 
       {/* Side Labels - fade out as you scroll */}
-      <div className={styles.sideLabels} style={{ opacity: Math.max(0, 1 - scrollProgress * 3) }}>
+      <div ref={sideLabelsRef} className={styles.sideLabels}>
         <span className={`${styles.sideLabel} ${styles.left}`}>
           [<ScrambleText trigger="load" retriggerAtEnd retriggerAtStart>FYSIOTHERAPIE</ScrambleText>]
         </span>
@@ -123,7 +131,7 @@ export default function ParticleHero() {
       </div>
 
       {/* Hero bottom labels */}
-      <div className={styles.heroBottom} style={{ opacity: Math.max(0, 1 - scrollProgress * 3) }}>
+      <div ref={heroBottomRef} className={styles.heroBottom}>
         <span className={styles.scrollDown}>
           [<ScrambleText trigger="load" retriggerAtEnd retriggerAtStart>SCROLL DOWN</ScrambleText>]
         </span>
@@ -150,10 +158,10 @@ export default function ParticleHero() {
         <Suspense fallback={null}>
           <group position={[0, getLogoYOffset(), 0]}>
             <Center precise>
-              <Logo3D scale={scale} scrollProgress={scrollProgress} mode="hero" isMobile={isMobile} />
+              <Logo3D scale={scale} scrollProgressRef={scrollProgressRef} mode="hero" isMobile={isMobile} sharedTexture={sharedTexture} />
             </Center>
           </group>
-          {WaterComponent && <WaterComponent />}
+          {WaterComponent && <WaterComponent sharedTexture={sharedTexture} sharedVideo={sharedVideo} />}
         </Suspense>
       </Canvas>
     </div>
