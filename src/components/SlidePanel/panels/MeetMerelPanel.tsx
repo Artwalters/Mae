@@ -151,10 +151,16 @@ export default function MeetMerelPanel() {
           </div>
           <div className={styles.timelineNav}>
             <button className={styles.timelineArrow} onClick={goToPrev}>
-              <span>&#8592;</span>
+              <svg width="60%" height="60%" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeMiterlimit="10" style={{ transform: 'scaleX(-1)' }}>
+                <path d="M14 19L21 12L14 5" />
+                <path d="M21 12H2" />
+              </svg>
             </button>
             <button className={styles.timelineArrow} onClick={goToNext}>
-              <span>&#8594;</span>
+              <svg width="60%" height="60%" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeMiterlimit="10">
+                <path d="M14 19L21 12L14 5" />
+                <path d="M21 12H2" />
+              </svg>
             </button>
           </div>
         </div>

@@ -161,7 +161,7 @@
 
 .step {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 0.5fr 1fr;
   padding: 2em 0;
   border-bottom: 0.25px solid rgba(0, 0, 0, 0.3);
 }
@@ -172,7 +172,7 @@
 
 .stepNumber {
   font-family: 'Chaney Regular', var(--font-primary);
-  font-size: var(--font-par);
+  font-size: var(--font-h4);
   font-weight: 400;
   line-height: 1;
 }
@@ -213,12 +213,12 @@
   height: 1.8em;
   background: transparent;
   border: 1px solid var(--color-dark);
+  border-radius: 0.15em;
   color: var(--color-dark);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: var(--font-small);
   transition: all 0.3s ease;
 }
 
@@ -272,21 +272,6 @@
   opacity: 1;
 }
 
-.timelineItemActive .timelineYear {
-  animation: pulse 0.3s ease;
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
 
 .timelineYear {
   font-family: 'Chaney Regular', var(--font-primary);
