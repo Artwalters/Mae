@@ -40,16 +40,11 @@ export default function GlobalPanel() {
 
   const activeGradient = (active: boolean) =>
     active ? {
-      background: `linear-gradient(to right, var(--color-dark) ${progress * 100}%, rgba(0,0,0,0.15) ${progress * 100}%)`
+      background: `linear-gradient(120deg, var(--color-accent) ${progress * 100}%, color-mix(in srgb, var(--color-accent) 90%, var(--color-dark)) ${progress * 100}%)`
     } : undefined;
 
   const navBar = (
     <div className={styles.navBar}>
-      {onBack && (
-        <button className={styles.backButton} onClick={onBack}>
-          <span>&#8592;</span>
-        </button>
-      )}
       <button
         className={`${styles.navTab} ${isMeetMaarten ? styles.navTabActive : ''}`}
         onClick={() => openPanel('meet-maarten')}
@@ -58,6 +53,14 @@ export default function GlobalPanel() {
         <span>Meet Maarten</span>
         <span className={styles.navTabNumber}>[01]</span>
       </button>
+      {onBack && (
+        <button className={`${styles.backButton} ${isStartNu ? styles.backButtonActive : ''}`} onClick={onBack}>
+          <svg width="60%" height="60%" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeMiterlimit="10" style={{ transform: 'scaleX(-1)' }}>
+            <path d="M14 19L21 12L14 5" />
+            <path d="M21 12H2" />
+          </svg>
+        </button>
+      )}
       <button
         className={`${styles.navTab} ${isStartNu ? styles.navTabActive : ''}`}
         onClick={() => openPanel('start-nu')}

@@ -46,6 +46,7 @@
   display: flex;
   gap: 0.3em;
   align-items: stretch;
+  height: 1.6em;
   clip-path: inset(100% 0 0 0);
   transform: translateY(1em);
   transition: clip-path 0.75s cubic-bezier(.7, 0, .3, 1), transform 0.75s cubic-bezier(.7, 0, .3, 1);
@@ -75,11 +76,13 @@
 }
 
 .closeButton {
-  width: 3.3em;
-  height: 3.3em;
   flex-shrink: 0;
+  aspect-ratio: 1 / 1;
+  height: 100%;
+  width: auto;
   background: var(--color-dark);
-  border: 1px solid var(--color-dark);
+  border: none;
+  border-radius: 0.15em;
   color: var(--color-white);
   cursor: pointer;
   display: flex;
@@ -147,6 +150,7 @@
   .panel[data-panel-open="true"] {
     clip-path: inset(0 0 0 0);
   }
+
 
   .contentInner {
     padding: 1em 1em 2em;

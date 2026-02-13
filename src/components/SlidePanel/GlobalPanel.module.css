@@ -18,6 +18,7 @@
   text-transform: uppercase;
   letter-spacing: 0.1em;
   border: none;
+  border-radius: 0.15em;
   cursor: pointer;
   transition: all 0.4s ease;
   background: rgba(0, 0, 0, 0.04);
@@ -29,12 +30,12 @@
 }
 
 .navTabActive {
-  background: var(--color-dark);
-  color: var(--color-accent);
+  background: var(--color-accent);
+  color: var(--color-white);
 }
 
 .navTabActive:hover {
-  background: var(--color-dark);
+  background: var(--color-accent);
 }
 
 .backButton {
@@ -42,6 +43,7 @@
   flex-shrink: 0;
   background: var(--color-dark);
   border: none;
+  border-radius: 0.15em;
   color: var(--color-white);
   cursor: pointer;
   display: flex;
@@ -52,7 +54,12 @@
 }
 
 .backButton:hover {
-  color: var(--color-accent);
+  opacity: 0.85;
+}
+
+.backButtonActive {
+  background: var(--color-accent);
+  color: var(--color-dark);
 }
 
 .navTabNumber {
@@ -62,10 +69,14 @@
 
 @media screen and (max-width: 767px) {
   .navBar {
-    height: 2.5em;
   }
 
   .navTab {
     padding: 0 0.8em;
+    display: none;
+  }
+
+  .navTabActive {
+    display: flex;
   }
 }
