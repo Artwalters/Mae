@@ -151,8 +151,15 @@
     clip-path: inset(0 0 0 0);
   }
 
+  .panelHeader {
+    padding: 0.5em 0.5em 0;
+  }
+
+  .divider {
+    margin-top: 0.5em;
+  }
 
   .contentInner {
-    padding: 1em 1em 2em;
+    padding: 1em 0.5em 2em;
   }
 }
