@@ -121,15 +121,7 @@ export default function Logo3D({ scale = 1, scrollProgress = 0, mode = 'hero', i
       materialRef.current.uniforms.rotateUV.value = 0.0;
     }
 
-    if (isMobile) {
-      // Mobile: same tilt + drop as desktop
-      const maxTilt = Math.PI * 0.25;
-      const maxDrop = 1.5;
-      const targetRotationX = scrollProgress * -maxTilt;
-      const targetY = -(scrollProgress * scrollProgress) * maxDrop;
-      groupRef.current.rotation.x += (targetRotationX - groupRef.current.rotation.x) * 0.1;
-      groupRef.current.position.y += (targetY - groupRef.current.position.y) * 0.1;
-    } else {
+    {
       const maxTilt = Math.PI * 0.25;
       const maxDrop = 1.5;
       let targetRotationX: number;
