@@ -1,6 +1,8 @@
 .panel {
   color: var(--color-dark);
   min-height: 100%;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 /* Section Header */
@@ -183,6 +185,12 @@
 .formInput:focus {
   outline: none;
   background: rgba(0, 0, 0, 0.1);
+}
+
+.formInput,
+.formTextarea {
+  -webkit-user-select: text;
+  user-select: text;
 }
 
 .formTextarea {

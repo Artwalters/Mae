@@ -284,11 +284,9 @@
 
 /* CTA Section */
 .ctaSection {
-  padding: 1em 0;
-}
-
-.ctaText {
-  margin: 0 0 1em 0;
+  padding: 2em 0;
+  display: flex;
+  justify-content: center;
 }
 
 .ctaButton {

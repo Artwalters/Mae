@@ -17,6 +17,11 @@ interface SlidePanelProps {
   header?: ReactNode;
 }
 
+// How much overscroll (in px of wheel delta) to fill phase 2
+const OVERSCROLL_THRESHOLD = 180;
+// Decay rate when user stops scrolling (0-1, lower = faster snap back)
+const OVERSCROLL_DECAY = 0.92;
+
 export default function SlidePanel({ isOpen, onClose, children, header }: SlidePanelProps) {
   const panelRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -26,21 +31,192 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
   const isMobileRef = useRef(false);
   const lenis = useLenis();
   const lenisRef = useRef(lenis);
-  const { activePanel, progress } = usePanel();
+  const { activePanel, progress, openPanel } = usePanel();
   const activePanelRef = useRef(activePanel);
+  const openPanelRef = useRef(openPanel);
+  const lastPhaseRef = useRef(1);
+
+  // Overscroll tracking for phase 2 resistance effect
+  const overscrollRef = useRef(0);
+  const decayRafRef = useRef<number | null>(null);
+  const switchedRef = useRef(false);
 
   // Keep refs in sync for use in callbacks
   isOpenRef.current = isOpen;
   lenisRef.current = lenis;
   activePanelRef.current = activePanel;
+  openPanelRef.current = openPanel;
 
-  // Update progress as CSS custom property directly on the panel (no React re-render)
+  // Check if content is scrolled to the bottom
+  const isAtBottom = () => {
+    const el = contentRef.current;
+    if (!el) return false;
+    return el.scrollTop + el.clientHeight >= el.scrollHeight - 2;
+  };
+
+  // Update phase 2 progress bar from overscroll value
+  const updateOverscrollBar = () => {
+    if (!panelRef.current) return;
+    const barProgress = Math.min(overscrollRef.current / OVERSCROLL_THRESHOLD, 1);
+    panelRef.current.style.setProperty('--panel-progress', String(barProgress));
+
+    // Update phase
+    const phase = overscrollRef.current > 0 ? 2 : 1;
+    if (phase !== lastPhaseRef.current) {
+      lastPhaseRef.current = phase;
+      panelRef.current.setAttribute('data-panel-phase', String(phase));
+    }
+
+    // Auto-switch when bar is full
+    if (barProgress >= 1 && !switchedRef.current) {
+      switchedRef.current = true;
+      openPanelRef.current('start-nu');
+    }
+  };
+
+  // Decay overscroll back to 0 when user stops scrolling
+  const startDecay = () => {
+    if (decayRafRef.current) cancelAnimationFrame(decayRafRef.current);
+
+    const tick = () => {
+      overscrollRef.current *= OVERSCROLL_DECAY;
+      if (overscrollRef.current < 1) {
+        overscrollRef.current = 0;
+      }
+      updateOverscrollBar();
+      if (overscrollRef.current > 0) {
+        decayRafRef.current = requestAnimationFrame(tick);
+      } else {
+        decayRafRef.current = null;
+      }
+    };
+    decayRafRef.current = requestAnimationFrame(tick);
+  };
+
+  const stopDecay = () => {
+    if (decayRafRef.current) {
+      cancelAnimationFrame(decayRafRef.current);
+      decayRafRef.current = null;
+    }
+  };
+
+  // Update scroll progress (phase 1) as CSS custom property
   const updateProgress = () => {
     if (activePanelRef.current !== 'meet-maarten' || !contentRef.current || !panelRef.current) return;
+
+    // If in overscroll phase, don't update from scroll position
+    if (overscrollRef.current > 0) return;
+
     const { scrollTop, scrollHeight, clientHeight } = contentRef.current;
     const max = scrollHeight - clientHeight;
-    if (max > 0) {
-      panelRef.current.style.setProperty('--panel-progress', String(scrollTop / max));
+    if (max <= 0) return;
+
+    const barProgress = Math.min(scrollTop / max, 1);
+    panelRef.current.style.setProperty('--panel-progress', String(barProgress));
+
+    // Ensure phase 1
+    if (lastPhaseRef.current !== 1) {
+      lastPhaseRef.current = 1;
+      panelRef.current.setAttribute('data-panel-phase', '1');
+    }
+  };
+
+  // Handle wheel events for overscroll resistance
+  const handleWheel = (e: WheelEvent) => {
+    if (activePanelRef.current !== 'meet-maarten' || switchedRef.current) return;
+
+    if (isAtBottom() && e.deltaY > 0) {
+      // Scrolling down at bottom — accumulate overscroll with resistance
+      e.preventDefault();
+      stopDecay();
+      // Resistance: diminishing returns as you accumulate
+      const resistance = 1 - (overscrollRef.current / OVERSCROLL_THRESHOLD) * 0.7;
+      overscrollRef.current += e.deltaY * resistance * 0.5;
+      overscrollRef.current = Math.min(overscrollRef.current, OVERSCROLL_THRESHOLD);
+      updateOverscrollBar();
+    } else if (overscrollRef.current > 0 && e.deltaY < 0) {
+      // Scrolling up while in overscroll — reduce overscroll
+      e.preventDefault();
+      stopDecay();
+      overscrollRef.current += e.deltaY * 0.5;
+      overscrollRef.current = Math.max(overscrollRef.current, 0);
+      updateOverscrollBar();
+    } else if (overscrollRef.current > 0 && e.deltaY > 0) {
+      // Still scrolling down in overscroll
+      e.preventDefault();
+      stopDecay();
+      const resistance = 1 - (overscrollRef.current / OVERSCROLL_THRESHOLD) * 0.7;
+      overscrollRef.current += e.deltaY * resistance * 0.5;
+      overscrollRef.current = Math.min(overscrollRef.current, OVERSCROLL_THRESHOLD);
+      updateOverscrollBar();
+    }
+  };
+
+  // Detect when user stops scrolling to start decay
+  const wheelTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const handleWheelEnd = () => {
+    if (wheelTimeoutRef.current) clearTimeout(wheelTimeoutRef.current);
+    wheelTimeoutRef.current = setTimeout(() => {
+      if (overscrollRef.current > 0 && overscrollRef.current < OVERSCROLL_THRESHOLD && !switchedRef.current) {
+        startDecay();
+      }
+    }, 150);
+  };
+
+  // Touch overscroll tracking
+  const touchStartYRef = useRef<number | null>(null);
+  const touchActiveRef = useRef(false);
+
+  const handleTouchStart = (e: TouchEvent) => {
+    touchStartYRef.current = e.touches[0].clientY;
+    touchActiveRef.current = false;
+  };
+
+  const handleTouchMove = (e: TouchEvent) => {
+    if (activePanelRef.current !== 'meet-maarten' || switchedRef.current || touchStartYRef.current === null) return;
+
+    const currentY = e.touches[0].clientY;
+    const deltaY = touchStartYRef.current - currentY; // positive = scrolling down
+
+    if (isAtBottom() && deltaY > 0 && !touchActiveRef.current) {
+      // Just entered overscroll zone
+      touchActiveRef.current = true;
+      touchStartYRef.current = currentY;
+      return;
+    }
+
+    if (touchActiveRef.current) {
+      const touchDelta = touchStartYRef.current - currentY;
+      e.preventDefault();
+      stopDecay();
+
+      if (touchDelta > 0) {
+        // Swiping up (scrolling down) — accumulate
+        const resistance = 1 - (overscrollRef.current / OVERSCROLL_THRESHOLD) * 0.7;
+        overscrollRef.current = Math.min(touchDelta * resistance * 0.8, OVERSCROLL_THRESHOLD);
+      } else {
+        // Swiping down (scrolling up) — reduce
+        overscrollRef.current = Math.max(overscrollRef.current + touchDelta * 0.5, 0);
+        if (overscrollRef.current <= 0) {
+          touchActiveRef.current = false;
+        }
+      }
+      updateOverscrollBar();
+    } else if (overscrollRef.current > 0 && deltaY < 0) {
+      // Scrolling up while in overscroll
+      e.preventDefault();
+      overscrollRef.current += deltaY * 0.5;
+      overscrollRef.current = Math.max(overscrollRef.current, 0);
+      updateOverscrollBar();
+      touchStartYRef.current = currentY;
+    }
+  };
+
+  const handleTouchEnd = () => {
+    touchStartYRef.current = null;
+    touchActiveRef.current = false;
+    if (overscrollRef.current > 0 && overscrollRef.current < OVERSCROLL_THRESHOLD && !switchedRef.current) {
+      startDecay();
     }
   };
 
@@ -50,25 +226,26 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
 
     if (!panel || !overlay) return;
 
-    // Kill any ongoing overlay animations
     gsap.killTweensOf(overlay);
 
     let transitionHandler: ((e: TransitionEvent) => void) | null = null;
     let fallbackTimer: ReturnType<typeof setTimeout> | null = null;
 
     if (isOpen) {
-      // Stop Lenis smooth scroll and prevent all scrolling
       lenisRef.current?.stop();
       document.documentElement.style.overflowY = 'hidden';
       document.body.style.overflowY = 'hidden';
 
-      // Reset scroll position and progress
       if (contentRef.current) {
         contentRef.current.scrollTop = 0;
       }
       panel.style.setProperty('--panel-progress', '0');
+      panel.setAttribute('data-panel-phase', '1');
+      lastPhaseRef.current = 1;
+      overscrollRef.current = 0;
+      switchedRef.current = false;
+      stopDecay();
 
-      // Trigger clip-path animation via data attribute
       panel.setAttribute('data-panel-open', 'true');
 
       gsap.to(overlay, {
@@ -78,7 +255,6 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
         pointerEvents: 'auto'
       });
     } else {
-      // Trigger clip-path close animation
       panel.setAttribute('data-panel-open', 'false');
 
       gsap.to(overlay, {
@@ -88,7 +264,6 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
         pointerEvents: 'none'
       });
 
-      // Restore Lenis + body scroll (only runs once)
       let restored = false;
       const restoreLenis = () => {
         if (restored) return;
@@ -101,15 +276,12 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
         }
       };
 
-      // Wait for CSS transition to finish, then restart Lenis
       transitionHandler = (e: TransitionEvent) => {
         if (e.propertyName !== 'clip-path') return;
         panel.removeEventListener('transitionend', transitionHandler!);
         restoreLenis();
       };
       panel.addEventListener('transitionend', transitionHandler);
-
-      // Fallback: ensure Lenis restarts even if transitionend doesn't fire
       fallbackTimer = setTimeout(restoreLenis, 1200);
     }
 
@@ -128,10 +300,8 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
     const isMobile = window.innerWidth < 768;
     isMobileRef.current = isMobile;
 
-    // Reset scroll position when panel content changes
     contentRef.current.scrollTop = 0;
 
-    // No panel Lenis on mobile — native scroll is smoother
     if (isMobile) return;
 
     const timer = setTimeout(() => {
@@ -143,7 +313,6 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
       });
       panelLenisRef.current = panelLenis;
 
-      // Track progress via Lenis scroll callback (direct DOM, no React re-render)
       panelLenis.on('scroll', updateProgress);
 
       const tick = (time: number) => {
@@ -161,6 +330,31 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
         panelLenisRef.current.destroy();
         panelLenisRef.current = null;
       }
+    };
+  }, [isOpen, activePanel]);
+
+  // Overscroll listeners for phase 2 resistance (wheel + touch)
+  useEffect(() => {
+    const el = contentRef.current;
+    if (!el || !isOpen) return;
+
+    const onWheel = (e: WheelEvent) => {
+      handleWheel(e);
+      handleWheelEnd();
+    };
+
+    el.addEventListener('wheel', onWheel, { passive: false });
+    el.addEventListener('touchstart', handleTouchStart, { passive: true });
+    el.addEventListener('touchmove', handleTouchMove, { passive: false });
+    el.addEventListener('touchend', handleTouchEnd, { passive: true });
+
+    return () => {
+      el.removeEventListener('wheel', onWheel);
+      el.removeEventListener('touchstart', handleTouchStart);
+      el.removeEventListener('touchmove', handleTouchMove);
+      el.removeEventListener('touchend', handleTouchEnd);
+      stopDecay();
+      if (wheelTimeoutRef.current) clearTimeout(wheelTimeoutRef.current);
     };
   }, [isOpen, activePanel]);
 
@@ -193,18 +387,14 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
 
   return (
     <>
-      {/* Overlay */}
       <div
         ref={overlayRef}
         className={styles.overlay}
         onClick={onClose}
       />
 
-      {/* Panel */}
       <div ref={panelRef} className={styles.panel}>
-        {/* Scrollable Content */}
         <div ref={contentRef} className={styles.content} data-lenis-prevent>
-          {/* Sticky header: bar + divider + white space */}
           <div className={styles.panelHeader}>
             <div className={styles.panelHeaderInner}>
               {header}

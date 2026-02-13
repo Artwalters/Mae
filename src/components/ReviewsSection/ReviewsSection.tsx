@@ -4,7 +4,6 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import styles from './ReviewsSection.module.css';
-import basePath from '@/lib/basePath';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -12,89 +11,98 @@ interface ReviewsSectionProps {
   type: 'fysio' | 'leefstijl';
 }
 
-// Fysiotherapie reviews (by Maarten)
+// Fysiotherapie reviews (Maarten)
 const fysioReviews = [
   {
-    text: 'Door de fysiotherapie van MAE heb ik weer normaal leren squatten zonder dat ik pijn heb aan mijn benen en rug.',
-    author: 'Rayan Vierblessingen',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face'
+    text: 'Na jaren dagelijkse pijn kan ik weer vrij bewegen. Waar anderen zeggen "minder bewegen", helpt Maarten juist door in beweging te blijven. Mijn kwaliteit van leven is echt verbeterd.',
+    author: 'Lisa Nooijen',
   },
   {
-    text: 'Na mijn knieblessure dacht ik dat hardlopen er niet meer in zat. Maarten heeft me stap voor stap weer opgebouwd.',
-    author: 'Sophie van den Berg',
-    image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop&crop=face'
+    text: 'Kwam met rugklachten, til nu deadlifts boven de 100kg,zonder pijn. Iets wat ik nooit voor mogelijk had gehouden.',
+    author: 'Kimberly Fellings',
   },
   {
-    text: 'Eindelijk iemand die naar mijn lichaam luistert en niet alleen naar de klachten. Topbehandeling!',
-    author: 'Thomas de Vries',
-    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=face'
+    text: 'Andere fysio\'s zeiden: minder zwaar tillen. Maarten liet me juist wél zwaar tillen, op de juiste manier. Rugklachten verdwenen.',
+    author: 'Jools Korver',
   },
   {
-    text: 'Mijn schouderpijn is volledig verdwenen na de behandelingen. Kan MAE aan iedereen aanraden.',
-    author: 'Lisa Jansen',
-    image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop&crop=face'
+    text: 'Dacht dat mijn rugpijn niet meer weg zou gaan. Dankzij Maarten ben ik nu sterker dan daarvoor en kan ik pijnvrij powerliften.',
+    author: 'Kim de Haar',
   },
   {
-    text: 'Als atleet is het belangrijk om snel te herstellen. Maarten begrijpt dat als geen ander.',
-    author: 'Kevin Bakker',
-    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face'
+    text: 'Maarten ontdekte de oorzaak van mijn knieproblemen,bijzonder vanwege mijn onderbeenamputatie. Sindsdien klachtenvrij. Hij pusht op het juiste moment, maar remt ook af waar nodig.',
+    author: 'Shn',
   },
   {
-    text: 'Na jaren rugklachten eindelijk de juiste aanpak gevonden. Dankjewel MAE!',
-    author: 'Emma Smit',
-    image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&h=200&fit=crop&crop=face'
-  }
+    text: 'Na een paar weken al verbetering, inmiddels klachtenvrij. De persoonlijke aandacht en deskundigheid maken echt het verschil.',
+    author: 'Gijs Pinckers',
+  },
 ];
 
-// Leefstijl reviews (by Merel)
+// Leefstijl reviews (Merel)
 const leefstijlReviews = [
   {
-    text: 'Merel heeft me geholpen om een gezonde balans te vinden tussen werk en beweging. Ik voel me fitter dan ooit!',
-    author: 'Mark Peters',
-    image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&h=200&fit=crop&crop=face'
+    text: 'Merel kijkt verder dan voeding en beweging,ook slaap, zelfbeeld en mentale gezondheid krijgen aandacht. Stap voor stap dichter bij mijn doelen.',
+    author: 'MK',
   },
   {
-    text: 'Door het leefstijlprogramma ben ik 10 kilo afgevallen en heb ik veel meer energie.',
-    author: 'Anna de Boer',
-    image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop&crop=face'
+    text: 'Merel gaat verder dan alleen voeding en sport. Volledig maatwerk, professioneel en motiverend. Vanaf moment één voelde ik me gehoord.',
+    author: 'Fauve Clignet',
   },
   {
-    text: 'Geen dieet maar een echte lifestyle verandering. Merel denkt met je mee en motiveert enorm.',
-    author: 'Daan Visser',
-    image: 'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=200&h=200&fit=crop&crop=face'
+    text: 'Merel maakte me bewust van mijn eetgedrag in combinatie met emoties. Ik maak nu bewuste keuzes, maar blijf genieten.',
+    author: 'Lieke Colier',
   },
   {
-    text: 'Eindelijk een aanpak die werkt voor mijn drukke leven. Praktische tips die ik kan volhouden.',
-    author: 'Julia Mulder',
-    image: 'https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?w=200&h=200&fit=crop&crop=face'
+    text: 'Merel luistert goed naar mijn wensen en leert me enorm veel over sporten en voeding. Resultaten komen op precies het juiste tempo.',
+    author: 'Dounia Bellari',
   },
   {
-    text: 'Mijn slaap is verbeterd, mijn stress verminderd. Het leefstijltraject heeft me zoveel gebracht.',
-    author: 'Niels van Dijk',
-    image: 'https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=200&h=200&fit=crop&crop=face'
+    text: 'Merel liet me inzien dat gezondheid veel meer is dan fitness en voeding. Begeleiding die aansluit op mij als persoon.',
+    author: 'Koen van de Berg',
   },
   {
-    text: 'Super persoonlijke begeleiding van Merel. Ze staat altijd voor je klaar met advies.',
-    author: 'Sara Hendriks',
-    image: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=200&h=200&fit=crop&crop=face'
-  }
+    text: 'Na 5 jaar zelfstandig fitnessen liep ik vast. Bij MAE werd er aandacht gegeven aan hoe ik in mijn vel zat, niet alleen aan resultaten. Aan te bevelen voor beginner én gevorderd.',
+    author: 'Jodie Van Hek',
+  },
 ];
+
+function StarIcon({ className }: { className: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+    </svg>
+  );
+}
 
 interface ReviewCardProps {
   text: string;
   author: string;
-  image: string;
 }
 
-function ReviewCard({ text, author, image }: ReviewCardProps) {
+const GOOGLE_REVIEWS_URL = 'https://www.google.com/search?si=AL3DRZEsmMGCryMMFSHJ3StBhOdZ2-6yYkXd_doETEE1OR-qOXL0frrsiugcngnYD9TKzoJjmCFtk1r6hFr4Vw13AN8ohrXHxyZw4DjqsdgofjgipVpLVXkIR6eJ42B5N8FoL9EWB6BQmXE4rSmPiealtE06X7Ddi0zv8mvSZwnUp9pcdgBWxWM%3D&q=M.A.E.+Coaching+en+Fysiotherapie+Reviews';
+
+function ReviewCard({ text, author }: ReviewCardProps) {
+  const initial = author.charAt(0).toUpperCase();
+
   return (
-    <div className={styles.reviewCard}>
-      <div className={styles.reviewImage}>
-        <img src={image} alt={author} />
+    <a
+      href={GOOGLE_REVIEWS_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={styles.reviewCard}
+    >
+      <div className={styles.reviewStars}>
+        {[...Array(5)].map((_, i) => (
+          <StarIcon key={i} className={styles.reviewStar} />
+        ))}
       </div>
       <p className={`${styles.reviewText} par`}>{text}</p>
-      <p className={`${styles.reviewAuthor} par`}>{author}</p>
-    </div>
+      <div className={styles.reviewAuthorRow}>
+        <div className={styles.reviewInitial}>{initial}</div>
+        <span className={styles.reviewAuthor}>{author}</span>
+      </div>
+    </a>
   );
 }
 

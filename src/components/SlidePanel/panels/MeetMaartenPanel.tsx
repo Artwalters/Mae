@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import gsap from 'gsap';
+import { usePanel } from '@/context/PanelContext';
 import styles from './MeetMaartenPanel.module.css';
 import basePath from '@/lib/basePath';
 
@@ -15,6 +16,7 @@ const credentials = [
 export default function MeetMaartenPanel() {
   const [activeCredential, setActiveCredential] = useState(0);
   const titleRef = useRef<HTMLHeadingElement>(null);
+  const { openPanel } = usePanel();
 
   useEffect(() => {
     if (titleRef.current) {
@@ -180,12 +182,9 @@ export default function MeetMaartenPanel() {
 
       {/* CTA */}
       <section className={styles.ctaSection}>
-        <p className={`${styles.ctaText} par`}>
-          Klaar om te beginnen? Plan een vrijblijvend kennismakingsgesprek.
-        </p>
-        <a href="#contact" className={styles.ctaButton}>
-          <span>Plan een afspraak</span>
-        </a>
+        <button className={styles.ctaButton} onClick={() => openPanel('start-nu')}>
+          <span>Start Traject</span>
+        </button>
       </section>
     </div>
   );

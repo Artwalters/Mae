@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { usePanel } from '@/context/PanelContext';
 import SlidePanel from './SlidePanel';
 import MeetMaartenPanel from './panels/MeetMaartenPanel';
@@ -12,12 +12,34 @@ export default function GlobalPanel() {
   const { activePanel, openPanel, closePanel, onBack } = usePanel();
   const lastPanelRef = useRef<string | null>(null);
   const navBarRef = useRef<HTMLDivElement>(null);
+  const [panelPhase, setPanelPhase] = useState(1);
 
   // Only update lastPanel when a new panel opens
   useEffect(() => {
     if (activePanel !== null) {
       lastPanelRef.current = activePanel;
     }
+  }, [activePanel]);
+
+  // Reset phase when panel changes
+  useEffect(() => {
+    setPanelPhase(1);
+  }, [activePanel]);
+
+  // Observe data-panel-phase attribute changes from SlidePanel
+  const panelElRef = useRef<HTMLElement | null>(null);
+  useEffect(() => {
+    // Find the panel element (parent of navBar)
+    const panelEl = navBarRef.current?.closest('[data-panel-phase]') as HTMLElement | null;
+    panelElRef.current = panelEl;
+    if (!panelEl) return;
+
+    const observer = new MutationObserver(() => {
+      const phase = parseInt(panelEl.getAttribute('data-panel-phase') || '1', 10);
+      setPanelPhase(phase);
+    });
+    observer.observe(panelEl, { attributes: true, attributeFilter: ['data-panel-phase'] });
+    return () => observer.disconnect();
   }, [activePanel]);
 
   // Use activePanel if open, otherwise use last panel for exit animation
@@ -38,11 +60,12 @@ export default function GlobalPanel() {
 
   const isMeetMaarten = panelToRender === 'meet-maarten';
   const isStartNu = panelToRender === 'start-nu';
+  const showStartTraject = isMeetMaarten && panelPhase === 2;
 
   const navBar = (
     <div ref={navBarRef} className={styles.navBar}>
       <button
-        className={`${styles.navTab} ${isMeetMaarten ? styles.navTabActive : ''}`}
+        className={`${styles.navTab} ${isMeetMaarten && !showStartTraject ? styles.navTabActive : ''}`}
         onClick={() => openPanel('meet-maarten')}
       >
         <span>Meet Maarten</span>
@@ -57,10 +80,10 @@ export default function GlobalPanel() {
         </button>
       )}
       <button
-        className={`${styles.navTab} ${isStartNu ? styles.navTabActive : ''}`}
+        className={`${styles.navTab} ${isStartNu ? styles.navTabActive : ''} ${showStartTraject ? styles.navTabPhase2 : ''}`}
         onClick={() => openPanel('start-nu')}
       >
-        <span>Start Nu</span>
+        <span>{showStartTraject ? 'Start Traject' : 'Start Nu'}</span>
         <span className={styles.navTabNumber}>[02]</span>
       </button>
     </div>

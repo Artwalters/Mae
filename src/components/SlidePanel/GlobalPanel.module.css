@@ -46,6 +46,24 @@
   );
 }
 
+/* Phase 2: overscroll fills with black */
+.navTabPhase2 {
+  background: linear-gradient(
+    120deg,
+    var(--color-dark) calc(var(--panel-progress, 0) * 100%),
+    rgba(0, 0, 0, 0.04) calc(var(--panel-progress, 0) * 100%)
+  );
+  color: var(--color-white);
+}
+
+.navTabPhase2:hover {
+  background: linear-gradient(
+    120deg,
+    var(--color-dark) calc(var(--panel-progress, 0) * 100%),
+    rgba(0, 0, 0, 0.04) calc(var(--panel-progress, 0) * 100%)
+  );
+}
+
 .backButton {
   aspect-ratio: 1;
   flex-shrink: 0;
