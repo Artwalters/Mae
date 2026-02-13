@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, createContext, useContext, useRef } from 'react';
+import { useEffect, createContext, useContext, useRef, useCallback, useMemo } from 'react';
 import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -39,29 +39,32 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
 
     lenis.on('scroll', ScrollTrigger.update);
 
-    gsap.ticker.add((time) => {
+    const tick = (time: number) => {
       lenis.raf(time * 1000);
-    });
+    };
+    gsap.ticker.add(tick);
 
     gsap.ticker.lagSmoothing(0);
 
     return () => {
+      gsap.ticker.remove(tick);
       lenis.destroy();
       lenisRef.current = null;
-      gsap.ticker.remove(lenis.raf);
     };
   }, []);
 
-  const stop = () => {
+  const stop = useCallback(() => {
     lenisRef.current?.stop();
-  };
+  }, []);
 
-  const start = () => {
+  const start = useCallback(() => {
     lenisRef.current?.start();
-  };
+  }, []);
+
+  const contextValue = useMemo(() => ({ stop, start }), [stop, start]);
 
   return (
-    <LenisContext.Provider value={{ stop, start }}>
+    <LenisContext.Provider value={contextValue}>
       {children}
     </LenisContext.Provider>
   );

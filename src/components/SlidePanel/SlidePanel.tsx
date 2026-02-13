@@ -24,10 +24,12 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
   const panelLenisRef = useRef<Lenis | null>(null);
   const isOpenRef = useRef(isOpen);
   const lenis = useLenis();
+  const lenisRef = useRef(lenis);
   const { activePanel, setProgress } = usePanel();
 
-  // Keep ref in sync for use in onComplete callbacks
+  // Keep refs in sync for use in callbacks
   isOpenRef.current = isOpen;
+  lenisRef.current = lenis;
 
   // Track scroll progress for meet-maarten
   const handleScroll = useCallback(() => {
@@ -50,10 +52,11 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
     gsap.killTweensOf(overlay);
 
     let transitionHandler: ((e: TransitionEvent) => void) | null = null;
+    let fallbackTimer: ReturnType<typeof setTimeout> | null = null;
 
     if (isOpen) {
       // Stop Lenis smooth scroll and prevent all scrolling
-      lenis?.stop();
+      lenisRef.current?.stop();
       document.documentElement.style.overflow = 'hidden';
       document.body.style.overflow = 'hidden';
 
@@ -82,26 +85,38 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
         pointerEvents: 'none'
       });
 
-      // Wait for CSS transition to finish, then restart Lenis
-      transitionHandler = (e: TransitionEvent) => {
-        if (e.propertyName !== 'clip-path') return;
-        panel.removeEventListener('transitionend', transitionHandler!);
+      // Restore Lenis + body scroll (only runs once)
+      let restored = false;
+      const restoreLenis = () => {
+        if (restored) return;
+        restored = true;
         if (!isOpenRef.current) {
-          lenis?.start();
+          lenisRef.current?.start();
           document.documentElement.style.overflow = '';
           document.body.style.overflow = '';
           ScrollTrigger.refresh();
         }
       };
+
+      // Wait for CSS transition to finish, then restart Lenis
+      transitionHandler = (e: TransitionEvent) => {
+        if (e.propertyName !== 'clip-path') return;
+        panel.removeEventListener('transitionend', transitionHandler!);
+        restoreLenis();
+      };
       panel.addEventListener('transitionend', transitionHandler);
+
+      // Fallback: ensure Lenis restarts even if transitionend doesn't fire
+      fallbackTimer = setTimeout(restoreLenis, 1200);
     }
 
     return () => {
       if (transitionHandler && panel) {
         panel.removeEventListener('transitionend', transitionHandler);
       }
+      if (fallbackTimer) clearTimeout(fallbackTimer);
     };
-  }, [isOpen, lenis]);
+  }, [isOpen]);
 
   // Panel-scoped Lenis smooth scroll
   useEffect(() => {
