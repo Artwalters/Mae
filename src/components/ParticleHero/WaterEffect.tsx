@@ -59,19 +59,19 @@ export default function WaterEffect({ brightness = 0.08 }: WaterEffectProps) {
       format: THREE.RGBAFormat,
       type: THREE.FloatType
     };
-    const resolution = 2048;
-    const sceneResolution = Math.max(size.width, size.height) * window.devicePixelRatio;
+    const resolution = 256;
+    const dpr = Math.min(window.devicePixelRatio, 2);
+    const sceneWidth = Math.round(size.width * dpr);
+    const sceneHeight = Math.round(size.height * dpr);
 
     return {
       read: new THREE.WebGLRenderTarget(resolution, resolution, options),
       write: new THREE.WebGLRenderTarget(resolution, resolution, options),
-      scene: new THREE.WebGLRenderTarget(sceneResolution, sceneResolution, {
-        minFilter: THREE.LinearMipmapLinearFilter,
+      scene: new THREE.WebGLRenderTarget(sceneWidth, sceneHeight, {
+        minFilter: THREE.LinearFilter,
         magFilter: THREE.LinearFilter,
         format: THREE.RGBAFormat,
-        samples: 8,
-        generateMipmaps: true,
-        anisotropy: gl.capabilities.getMaxAnisotropy()
+        samples: 4
       })
     };
   }, []);
@@ -121,8 +121,11 @@ export default function WaterEffect({ brightness = 0.08 }: WaterEffectProps) {
 
           pressure += delta * velocity;
 
-          velocity *= 0.998;
-          pressure *= 0.999;
+          velocity *= 0.985;
+          pressure *= 0.99;
+
+          pressure = clamp(pressure, -3.0, 3.0);
+          velocity = clamp(velocity, -3.0, 3.0);
 
           // Mouse interaction (hover)
           float dist = distance(vUv, uMouse);
