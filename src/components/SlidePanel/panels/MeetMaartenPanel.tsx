@@ -72,32 +72,15 @@ export default function MeetMaartenPanel() {
           <span className={styles.aboutLabel}>Over Maarten</span>
           <span className={styles.aboutNumber}>[01]</span>
         </div>
-        <div className={styles.stats}>
-          <div className={styles.stat}>
-            <span className={styles.statNumber}>8+</span>
-            <span className={styles.statLabel}>Jaar actief</span>
-          </div>
-          <div className={styles.stat}>
-            <span className={styles.statNumber}>500+</span>
-            <span className={styles.statLabel}>Cliënten</span>
-          </div>
-          <div className={styles.stat}>
-            <span className={styles.statNumber}>1500+</span>
-            <span className={styles.statLabel}>Sessies</span>
-          </div>
-          <div className={styles.stat}>
-            <span className={styles.statNumber}>2</span>
-            <span className={styles.statLabel}>Disciplines</span>
-          </div>
-        </div>
         <div className={styles.aboutText}>
           <p className={`${styles.text} par`}>
-            Als gecertificeerd fysiotherapeut en personal trainer combineer ik het beste van beide werelden.
-            Mijn filosofie is simpel: ik geloof niet in beperkingen opleggen, maar in mogelijkheden creëren.
+            Mijn naam is Maarten en ik ben een enthousiast krachtsporter, fysiotherapeut en personal coach. Van jongs af aan heb ik altijd veel moeite gehad met stilzitten, zoekend naar nieuwe uitdagingen en gefascineerd door de kracht en mogelijkheden van het menselijk lichaam. Deze fascinatie heeft zich ontwikkeld tot een diepe passie voor krachtsport, die de basis vormt voor mijn professionele leven.
           </p>
           <p className={`${styles.text} par`}>
-            Of je nu herstelt van een blessure, je prestaties wilt verbeteren, of gewoon fitter wilt worden -
-            samen vinden we de weg die bij jou past.
+            Mijn aanpak gaat verder dan het standaard behandelprotocol; ik streef ernaar om een plan te creëren dat perfect is afgestemd op de unieke behoeften van de individuele cliënt. Ik zie elk obstakel als een mogelijkheid. In de huidige zorgpraktijk merk ik dat er vaak te snel grenzen worden gesteld aan wat cliënten kunnen bereiken. Hier zet ik mij tegen af door niet alleen te focussen op wat tijdelijk onmogelijk lijkt, maar door actief oplossingen en alternatieven te zoeken.
+          </p>
+          <p className={`${styles.text} par`}>
+            Van de dakdekker met aanhoudende rugklachten tot de sporter met een scheve rug, ik ben ervan overtuigd dat met de juiste benadering en begeleiding, iedereen kan werken aan een leven vrij van belemmeringen.
           </p>
         </div>
         <div className={styles.photoGrid}>
@@ -123,29 +106,29 @@ export default function MeetMaartenPanel() {
           <div className={styles.step}>
             <span className={styles.stepNumber}>1</span>
             <div className={styles.stepContent}>
-              <h4 className={styles.stepTitle}>Intake & Analyse</h4>
-              <p className={`${styles.stepText} par`}>We beginnen met een uitgebreide intake waarin ik je fysieke conditie, doelen en eventuele beperkingen in kaart breng.</p>
+              <h4 className={styles.stepTitle}>Intake, screening & onderzoek</h4>
+              <p className={`${styles.stepText} par`}>Tijdens het intakegesprek bespreken we waar jij staat en waar je naartoe wilt. We doen een screening om ernstige oorzaken uit te sluiten, gevolgd door een lichamelijk en bewegingsonderzoek om de basis van je klacht in kaart te brengen.</p>
             </div>
           </div>
           <div className={styles.step}>
             <span className={styles.stepNumber}>2</span>
             <div className={styles.stepContent}>
-              <h4 className={styles.stepTitle}>Persoonlijk Plan</h4>
-              <p className={`${styles.stepText} par`}>Op basis van de analyse stel ik een volledig op maat gemaakt plan op dat past bij jouw niveau en levensstijl.</p>
+              <h4 className={styles.stepTitle}>Persoonlijk revalidatieplan</h4>
+              <p className={`${styles.stepText} par`}>Na de intake ontvang je een op maat gemaakt revalidatieplan, volledig aangepast op wat jouw lichaam op dat moment aankan. Dit plan wordt elke week geüpdatet zodat je altijd traint op een niveau dat bij jou past.</p>
             </div>
           </div>
           <div className={styles.step}>
             <span className={styles.stepNumber}>3</span>
             <div className={styles.stepContent}>
-              <h4 className={styles.stepTitle}>Begeleiding</h4>
-              <p className={`${styles.stepText} par`}>Tijdens de sessies werk ik intensief met je samen, waarbij ik technieken uitleg en direct feedback geef.</p>
+              <h4 className={styles.stepTitle}>Wekelijks online contactmoment</h4>
+              <p className={`${styles.stepText} par`}>Wekelijks bespreken we hoe de uitvoering van je plan is verlopen. Je kunt trainingsvideo&apos;s insturen voor concrete feedback en pijnscores bijhouden zodat we het plan continu kunnen afstemmen.</p>
             </div>
           </div>
           <div className={styles.step}>
             <span className={styles.stepNumber}>4</span>
             <div className={styles.stepContent}>
-              <h4 className={styles.stepTitle}>Evaluatie & Bijsturing</h4>
-              <p className={`${styles.stepText} par`}>Regelmatige evaluaties zorgen ervoor dat we het plan aanpassen aan jouw voortgang.</p>
+              <h4 className={styles.stepTitle}>Maandelijkse fysieke afspraak</h4>
+              <p className={`${styles.stepText} par`}>Iedere maand plannen we een persoonlijke afspraak van een uur om je voortgang te evalueren en samen verder te werken aan je herstel. In overleg is vaker mogelijk.</p>
             </div>
           </div>
         </div>

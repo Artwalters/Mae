@@ -72,24 +72,6 @@ export default function MeetMerelPanel() {
           <span className={styles.aboutLabel}>Over Merel</span>
           <span className={styles.aboutNumber}>[01]</span>
         </div>
-        <div className={styles.stats}>
-          <div className={styles.stat}>
-            <span className={styles.statNumber}>5+</span>
-            <span className={styles.statLabel}>Jaar ervaring</span>
-          </div>
-          <div className={styles.stat}>
-            <span className={styles.statNumber}>200+</span>
-            <span className={styles.statLabel}>Cliënten</span>
-          </div>
-          <div className={styles.stat}>
-            <span className={styles.statNumber}>100%</span>
-            <span className={styles.statLabel}>Persoonlijk</span>
-          </div>
-          <div className={styles.stat}>
-            <span className={styles.statNumber}>0</span>
-            <span className={styles.statLabel}>Diëten</span>
-          </div>
-        </div>
         <div className={styles.aboutText}>
           <p className={styles.text}>
             Als leefstijlcoach en krachtsporter heb ik uit eigen ervaring geleerd hoe cruciaal een gezonde

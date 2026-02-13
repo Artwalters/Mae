@@ -60,10 +60,11 @@ export default function HerstelSection() {
         </span>
         <h2 className={`title-chaney ${styles.title}`}>Herstel</h2>
         <p className={`text-description ${styles.description} par`}>
-          Bij MAE zien we fysiotherapie niet als een vast stramien, maar als een ingang.
-          Een poort naar het échte gesprek, naar beweging, naar ervaren, en vooral: naar
-          verandering. Geen standaardprotocols of voorspelbare trajecten, maar een
-          behandeling die begint met écht luisteren.
+          Bij M.A.E. benaderen we revalidatie op een unieke manier. Geen standaardprotocollen,
+          maar een doelgerichte, persoonlijke en stapsgewijze revalidatie. We creëren samen een
+          revalidatieplan dat aansluit op jouw lichaam, klachten en doelen. Met wekelijkse updates,
+          feedbackmomenten en trainingsvideo&apos;s zorgen we dat je gemotiveerd en uitgedaagd blijft
+          op weg naar belemmeringsvrij functioneren.
         </p>
         <button className="btn-accent" onClick={() => openPanel('start-nu')}><span>Start nu</span></button>
       </div>
@@ -72,7 +73,7 @@ export default function HerstelSection() {
       <div id="herstel-image" className={styles.imageContainer}>
         <div ref={bannerRef} className={`banner-accent ${styles.banner}`}>
           <p className="banner-text par">
-            Jij bent niet je klacht. En herstel begint niet altijd met een behandelplan, maar met vertrouwen, inzicht en een fysiotherapeut die naast je staat.
+            Ik ben Maarten, krachtsporter, fysiotherapeut en personal coach. Waar de zorg vaak te snel grenzen stelt, zie ik mogelijkheden. Ik zoek altijd actief naar oplossingen en alternatieven.
           </p>
           <button className={`btn-bar ${styles.bannerButton}`} onClick={() => openPanel('meet-maarten')}>
             Meet Maarten
