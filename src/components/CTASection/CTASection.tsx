@@ -1,8 +1,10 @@
 'use client';
 
+import { usePanel } from '@/context/PanelContext';
 import styles from './CTASection.module.css';
 
 export default function CTASection() {
+  const { openPanel } = usePanel();
   return (
     <section id="cta-section" className={styles.section}>
       <div className={styles.header}>
@@ -19,31 +21,31 @@ export default function CTASection() {
         <div className={`${styles.card} ${styles.cardLight}`}>
           <h3 className={styles.cardTitle}>Leefstijl</h3>
           <p className={`${styles.cardText} par`}>
-            Meer energie, betere gewoontes en een gezonder leven. Persoonlijke begeleiding die past bij jouw situatie.
+            Bouw aan een sterker fundament. Persoonlijke begeleiding voor meer energie, betere gewoontes en duurzame resultaten.
           </p>
-          <a href="#leefstijl" className={`btn-bar ${styles.cardButton}`}>
+          <button className={`btn-bar ${styles.cardButton}`} onClick={() => openPanel('start-nu')}>
             Start je traject
-          </a>
+          </button>
         </div>
 
         <div className={`${styles.card} ${styles.cardAccent}`}>
-          <h3 className={styles.cardTitle}>Gecombineerd</h3>
+          <h3 className={styles.cardTitle}>Compleet overzicht</h3>
           <p className={`${styles.cardText} par`}>
-            De kracht van beide disciplines. Voor wie het maximale uit zichzelf wil halen, fysiek én mentaal.
+            Ontdek het volledige aanbod op HAL 13. Van coaching en training tot revalidatie — alles onder één dak.
           </p>
-          <a href="#contact" className={`btn-bar ${styles.cardButton}`}>
-            Neem contact op
+          <a href="https://www.hal13.nl/" target="_blank" rel="noopener noreferrer" className={`btn-bar ${styles.cardButton}`}>
+            Bekijk alle diensten
           </a>
         </div>
 
         <div className={`${styles.card} ${styles.cardDark}`}>
           <h3 className={styles.cardTitle}>Fysiotherapie</h3>
           <p className={`${styles.cardText} par`}>
-            Herstel van blessures, pijnklachten of na een operatie. Samen werken we aan jouw bewegingsvrijheid en kracht.
+            Gericht herstel en preventie. Samen werken we aan jouw bewegingsvrijheid, kracht en een pijnvrij lichaam.
           </p>
-          <a href="#fysio" className={`btn-bar ${styles.cardButton}`}>
-            Maak een afspraak
-          </a>
+          <button className={`btn-bar ${styles.cardButton}`} onClick={() => openPanel('start-nu')}>
+            Start je traject
+          </button>
         </div>
       </div>
 

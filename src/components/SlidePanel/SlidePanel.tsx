@@ -28,6 +28,23 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
   const panelRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const closeSvgRef = useRef<SVGSVGElement>(null);
+  const closeLine1Ref = useRef<SVGLineElement>(null);
+  const closeLine2Ref = useRef<SVGLineElement>(null);
+
+  const handleCloseHover = () => {
+    if (!closeLine1Ref.current || !closeLine2Ref.current) return;
+    // X morphs to horizontal line (—)
+    gsap.to(closeLine1Ref.current, { attr: { x1: 4, y1: 12, x2: 20, y2: 12 }, duration: 0.3, ease: 'power2.inOut' });
+    gsap.to(closeLine2Ref.current, { attr: { x1: 4, y1: 12, x2: 20, y2: 12 }, duration: 0.3, ease: 'power2.inOut' });
+  };
+
+  const handleCloseLeave = () => {
+    if (!closeLine1Ref.current || !closeLine2Ref.current) return;
+    // Back to X
+    gsap.to(closeLine1Ref.current, { attr: { x1: 18, y1: 6, x2: 6, y2: 18 }, duration: 0.3, ease: 'power2.inOut' });
+    gsap.to(closeLine2Ref.current, { attr: { x1: 6, y1: 6, x2: 18, y2: 18 }, duration: 0.3, ease: 'power2.inOut' });
+  };
   const panelLenisRef = useRef<Lenis | null>(null);
   const isOpenRef = useRef(isOpen);
   const isMobileRef = useRef(false);
@@ -448,10 +465,10 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
           <div className={styles.panelHeader}>
             <div className={styles.panelHeaderInner}>
               {header}
-              <button className={styles.closeButton} onClick={onClose}>
-                <svg width="60%" height="60%" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
+              <button className={styles.closeButton} onClick={onClose} onMouseEnter={handleCloseHover} onMouseLeave={handleCloseLeave}>
+                <svg ref={closeSvgRef} width="60%" height="60%" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <line ref={closeLine1Ref} x1="18" y1="6" x2="6" y2="18" />
+                  <line ref={closeLine2Ref} x1="6" y1="6" x2="18" y2="18" />
                 </svg>
               </button>
             </div>

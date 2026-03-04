@@ -14,6 +14,8 @@ const credentials = [
 export default function MeetMaartenPanel() {
   const [activeCredential, setActiveCredential] = useState(0);
   const titleRef = useRef<HTMLHeadingElement>(null);
+  const prevSvgRef = useRef<SVGSVGElement>(null);
+  const nextSvgRef = useRef<SVGSVGElement>(null);
   const { openPanel } = usePanel();
 
   useEffect(() => {
@@ -52,6 +54,16 @@ export default function MeetMaartenPanel() {
     if (index !== activeCredential) {
       animateAndChange(index);
     }
+  };
+
+  const handleArrowHover = (svgEl: SVGSVGElement | null, direction: 'left' | 'right') => {
+    if (!svgEl) return;
+    const tl = gsap.timeline();
+    const moveOut = direction === 'right' ? '120%' : '-120%';
+    const moveIn = direction === 'right' ? '-120%' : '120%';
+    tl.to(svgEl, { x: moveOut, duration: 0.2, ease: 'power2.in' })
+      .set(svgEl, { x: moveIn })
+      .to(svgEl, { x: '0%', duration: 0.2, ease: 'power2.out' });
   };
 
   return (
@@ -150,14 +162,14 @@ export default function MeetMaartenPanel() {
             </div>
           </div>
           <div className={styles.timelineNav}>
-            <button className={styles.timelineArrow} onClick={goToPrev}>
-              <svg width="60%" height="60%" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeMiterlimit="10" style={{ transform: 'scaleX(-1)' }}>
+            <button className={styles.timelineArrow} onClick={goToPrev} onMouseEnter={() => handleArrowHover(prevSvgRef.current, 'left')}>
+              <svg ref={prevSvgRef} width="60%" height="60%" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeMiterlimit="10" style={{ transform: 'scaleX(-1)' }}>
                 <path d="M14 19L21 12L14 5" />
                 <path d="M21 12H2" />
               </svg>
             </button>
-            <button className={styles.timelineArrow} onClick={goToNext}>
-              <svg width="60%" height="60%" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeMiterlimit="10">
+            <button className={styles.timelineArrow} onClick={goToNext} onMouseEnter={() => handleArrowHover(nextSvgRef.current, 'right')}>
+              <svg ref={nextSvgRef} width="60%" height="60%" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeMiterlimit="10">
                 <path d="M14 19L21 12L14 5" />
                 <path d="M21 12H2" />
               </svg>

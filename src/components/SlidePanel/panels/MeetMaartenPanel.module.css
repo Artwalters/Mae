@@ -209,8 +209,8 @@
 }
 
 .timelineArrow {
-  width: 1.8em;
-  height: 1.8em;
+  width: 40px;
+  height: 40px;
   background: transparent;
   border: 1px solid var(--color-dark);
   border-radius: 0.15em;
@@ -219,12 +219,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
-}
-
-.timelineArrow:hover {
-  background: var(--color-dark);
-  color: var(--color-accent);
+  overflow: hidden;
 }
 
 .timelineMain {
@@ -355,7 +350,7 @@
   }
 
   .timelineArrow {
-    width: 1.5em;
-    height: 1.5em;
+    width: 40px;
+    height: 40px;
   }
 }

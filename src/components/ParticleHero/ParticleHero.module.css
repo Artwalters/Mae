@@ -28,6 +28,10 @@
   color: var(--color-gray);
   letter-spacing: 0.2em;
   white-space: nowrap;
+  background: none;
+  border: none;
+  cursor: pointer;
+  pointer-events: auto;
 }
 
 .sideLabel.left {

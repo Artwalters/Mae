@@ -46,7 +46,7 @@
   display: flex;
   gap: 0.3em;
   align-items: stretch;
-  height: 1.6em;
+  height: 40px;
   clip-path: inset(100% 0 0 0);
   transform: translateY(1em);
   transition: clip-path 0.75s cubic-bezier(.7, 0, .3, 1), transform 0.75s cubic-bezier(.7, 0, .3, 1);
@@ -88,12 +88,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
-}
-
-.closeButton:hover {
-  background: var(--color-dark);
-  color: var(--color-accent);
+  overflow: hidden;
 }
 
 .content {

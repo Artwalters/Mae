@@ -122,9 +122,9 @@ export default function ParticleHero() {
         <span className={`${styles.sideLabel} ${styles.left}`}>
           [CONTACT]
         </span>
-        <span className={`${styles.sideLabel} ${styles.right}`}>
+        <button className={`${styles.sideLabel} ${styles.right}`} onClick={() => document.getElementById('mae-section')?.scrollIntoView({ behavior: 'smooth' })}>
           [SCROLL DOWN]
-        </span>
+        </button>
       </div>
 
       <Canvas
