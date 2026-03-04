@@ -37,7 +37,7 @@ export default function Logo3D({ scale = 1, scrollProgressRef, mode = 'hero', is
       vertexShader: `
         varying vec2 vUv;
         void main() {
-          vUv = uv;
+          vUv = vec2(uv.x, uv.y - 0.1);
           gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
         }
       `,
