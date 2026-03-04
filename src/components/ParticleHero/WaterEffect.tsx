@@ -10,7 +10,7 @@ interface WaterEffectProps {
   sharedVideo?: HTMLVideoElement | null;
 }
 
-export default function WaterEffect({ brightness = 0.08, sharedTexture, sharedVideo }: WaterEffectProps) {
+export default function WaterEffect({ brightness = 0.11, sharedTexture, sharedVideo }: WaterEffectProps) {
   const { gl, size, scene, camera } = useThree();
   const meshRef = useRef<THREE.Mesh>(null);
   const mouse = useRef(new THREE.Vector2(0.5, 0.5));
@@ -133,7 +133,8 @@ export default function WaterEffect({ brightness = 0.08, sharedTexture, sharedVi
         uTime: { value: 0 },
         uResolution: { value: new THREE.Vector2(size.width, size.height) },
         uBgAspect: { value: 1.0 },
-        uBrightness: { value: brightness }
+        uBrightness: { value: brightness },
+        uMouse: { value: new THREE.Vector2(0.5, 0.5) }
       },
       vertexShader: `
         varying vec2 vUv;
@@ -150,6 +151,7 @@ export default function WaterEffect({ brightness = 0.08, sharedTexture, sharedVi
         uniform vec2 uResolution;
         uniform float uBgAspect;
         uniform float uBrightness;
+        uniform vec2 uMouse;
         varying vec2 vUv;
 
         vec2 coverUv(vec2 uv, vec2 screenRes, float imgAspect) {
@@ -230,6 +232,18 @@ export default function WaterEffect({ brightness = 0.08, sharedTexture, sharedVi
           // Composite: bg photo (deformation only) vs processed scene (full water)
           vec3 finalColor = mix(bgColor, sceneProcessed, sceneBlend);
 
+          // Grayscale with color reveal on hover
+          float gray = dot(finalColor, vec3(0.299, 0.587, 0.114));
+          vec3 grayColor = vec3(gray);
+
+          // Mouse-based color reveal
+          vec2 aspectCorrected = vec2(vUv.x * uResolution.x / uResolution.y, vUv.y);
+          vec2 mouseAspect = vec2(uMouse.x * uResolution.x / uResolution.y, uMouse.y);
+          float dist = distance(aspectCorrected, mouseAspect);
+          float radius = 0.15;
+          float colorBlend = smoothstep(radius, radius * 0.3, dist);
+          finalColor = mix(grayColor, finalColor, colorBlend);
+
           // Dithering om banding te verminderen
           float dither = (fract(sin(dot(vUv, vec2(12.9898, 78.233))) * 43758.5453) - 0.5) * 0.015;
           finalColor += dither;
@@ -243,16 +257,24 @@ export default function WaterEffect({ brightness = 0.08, sharedTexture, sharedVi
     });
   }, [size]);
 
-  // Mouse tracking
+  // Mouse tracking (relative to canvas)
   useEffect(() => {
+    const canvas = gl.domElement;
+
+    const getRelativePos = (clientX: number, clientY: number) => {
+      const rect = canvas.getBoundingClientRect();
+      const x = (clientX - rect.left) / rect.width;
+      const y = 1.0 - (clientY - rect.top) / rect.height;
+      return { x: Math.max(0, Math.min(1, x)), y: Math.max(0, Math.min(1, y)) };
+    };
+
     const handleMouseMove = (e: MouseEvent) => {
-      const newX = e.clientX / window.innerWidth;
-      const newY = 1.0 - (e.clientY / window.innerHeight);
-      mouseVelocity.current.x = newX - mouse.current.x;
-      mouseVelocity.current.y = newY - mouse.current.y;
+      const pos = getRelativePos(e.clientX, e.clientY);
+      mouseVelocity.current.x = pos.x - mouse.current.x;
+      mouseVelocity.current.y = pos.y - mouse.current.y;
       mousePrev.current.copy(mouse.current);
-      mouse.current.x = newX;
-      mouse.current.y = newY;
+      mouse.current.x = pos.x;
+      mouse.current.y = pos.y;
     };
 
     const handleMouseDown = () => {
@@ -265,20 +287,20 @@ export default function WaterEffect({ brightness = 0.08, sharedTexture, sharedVi
 
     const handleTouchMove = (e: TouchEvent) => {
       if (e.touches.length > 0) {
-        const newX = e.touches[0].clientX / window.innerWidth;
-        const newY = 1.0 - (e.touches[0].clientY / window.innerHeight);
-        mouseVelocity.current.x = newX - mouse.current.x;
-        mouseVelocity.current.y = newY - mouse.current.y;
+        const pos = getRelativePos(e.touches[0].clientX, e.touches[0].clientY);
+        mouseVelocity.current.x = pos.x - mouse.current.x;
+        mouseVelocity.current.y = pos.y - mouse.current.y;
         mousePrev.current.copy(mouse.current);
-        mouse.current.x = newX;
-        mouse.current.y = newY;
+        mouse.current.x = pos.x;
+        mouse.current.y = pos.y;
       }
     };
 
     const handleTouchStart = (e: TouchEvent) => {
       if (e.touches.length > 0) {
-        mouse.current.x = e.touches[0].clientX / window.innerWidth;
-        mouse.current.y = 1.0 - (e.touches[0].clientY / window.innerHeight);
+        const pos = getRelativePos(e.touches[0].clientX, e.touches[0].clientY);
+        mouse.current.x = pos.x;
+        mouse.current.y = pos.y;
         mouseDown.current = true;
       }
     };
@@ -370,8 +392,12 @@ export default function WaterEffect({ brightness = 0.08, sharedTexture, sharedVi
         material.uniforms.uSceneTexture.value = buffers.scene.texture;
         material.uniforms.uTime.value = state.clock.elapsedTime;
         material.uniforms.uResolution.value.set(size.width, size.height);
+        material.uniforms.uMouse.value.copy(mouse.current);
 
         if (sharedTexture) {
+          if (sharedVideo && sharedVideo.readyState >= sharedVideo.HAVE_CURRENT_DATA) {
+            sharedTexture.needsUpdate = true;
+          }
           material.uniforms.uBackgroundTexture.value = sharedTexture;
           if (sharedVideo?.videoWidth && sharedVideo?.videoHeight) {
             material.uniforms.uBgAspect.value = sharedVideo.videoWidth / sharedVideo.videoHeight;

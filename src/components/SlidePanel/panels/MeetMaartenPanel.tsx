@@ -8,9 +8,7 @@ import basePath from '@/lib/basePath';
 
 const credentials = [
   { year: '2016', text: 'Bachelor Fysiotherapie' },
-  { year: '2018', text: 'Master Sports Physiotherapy' },
-  { year: '2019', text: 'Certified Strength & Conditioning Specialist' },
-  { year: '2022', text: 'Leefstijlcoach Certificering' },
+  { year: '2018', text: 'The Performance Method' },
 ];
 
 export default function MeetMaartenPanel() {

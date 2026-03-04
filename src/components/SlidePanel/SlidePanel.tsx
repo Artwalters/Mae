@@ -18,9 +18,11 @@ interface SlidePanelProps {
 }
 
 // How much overscroll (in px of wheel delta) to fill phase 2
-const OVERSCROLL_THRESHOLD = 180;
+const OVERSCROLL_THRESHOLD = 550;
 // Decay rate when user stops scrolling (0-1, lower = faster snap back)
-const OVERSCROLL_DECAY = 0.92;
+const OVERSCROLL_DECAY = 0.94;
+// Lerp speed for smooth progress bar animation (0-1, lower = smoother)
+const PROGRESS_LERP = 0.12;
 
 export default function SlidePanel({ isOpen, onClose, children, header }: SlidePanelProps) {
   const panelRef = useRef<HTMLDivElement>(null);
@@ -38,7 +40,9 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
 
   // Overscroll tracking for phase 2 resistance effect
   const overscrollRef = useRef(0);
+  const displayProgressRef = useRef(0);
   const decayRafRef = useRef<number | null>(null);
+  const lerpRafRef = useRef<number | null>(null);
   const switchedRef = useRef(false);
 
   // Keep refs in sync for use in callbacks
@@ -54,24 +58,44 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
     return el.scrollTop + el.clientHeight >= el.scrollHeight - 2;
   };
 
-  // Update phase 2 progress bar from overscroll value
-  const updateOverscrollBar = () => {
-    if (!panelRef.current) return;
-    const barProgress = Math.min(overscrollRef.current / OVERSCROLL_THRESHOLD, 1);
-    panelRef.current.style.setProperty('--panel-progress', String(barProgress));
+  // Smooth lerp loop — runs continuously while overscroll is active
+  const startLerpLoop = () => {
+    if (lerpRafRef.current) return; // already running
 
-    // Update phase
-    const phase = overscrollRef.current > 0 ? 2 : 1;
-    if (phase !== lastPhaseRef.current) {
-      lastPhaseRef.current = phase;
-      panelRef.current.setAttribute('data-panel-phase', String(phase));
-    }
+    const tick = () => {
+      const target = Math.min(overscrollRef.current / OVERSCROLL_THRESHOLD, 1);
+      displayProgressRef.current += (target - displayProgressRef.current) * PROGRESS_LERP;
 
-    // Auto-switch when bar is full
-    if (barProgress >= 1 && !switchedRef.current) {
-      switchedRef.current = true;
-      openPanelRef.current('start-nu');
-    }
+      // Snap to target when close enough
+      if (Math.abs(displayProgressRef.current - target) < 0.001) {
+        displayProgressRef.current = target;
+      }
+
+      if (panelRef.current) {
+        panelRef.current.style.setProperty('--panel-progress', String(displayProgressRef.current));
+
+        // Update phase
+        const phase = displayProgressRef.current > 0.001 ? 2 : 1;
+        if (phase !== lastPhaseRef.current) {
+          lastPhaseRef.current = phase;
+          panelRef.current.setAttribute('data-panel-phase', String(phase));
+        }
+      }
+
+      // Auto-switch when display reaches full
+      if (displayProgressRef.current >= 0.99 && !switchedRef.current) {
+        switchedRef.current = true;
+        openPanelRef.current('start-nu');
+      }
+
+      // Keep running if there's still movement
+      if (overscrollRef.current > 0 || displayProgressRef.current > 0.001) {
+        lerpRafRef.current = requestAnimationFrame(tick);
+      } else {
+        lerpRafRef.current = null;
+      }
+    };
+    lerpRafRef.current = requestAnimationFrame(tick);
   };
 
   // Decay overscroll back to 0 when user stops scrolling
@@ -83,7 +107,6 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
       if (overscrollRef.current < 1) {
         overscrollRef.current = 0;
       }
-      updateOverscrollBar();
       if (overscrollRef.current > 0) {
         decayRafRef.current = requestAnimationFrame(tick);
       } else {
@@ -91,12 +114,20 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
       }
     };
     decayRafRef.current = requestAnimationFrame(tick);
+    startLerpLoop();
   };
 
   const stopDecay = () => {
     if (decayRafRef.current) {
       cancelAnimationFrame(decayRafRef.current);
       decayRafRef.current = null;
+    }
+  };
+
+  const stopLerpLoop = () => {
+    if (lerpRafRef.current) {
+      cancelAnimationFrame(lerpRafRef.current);
+      lerpRafRef.current = null;
     }
   };
 
@@ -126,29 +157,31 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
     if (activePanelRef.current !== 'meet-maarten' || switchedRef.current) return;
 
     if (isAtBottom() && e.deltaY > 0) {
-      // Scrolling down at bottom — accumulate overscroll with resistance
+      // Scrolling down at bottom — accumulate overscroll with heavy resistance
       e.preventDefault();
       stopDecay();
-      // Resistance: diminishing returns as you accumulate
-      const resistance = 1 - (overscrollRef.current / OVERSCROLL_THRESHOLD) * 0.7;
-      overscrollRef.current += e.deltaY * resistance * 0.5;
+      const ratio = overscrollRef.current / OVERSCROLL_THRESHOLD;
+      // Resistance that eases off near the end so it doesn't stall
+      const resistance = Math.max(1 - ratio * ratio * 0.85, 0.08);
+      overscrollRef.current += e.deltaY * resistance * 0.35;
       overscrollRef.current = Math.min(overscrollRef.current, OVERSCROLL_THRESHOLD);
-      updateOverscrollBar();
+      startLerpLoop();
     } else if (overscrollRef.current > 0 && e.deltaY < 0) {
       // Scrolling up while in overscroll — reduce overscroll
       e.preventDefault();
       stopDecay();
-      overscrollRef.current += e.deltaY * 0.5;
+      overscrollRef.current += e.deltaY * 0.4;
       overscrollRef.current = Math.max(overscrollRef.current, 0);
-      updateOverscrollBar();
+      startLerpLoop();
     } else if (overscrollRef.current > 0 && e.deltaY > 0) {
       // Still scrolling down in overscroll
       e.preventDefault();
       stopDecay();
-      const resistance = 1 - (overscrollRef.current / OVERSCROLL_THRESHOLD) * 0.7;
-      overscrollRef.current += e.deltaY * resistance * 0.5;
+      const ratio = overscrollRef.current / OVERSCROLL_THRESHOLD;
+      const resistance = Math.max(1 - ratio * ratio * 0.85, 0.08);
+      overscrollRef.current += e.deltaY * resistance * 0.35;
       overscrollRef.current = Math.min(overscrollRef.current, OVERSCROLL_THRESHOLD);
-      updateOverscrollBar();
+      startLerpLoop();
     }
   };
 
@@ -191,23 +224,24 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
       stopDecay();
 
       if (touchDelta > 0) {
-        // Swiping up (scrolling down) — accumulate
-        const resistance = 1 - (overscrollRef.current / OVERSCROLL_THRESHOLD) * 0.7;
-        overscrollRef.current = Math.min(touchDelta * resistance * 0.8, OVERSCROLL_THRESHOLD);
+        // Swiping up (scrolling down) — accumulate with resistance
+        const ratio = overscrollRef.current / OVERSCROLL_THRESHOLD;
+        const resistance = Math.max(1 - ratio * ratio * 0.85, 0.08);
+        overscrollRef.current = Math.min(touchDelta * resistance * 0.6, OVERSCROLL_THRESHOLD);
       } else {
         // Swiping down (scrolling up) — reduce
-        overscrollRef.current = Math.max(overscrollRef.current + touchDelta * 0.5, 0);
+        overscrollRef.current = Math.max(overscrollRef.current + touchDelta * 0.4, 0);
         if (overscrollRef.current <= 0) {
           touchActiveRef.current = false;
         }
       }
-      updateOverscrollBar();
+      startLerpLoop();
     } else if (overscrollRef.current > 0 && deltaY < 0) {
       // Scrolling up while in overscroll
       e.preventDefault();
-      overscrollRef.current += deltaY * 0.5;
+      overscrollRef.current += deltaY * 0.4;
       overscrollRef.current = Math.max(overscrollRef.current, 0);
-      updateOverscrollBar();
+      startLerpLoop();
       touchStartYRef.current = currentY;
     }
   };
@@ -243,8 +277,10 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
       panel.setAttribute('data-panel-phase', '1');
       lastPhaseRef.current = 1;
       overscrollRef.current = 0;
+      displayProgressRef.current = 0;
       switchedRef.current = false;
       stopDecay();
+      stopLerpLoop();
 
       panel.setAttribute('data-panel-open', 'true');
 
@@ -292,6 +328,19 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
       if (fallbackTimer) clearTimeout(fallbackTimer);
     };
   }, [isOpen]);
+
+  // Reset overscroll state when switching panels (isOpen stays true)
+  useEffect(() => {
+    if (!isOpen || !panelRef.current) return;
+    overscrollRef.current = 0;
+    displayProgressRef.current = 0;
+    switchedRef.current = false;
+    stopDecay();
+    stopLerpLoop();
+    panelRef.current.style.setProperty('--panel-progress', '0');
+    panelRef.current.setAttribute('data-panel-phase', '1');
+    lastPhaseRef.current = 1;
+  }, [activePanel]);
 
   // Panel-scoped Lenis smooth scroll (desktop only)
   useEffect(() => {
@@ -354,6 +403,7 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
       el.removeEventListener('touchmove', handleTouchMove);
       el.removeEventListener('touchend', handleTouchEnd);
       stopDecay();
+      stopLerpLoop();
       if (wheelTimeoutRef.current) clearTimeout(wheelTimeoutRef.current);
     };
   }, [isOpen, activePanel]);
