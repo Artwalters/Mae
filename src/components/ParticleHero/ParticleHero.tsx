@@ -8,10 +8,26 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Logo3D from './LogoParticles';
 import WaterEffect from './WaterEffect';
 import { useSharedVideo } from '@/context/SharedVideoContext';
-import basePath from '@/lib/basePath';
 import styles from './ParticleHero.module.css';
 
 gsap.registerPlugin(ScrollTrigger);
+
+function MobileVideoBackground({ video }: { video: HTMLVideoElement | null }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!video || !containerRef.current) return;
+    video.className = styles.mobileVideo;
+    containerRef.current.appendChild(video);
+    return () => {
+      if (video.parentNode === containerRef.current) {
+        containerRef.current?.removeChild(video);
+      }
+    };
+  }, [video]);
+
+  return <div ref={containerRef} />;
+}
 
 type ScreenSize = 'mobile' | 'tablet-sm' | 'tablet-md' | 'tablet' | 'desktop-sm' | 'desktop' | 'desktop-lg' | null;
 
@@ -105,17 +121,8 @@ export default function ParticleHero() {
 
   return (
     <div ref={containerRef} className={styles.container}>
-      {/* Mobile video background */}
-      {isMobile && (
-        <video
-          className={styles.mobileVideo}
-          src={`${basePath}/img/hero.mp4`}
-          autoPlay
-          muted
-          loop
-          playsInline
-        />
-      )}
+      {/* Mobile video background — reuse the shared video element */}
+      {isMobile && <MobileVideoBackground video={sharedVideo} />}
 
       {/* Side Labels - fade out as you scroll */}
       <div ref={sideLabelsRef} className={styles.sideLabels}>
