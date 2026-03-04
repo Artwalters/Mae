@@ -10,7 +10,7 @@ interface WaterEffectProps {
   sharedVideo?: HTMLVideoElement | null;
 }
 
-export default function WaterEffect({ brightness = 0.11, sharedTexture, sharedVideo }: WaterEffectProps) {
+export default function WaterEffect({ brightness = 0.07, sharedTexture, sharedVideo }: WaterEffectProps) {
   const { gl, size, scene, camera } = useThree();
   const meshRef = useRef<THREE.Mesh>(null);
   const mouse = useRef(new THREE.Vector2(0.5, 0.5));
@@ -240,7 +240,7 @@ export default function WaterEffect({ brightness = 0.11, sharedTexture, sharedVi
           vec2 aspectCorrected = vec2(vUv.x * uResolution.x / uResolution.y, vUv.y);
           vec2 mouseAspect = vec2(uMouse.x * uResolution.x / uResolution.y, uMouse.y);
           float dist = distance(aspectCorrected, mouseAspect);
-          float radius = 0.15;
+          float radius = 0.8;
           float colorBlend = smoothstep(radius, radius * 0.3, dist);
           finalColor = mix(grayColor, finalColor, colorBlend);
 
