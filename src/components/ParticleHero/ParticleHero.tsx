@@ -7,7 +7,6 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Logo3D from './LogoParticles';
 import WaterEffect from './WaterEffect';
-import ScrambleText from '@/components/ScrambleText';
 import { useSharedVideo } from '@/context/SharedVideoContext';
 import basePath from '@/lib/basePath';
 import styles from './ParticleHero.module.css';
@@ -21,7 +20,6 @@ export default function ParticleHero() {
   const scrollProgressRef = useRef(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const sideLabelsRef = useRef<HTMLDivElement>(null);
-  const heroBottomRef = useRef<HTMLDivElement>(null);
   const { video: sharedVideo, texture: sharedTexture } = useSharedVideo();
 
   useEffect(() => {
@@ -63,7 +61,6 @@ export default function ParticleHero() {
         // Update label opacity directly via DOM
         const opacity = String(Math.max(0, 1 - self.progress * 3));
         if (sideLabelsRef.current) sideLabelsRef.current.style.opacity = opacity;
-        if (heroBottomRef.current) heroBottomRef.current.style.opacity = opacity;
       }
     });
 
@@ -123,27 +120,11 @@ export default function ParticleHero() {
       {/* Side Labels - fade out as you scroll */}
       <div ref={sideLabelsRef} className={styles.sideLabels}>
         <span className={`${styles.sideLabel} ${styles.left}`}>
-          [<ScrambleText trigger="load" retriggerAtEnd retriggerAtStart>FYSIOTHERAPIE</ScrambleText>]
+          [CONTACT]
         </span>
         <span className={`${styles.sideLabel} ${styles.right}`}>
-          [<ScrambleText trigger="load" retriggerAtEnd retriggerAtStart>LEEFSTIJL</ScrambleText>]
+          [SCROLL DOWN]
         </span>
-      </div>
-
-      {/* Hero bottom labels */}
-      <div ref={heroBottomRef} className={styles.heroBottom}>
-        <span className={styles.scrollDown}>
-          [<ScrambleText trigger="load" retriggerAtEnd retriggerAtStart>SCROLL DOWN</ScrambleText>]
-        </span>
-        <button
-          className={styles.contact}
-          onClick={() => {
-            const el = document.getElementById('cta-section');
-            if (el) el.scrollIntoView({ behavior: 'smooth' });
-          }}
-        >
-          [<ScrambleText trigger="load" retriggerAtEnd retriggerAtStart>CONTACT</ScrambleText>]
-        </button>
       </div>
 
       <Canvas

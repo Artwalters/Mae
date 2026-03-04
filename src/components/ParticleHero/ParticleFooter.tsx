@@ -7,7 +7,6 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Logo3D from './LogoParticles';
 import WaterEffect from './WaterEffect';
-import ScrambleText from '@/components/ScrambleText';
 import { useSharedVideo } from '@/context/SharedVideoContext';
 import basePath from '@/lib/basePath';
 import styles from './ParticleHero.module.css';
@@ -122,10 +121,10 @@ export default function ParticleFooter() {
       {/* Footer Tags - fade in when logo reaches center */}
       <div ref={footerTagsRef} className={styles.footerTags} style={{ opacity: 0 }}>
         <a href="#fysio" className={styles.footerTag}>
-          [<ScrambleText retriggerAtEnd>START FYSIOTHERAPIE</ScrambleText>]
+          [START FYSIOTHERAPIE]
         </a>
         <a href="#leefstijl" className={styles.footerTag}>
-          [<ScrambleText retriggerAtEnd>START LEEFSTIJL COACHING</ScrambleText>]
+          [START LEEFSTIJL COACHING]
         </a>
       </div>
 

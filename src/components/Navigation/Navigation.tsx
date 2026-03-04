@@ -17,29 +17,42 @@ const navItems = [
 ];
 
 const sectionColors: { id: string; bg: string }[] = [
-  { id: 'mae-section', bg: '#d7d7d7' },           // --color-light darkened
-  { id: 'herstel-section', bg: '#3a3a3a' },       // dark grey like hero
-  { id: 'herstel-image', bg: '#d7d7d7' },         // light darkened
-  { id: 'leefstijl-content', bg: '#3a3a3a' },     // dark grey like hero
-  { id: 'leefstijl-image', bg: '#d7d7d7' },       // light darkened
-  { id: 'faq-section', bg: '#d7d7d7' },           // light darkened
-  { id: 'cta-section', bg: '#d7d7d7' },           // light darkened
-  { id: 'footer-section', bg: '#3a3a3a' },        // dark grey like hero
+  { id: 'mae-section', bg: '#d7d7d7' },
+  { id: 'herstel-section', bg: '#3a3a3a' },
+  { id: 'herstel-image', bg: '#d7d7d7' },
+  { id: 'leefstijl-content', bg: '#3a3a3a' },
+  { id: 'leefstijl-image', bg: '#d7d7d7' },
+  { id: 'faq-section', bg: '#d7d7d7' },
+  { id: 'cta-section', bg: '#d7d7d7' },
+  { id: 'footer-section', bg: '#3a3a3a' },
 ];
 
 export default function Navigation() {
   const [active, setActive] = useState(false);
   const hamburgerRef = useRef<HTMLButtonElement>(null);
+  const lottieRef = useRef<any>(null);
   const lenis = useLenis();
 
   const open = useCallback(() => {
     setActive(true);
     lenis?.stop();
+    setTimeout(() => {
+      const el = lottieRef.current;
+      if (el?.dotLottie) {
+        el.dotLottie.setMode('forward');
+        el.dotLottie.play();
+      }
+    }, 500);
   }, [lenis]);
 
   const close = useCallback(() => {
     setActive(false);
     lenis?.start();
+    const el = lottieRef.current;
+    if (el?.dotLottie) {
+      el.dotLottie.setMode('reverse');
+      el.dotLottie.play();
+    }
   }, [lenis]);
 
   const toggle = useCallback(() => {
@@ -90,7 +103,7 @@ export default function Navigation() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [active, close]);
 
-  // Hamburger adapts background color to current section
+  // Hamburger + page logo color adapts to current section
   useEffect(() => {
     const btn = hamburgerRef.current;
     if (!btn) return;
@@ -102,9 +115,6 @@ export default function Navigation() {
       const el = document.getElementById(id);
       if (!el) return null;
 
-      const color = bg;
-
-      // Find the previous section's color (or hero color)
       const prevColor = index === 0
         ? heroColor
         : sectionColors[index - 1].bg;
@@ -113,8 +123,8 @@ export default function Navigation() {
         trigger: el,
         start: 'top top+=80',
         end: 'bottom top+=80',
-        onEnter: () => { btn.style.backgroundColor = color; },
-        onEnterBack: () => { btn.style.backgroundColor = color; },
+        onEnter: () => { btn.style.backgroundColor = bg; },
+        onEnterBack: () => { btn.style.backgroundColor = bg; },
         onLeave: () => {},
         onLeaveBack: () => { btn.style.backgroundColor = prevColor; },
       });
@@ -130,20 +140,7 @@ export default function Navigation() {
       className={styles.nav}
       data-navigation-status={active ? 'active' : 'not-active'}
     >
-      {/* Desktop nav links */}
-      <div className={styles.desktopNav}>
-        {navItems.map((item) => (
-          <button
-            key={item.target}
-            className={styles.navLink}
-            onClick={() => scrollTo(item.target)}
-          >
-            {item.label}
-          </button>
-        ))}
-      </div>
-
-      {/* Hamburger (mobile) */}
+      {/* Hamburger */}
       <button
         ref={hamburgerRef}
         className={styles.hamburger}
@@ -152,39 +149,39 @@ export default function Navigation() {
       >
         <span className={styles.hamburgerBar} />
         <span className={styles.hamburgerBar} />
+        <span className={styles.hamburgerBar} />
       </button>
 
-      {/* Menu overlay */}
+      {/* Fullscreen overlay */}
       <div className={styles.tile}>
-        <div className={styles.tileContent}>
-          {/* Close button */}
-          <button className={styles.closeBtn} onClick={close} aria-label="Close menu">
-            X
-          </button>
+        {/* Logo top-left */}
+        <button className={styles.logo} onClick={() => scrollTo('top')} aria-label="Home">
+          <dotlottie-wc
+            ref={lottieRef}
+            src="https://lottie.host/f0906274-5272-4bff-a63b-12216f8152d3/7pJjJ1FQcj.lottie"
+          />
+        </button>
 
-          <ul className={styles.menuList}>
-            {navItems.map((item) => (
-              <li key={item.target} className={styles.menuItem}>
-                <button
-                  className={`${styles.menuLink} ${item.accent ? styles.menuLinkAccent : ''}`}
-                  onClick={() => scrollTo(item.target)}
-                >
-                  <span className={styles.menuLinkText}>{item.label}</span>
-                  <span className={styles.menuLinkText}>{item.label}</span>
-                </button>
-              </li>
-            ))}
-          </ul>
+        <ul className={styles.menuList}>
+          {navItems.map((item) => (
+            <li key={item.target} className={styles.menuItem}>
+              <button
+                className={`${styles.menuLink} ${item.accent ? styles.menuLinkAccent : ''}`}
+                onClick={() => scrollTo(item.target)}
+              >
+                {item.label.split('').map((char, i) =>
+                  char.toLowerCase() === 'a' || char.toLowerCase() === 'v'
+                    ? <span key={i} className={styles.menuLinkAlt}>{char}</span>
+                    : char
+                )}
+              </button>
+            </li>
+          ))}
+        </ul>
 
-          <div className={styles.menuFooter}>
-            <a href="mailto:info@mae-studio.nl" className={styles.menuContactLink}>info@mae-studio.nl</a>
-            <a href="tel:+31612345678" className={styles.menuContactLink}>+31 6 1234 5678</a>
-            <div className={styles.menuSocials}>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">[ LinkedIn ]</a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">[ Instagram ]</a>
-            </div>
-          </div>
-        </div>
+        <a href="mailto:info@mae-studio.nl" className={`${styles.menuCornerLink} ${styles.menuCornerTopLeft}`}>info@mae-studio.nl</a>
+        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className={`${styles.menuCornerLink} ${styles.menuCornerBottomLeft}`}>LinkedIn</a>
+        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className={`${styles.menuCornerLink} ${styles.menuCornerBottomRight}`}>Instagram</a>
       </div>
     </nav>
   );

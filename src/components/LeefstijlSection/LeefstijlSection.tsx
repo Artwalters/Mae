@@ -3,7 +3,6 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import ScrambleText from '@/components/ScrambleText';
 import { usePanel } from '@/context/PanelContext';
 import styles from './LeefstijlSection.module.css';
 import basePath from '@/lib/basePath';
@@ -73,7 +72,7 @@ export default function LeefstijlSection() {
       {/* Right Content */}
       <div id="leefstijl-content" className={styles.content}>
         <span className="label label-light">
-          [ <ScrambleText retriggerAtEnd>Leefstijlcoaching</ScrambleText> ]
+          [ Leefstijlcoaching ]
         </span>
         <h2 className={`title-chaney ${styles.title}`}>Balans</h2>
         <p className={`text-description ${styles.description} par`}>

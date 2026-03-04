@@ -7,8 +7,8 @@ import styles from './MeetMaartenPanel.module.css';
 import basePath from '@/lib/basePath';
 
 const credentials = [
-  { year: '2016', text: 'Bachelor Fysiotherapie' },
-  { year: '2018', text: 'The Performance Method' },
+  { year: '2022', text: 'Bachelor Fysiotherapie' },
+  { year: '2025', text: 'The Performance Method (niveau 3)' },
 ];
 
 export default function MeetMaartenPanel() {

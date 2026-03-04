@@ -3,7 +3,6 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import ScrambleText from '@/components/ScrambleText';
 import { usePanel } from '@/context/PanelContext';
 import styles from './HerstelSection.module.css';
 import basePath from '@/lib/basePath';
@@ -56,7 +55,7 @@ export default function HerstelSection() {
       {/* Left Content */}
       <div className={styles.content}>
         <span className="label label-light">
-          [ <ScrambleText retriggerAtEnd>Fysiotherapie bij MAE</ScrambleText> ]
+          [ Fysiotherapie bij MAE ]
         </span>
         <h2 className={`title-chaney ${styles.title}`}>Herstel</h2>
         <p className={`text-description ${styles.description} par`}>

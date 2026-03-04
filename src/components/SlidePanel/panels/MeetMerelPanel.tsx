@@ -6,10 +6,7 @@ import styles from './MeetMaartenPanel.module.css';
 import basePath from '@/lib/basePath';
 
 const credentials = [
-  { year: '2018', text: 'Bachelor Trainingskunde' },
-  { year: '2020', text: 'Voedingscoach Certificering' },
-  { year: '2021', text: 'Leefstijlcoach Certificering' },
-  { year: '2023', text: 'Personal Coach Certificering' },
+  { year: '2025', text: 'Sportkunde' },
 ];
 
 export default function MeetMerelPanel() {

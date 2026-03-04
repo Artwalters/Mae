@@ -3,7 +3,6 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import ScrambleText from '@/components/ScrambleText';
 import styles from './MaeSection.module.css';
 import basePath from '@/lib/basePath';
 
@@ -123,7 +122,7 @@ export default function MaeSection() {
       {/* Header */}
       <div className={styles.header}>
         <span className="label label-dark">
-          [ <ScrambleText retriggerAtEnd>VISIE EN MISSIE</ScrambleText> ]
+          [ VISIE EN MISSIE ]
         </span>
       </div>
 

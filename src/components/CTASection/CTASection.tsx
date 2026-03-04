@@ -1,6 +1,5 @@
 'use client';
 
-import ScrambleText from '@/components/ScrambleText';
 import styles from './CTASection.module.css';
 
 export default function CTASection() {
@@ -8,7 +7,7 @@ export default function CTASection() {
     <section id="cta-section" className={styles.section}>
       <div className={styles.header}>
         <span className="label label-dark">
-          [ <ScrambleText retriggerAtEnd>START NOW</ScrambleText> ]
+          [ START NOW ]
         </span>
         <h2 className={styles.title}>
           <span className={styles.titleLine}>ARE YOU READY</span>
