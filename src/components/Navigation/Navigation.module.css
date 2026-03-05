@@ -23,8 +23,8 @@
   height: 4em;
   display: flex;
   position: fixed;
-  top: 0.5em;
-  right: 0.5em;
+  top: 1em;
+  right: 1em;
   z-index: 200;
   overflow: hidden;
   transition: color 0.4s ease, background-color 0.4s ease;
@@ -96,8 +96,8 @@
   cursor: pointer;
   z-index: 1;
   padding: 0;
-  width: 14em;
-  height: 14em;
+  width: 12em;
+  height: 12em;
   filter: invert(1) brightness(0.20);
   pointer-events: none;
 }
@@ -201,37 +201,44 @@
 [data-navigation-status="active"] .menuItem:nth-child(5) .menuLink { transition-delay: 0.5s; }
 
 
-/* --------------------------------- Menu Footer --------------------------------- */
+/* --------------------------------- Menu Tags --------------------------------- */
 
-.menuCornerLink {
+.menuTag {
   position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
   font-family: var(--font-secondary);
-  font-size: 1.125em;
+  font-size: var(--font-tag);
   font-weight: var(--font-weight);
-  color: var(--color-white);
+  text-transform: uppercase;
+  color: var(--color-gray);
+  letter-spacing: 0.2em;
   text-decoration: none;
-  opacity: 0.5;
-  transition: opacity 0.3s ease;
+  white-space: nowrap;
   pointer-events: auto;
+  transition: color 0.3s ease;
+  opacity: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
 }
 
-.menuCornerLink:hover {
+[data-navigation-status="active"] .menuTag {
   opacity: 1;
+  transition: opacity 0.6s ease 0.6s;
 }
 
-.menuCornerTopLeft {
-  top: 0.5em;
-  left: 0.5em;
+.menuTag:hover {
+  color: var(--color-white);
 }
 
-.menuCornerBottomLeft {
-  bottom: 0.5em;
-  left: 0.5em;
+.menuTagLeft {
+  left: 2em;
 }
 
-.menuCornerBottomRight {
-  bottom: 0.5em;
-  right: 0.5em;
+.menuTagRight {
+  right: 2em;
 }
 
 /* --------------------------------- Mobile --------------------------------- */
@@ -259,24 +266,20 @@
     font-size: calc(6vw + 3vh);
   }
 
-  .menuCornerTopLeft {
-    top: 1.5em;
-    left: 1.5em;
+  .menuTag {
+    inset: auto auto 6.5em 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    font-size: 0.75em;
   }
 
-  .menuCornerBottomLeft {
-    bottom: 1.5em;
-    left: 1.5em;
-  }
-
-  .menuCornerBottomRight {
-    bottom: 1.5em;
-    right: 1.5em;
+  .menuTagRight {
+    display: none;
   }
 
   .logo {
-    top: 1.5em;
-    width: 8em;
-    height: 8em;
+    top: 3em;
+    width: 10em;
+    height: 10em;
   }
 }

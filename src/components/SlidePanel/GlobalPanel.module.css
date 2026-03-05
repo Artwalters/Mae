@@ -46,20 +46,26 @@
   );
 }
 
-/* Phase 2: overscroll fills with black */
-.navTabPhase2 {
+/* Phase 2: Meet Maarten stays fully filled light green (complete) */
+:global([data-panel-phase="2"]) .navTabMaarten {
+  background: var(--color-accent) !important;
+  color: var(--color-white);
+}
+
+/* Phase 2: overscroll fills Start Nu with dark green */
+:global([data-panel-phase="2"]) .navTabStartNu {
   background: linear-gradient(
     120deg,
-    var(--color-dark) calc(var(--panel-progress, 0) * 100%),
+    color-mix(in srgb, var(--color-accent) 90%, var(--color-dark)) calc(var(--panel-progress, 0) * 100%),
     rgba(0, 0, 0, 0.04) calc(var(--panel-progress, 0) * 100%)
   );
   color: var(--color-white);
 }
 
-.navTabPhase2:hover {
+:global([data-panel-phase="2"]) .navTabStartNu:hover {
   background: linear-gradient(
     120deg,
-    var(--color-dark) calc(var(--panel-progress, 0) * 100%),
+    color-mix(in srgb, var(--color-accent) 90%, var(--color-dark)) calc(var(--panel-progress, 0) * 100%),
     rgba(0, 0, 0, 0.04) calc(var(--panel-progress, 0) * 100%)
   );
 }

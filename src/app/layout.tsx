@@ -8,6 +8,7 @@ import GlobalPanel from "@/components/SlidePanel/GlobalPanel";
 import TitleRotator from "@/components/TitleRotator";
 import FontStyles from "@/components/FontStyles";
 import Navigation from "@/components/Navigation";
+import InViewObserver from "@/components/InViewObserver";
 
 export const metadata: Metadata = {
   title: "Move Adapt Evolve",
@@ -31,6 +32,7 @@ export default function RootLayout({
           <PanelProvider>
             <SmoothScroll>
               <Navigation />
+              <InViewObserver />
               {children}
               <GlobalPanel />
             </SmoothScroll>

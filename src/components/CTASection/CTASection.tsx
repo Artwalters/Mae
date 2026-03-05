@@ -23,7 +23,7 @@ export default function CTASection() {
           <p className={`${styles.cardText} par`}>
             Bouw aan een sterker fundament. Persoonlijke begeleiding voor meer energie, betere gewoontes en duurzame resultaten.
           </p>
-          <button className={`btn-bar ${styles.cardButton}`} onClick={() => openPanel('start-nu')}>
+          <button className={`btn-bar ${styles.cardButton}`} onClick={() => openPanel('start-nu', 'leefstijl')}>
             Start je traject
           </button>
         </div>
@@ -43,7 +43,7 @@ export default function CTASection() {
           <p className={`${styles.cardText} par`}>
             Gericht herstel en preventie. Samen werken we aan jouw bewegingsvrijheid, kracht en een pijnvrij lichaam.
           </p>
-          <button className={`btn-bar ${styles.cardButton}`} onClick={() => openPanel('start-nu')}>
+          <button className={`btn-bar ${styles.cardButton}`} onClick={() => openPanel('start-nu', 'fysio')}>
             Start je traject
           </button>
         </div>

@@ -51,27 +51,31 @@ export default function MaeSection() {
     // They all start stacked at position 0 (top)
     // Order from top: overlay (z-4), MOVE (z-3), ADAPT (z-2), EVOLVE (z-1)
 
-    const allElements = [overlay, ...rows];
-    const heights = allElements.map(el => el.offsetHeight);
     const isMobile = window.innerWidth < 768;
 
-    // Set initial state: all stacked at top with rotation
-    // Minimal animation on mobile
-    const extraOffset = isMobile ? 20 : 50;
+    // On mobile: no animation, just show everything statically
+    if (isMobile) {
+      overlay.style.display = 'none';
+      shadowsRef.current.forEach(s => { if (s) s.style.display = 'none'; });
+      return;
+    }
+
+    const allElements = [overlay, ...rows];
+    const heights = allElements.map(el => el.offsetHeight);
+    const extraOffset = 50;
 
     allElements.forEach((el, index) => {
       if (index > 0) {
         const offset = heights.slice(0, index).reduce((sum, h) => sum + h, 0) + extraOffset;
         gsap.set(el, {
           y: -offset,
-          rotation: isMobile ? 0 : -3 - (index - 1) * 1.5,
+          rotation: -3 - (index - 1) * 1.5,
           transformOrigin: 'right top',
           force3d: true,
         });
       }
     });
 
-    // Create timeline
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: rowsWrapper,
@@ -91,13 +95,12 @@ export default function MaeSection() {
         tl.to(el, {
           y: 0,
           rotation: 0,
-          ease: isMobile ? 'none' : 'power1.inOut',
+          ease: 'power1.inOut',
           duration: duration,
           force3d: true,
         }, delay);
 
-        // Fade out shadow overlay (skip on mobile)
-        if (!isMobile && shadows[index - 1]) {
+        if (shadows[index - 1]) {
           tl.to(shadows[index - 1], {
             opacity: 0,
             ease: 'power1.inOut',
@@ -106,11 +109,6 @@ export default function MaeSection() {
         }
       }
     });
-
-    // On mobile, hide shadows immediately
-    if (isMobile) {
-      shadows.forEach(s => { if (s) s.style.display = 'none'; });
-    }
 
     return () => {
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());

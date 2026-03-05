@@ -192,7 +192,7 @@ export default function MeetMaartenPanel() {
 
       {/* CTA */}
       <section className={styles.ctaSection}>
-        <button className={styles.ctaButton} onClick={() => openPanel('start-nu')}>
+        <button className={styles.ctaButton} onClick={() => openPanel('start-nu', 'fysio')}>
           <span>Start Traject</span>
         </button>
       </section>

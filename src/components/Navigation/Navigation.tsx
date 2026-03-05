@@ -9,11 +9,11 @@ import styles from './Navigation.module.css';
 gsap.registerPlugin(ScrollTrigger);
 
 const navItems = [
-  { label: 'Home', target: 'top' },
-  { label: 'Fysio', target: 'herstel-section' },
-  { label: 'Leefstijl', target: 'leefstijl-section' },
-  { label: 'FAQ', target: 'faq-section' },
-  { label: 'Contact', target: 'cta-section', accent: true },
+  { label: 'Home', target: 'top', tagLeft: 'info@mae-studio.nl', tagRight: 'Instagram', linkLeft: 'mailto:info@mae-studio.nl', linkRight: 'https://instagram.com' },
+  { label: 'Fysio', target: 'herstel-section', tagLeft: 'Meet Maarten', tagRight: 'Meer info', linkLeft: 'herstel-section', linkRight: 'herstel-section' },
+  { label: 'Leefstijl', target: 'leefstijl-section', tagLeft: 'Meet Merel', tagRight: 'Meer info', linkLeft: 'leefstijl-section', linkRight: 'leefstijl-section' },
+  { label: 'FAQ', target: 'faq-section', tagLeft: 'Veelgestelde vragen', tagRight: 'Meer info', linkLeft: 'faq-section', linkRight: 'faq-section' },
+  { label: 'Contact', target: 'cta-section', accent: true, tagLeft: 'info@mae-studio.nl', tagRight: 'Neem contact op', linkLeft: 'mailto:info@mae-studio.nl', linkRight: 'cta-section' },
 ];
 
 const sectionColors: { id: string; bg: string }[] = [
@@ -31,6 +31,10 @@ export default function Navigation() {
   const [active, setActive] = useState(false);
   const hamburgerRef = useRef<HTMLButtonElement>(null);
   const lottieRef = useRef<any>(null);
+  const tagLeftRef = useRef<HTMLButtonElement>(null);
+  const tagRightRef = useRef<HTMLButtonElement>(null);
+  const menuItemRefs = useRef<(HTMLLIElement | null)[]>([]);
+  const hoveredIndexRef = useRef(0);
   const lenis = useLenis();
 
   const open = useCallback(() => {
@@ -103,6 +107,47 @@ export default function Navigation() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [active, close]);
 
+  const handleTagClick = useCallback((side: 'left' | 'right') => {
+    const item = navItems[hoveredIndexRef.current];
+    const link = side === 'left' ? item.linkLeft : item.linkRight;
+    if (link.startsWith('mailto:') || link.startsWith('http')) {
+      window.open(link, link.startsWith('http') ? '_blank' : '_self');
+    } else {
+      scrollTo(link);
+    }
+  }, [scrollTo]);
+
+  // Tags follow hovered menu item (desktop only)
+  const handleMenuEnter = useCallback((index: number) => {
+    hoveredIndexRef.current = index;
+    const isMobile = window.matchMedia('(max-width: 767px)').matches;
+
+    if (tagLeftRef.current) tagLeftRef.current.textContent = `[${navItems[index].tagLeft}]`;
+    if (tagRightRef.current) tagRightRef.current.textContent = `[${navItems[index].tagRight}]`;
+
+    if (isMobile) return;
+
+    const item = menuItemRefs.current[index];
+    const tile = item?.closest(`.${styles.tile}`) as HTMLElement;
+    if (!item || !tile) return;
+
+    const tileRect = tile.getBoundingClientRect();
+    const itemRect = item.getBoundingClientRect();
+    const itemCenterY = itemRect.top + itemRect.height / 2 - tileRect.top;
+
+    const targets = [tagLeftRef.current, tagRightRef.current].filter(Boolean);
+    gsap.to(targets, {
+      top: itemCenterY,
+      yPercent: -50,
+      duration: 0.4,
+      ease: 'power3.out',
+    });
+  }, []);
+
+  const handleMenuLeave = useCallback(() => {
+    // Tags blijven op de laatst gehoverде positie met de laatst getoonde tekst
+  }, []);
+
   // Hamburger + page logo color adapts to current section
   useEffect(() => {
     const btn = hamburgerRef.current;
@@ -162,9 +207,14 @@ export default function Navigation() {
           />
         </button>
 
-        <ul className={styles.menuList}>
-          {navItems.map((item) => (
-            <li key={item.target} className={styles.menuItem}>
+        <ul className={styles.menuList} onMouseLeave={handleMenuLeave}>
+          {navItems.map((item, index) => (
+            <li
+              key={item.target}
+              className={styles.menuItem}
+              ref={(el) => { menuItemRefs.current[index] = el; }}
+              onMouseEnter={() => handleMenuEnter(index)}
+            >
               <button
                 className={`${styles.menuLink} ${item.accent ? styles.menuLinkAccent : ''}`}
                 onClick={() => scrollTo(item.target)}
@@ -179,9 +229,8 @@ export default function Navigation() {
           ))}
         </ul>
 
-        <a href="mailto:info@mae-studio.nl" className={`${styles.menuCornerLink} ${styles.menuCornerTopLeft}`}>info@mae-studio.nl</a>
-        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className={`${styles.menuCornerLink} ${styles.menuCornerBottomLeft}`}>LinkedIn</a>
-        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className={`${styles.menuCornerLink} ${styles.menuCornerBottomRight}`}>Instagram</a>
+        <button ref={tagLeftRef} className={`${styles.menuTag} ${styles.menuTagLeft}`} onClick={() => handleTagClick('left')}>[info@mae-studio.nl]</button>
+        <button ref={tagRightRef} className={`${styles.menuTag} ${styles.menuTagRight}`} onClick={() => handleTagClick('right')}>[Instagram]</button>
       </div>
     </nav>
   );
