@@ -78,12 +78,9 @@ export default function HerstelSection() {
             Meet Maarten
           </button>
         </div>
-        <video
-          src={`${basePath}/img/maarten.mp4`}
-          autoPlay
-          loop
-          muted
-          playsInline
+        <img
+          src={`${basePath}/img/maarten-sled.png`}
+          alt="Maarten"
           className="img-cover"
         />
       </div>

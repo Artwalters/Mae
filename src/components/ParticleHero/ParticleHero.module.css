@@ -77,6 +77,10 @@
   transition: color 0.3s ease;
   white-space: nowrap;
   pointer-events: auto;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
 }
 
 .footerTag:first-child {
@@ -89,6 +93,7 @@
 
 .footerTag:hover {
   color: var(--color-white);
+  letter-spacing: 0.2em;
 }
 
 /* Hero Bottom */

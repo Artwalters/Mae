@@ -216,7 +216,7 @@
   text-decoration: none;
   white-space: nowrap;
   pointer-events: auto;
-  transition: color 0.3s ease;
+  transition: color 0.3s ease, opacity 0.6s ease;
   opacity: 0;
   background: none;
   border: none;
@@ -226,7 +226,7 @@
 
 [data-navigation-status="active"] .menuTag {
   opacity: 1;
-  transition: opacity 0.6s ease 0.6s;
+  transition: color 0.3s ease, opacity 0.6s ease 0.6s;
 }
 
 .menuTag:hover {

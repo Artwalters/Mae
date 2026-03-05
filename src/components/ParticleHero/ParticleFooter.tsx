@@ -120,12 +120,12 @@ export default function ParticleFooter() {
 
       {/* Footer Tags - fade in when logo reaches center */}
       <div ref={footerTagsRef} className={styles.footerTags} style={{ opacity: 0 }}>
-        <a href="#fysio" className={styles.footerTag}>
+        <button className={styles.footerTag} onClick={() => document.getElementById('herstel-section')?.scrollIntoView({ behavior: 'smooth' })}>
           [START FYSIOTHERAPIE]
-        </a>
-        <a href="#leefstijl" className={styles.footerTag}>
+        </button>
+        <button className={styles.footerTag} onClick={() => document.getElementById('leefstijl-section')?.scrollIntoView({ behavior: 'smooth' })}>
           [START LEEFSTIJL COACHING]
-        </a>
+        </button>
       </div>
 
       <Canvas
