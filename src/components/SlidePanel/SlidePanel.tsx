@@ -102,7 +102,7 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
       // Auto-switch when display reaches full
       if (displayProgressRef.current >= 0.99 && !switchedRef.current) {
         switchedRef.current = true;
-        openPanelRef.current('start-nu');
+        openPanelRef.current('start-nu', activePanelRef.current === 'meet-merel' ? 'leefstijl' : 'fysio');
       }
 
       // Keep running if there's still movement
@@ -150,7 +150,7 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
 
   // Update scroll progress (phase 1) as CSS custom property
   const updateProgress = () => {
-    if (activePanelRef.current !== 'meet-maarten' || !contentRef.current || !panelRef.current) return;
+    if ((activePanelRef.current !== 'meet-maarten' && activePanelRef.current !== 'meet-merel') || !contentRef.current || !panelRef.current) return;
 
     // If in overscroll phase, don't update from scroll position
     if (overscrollRef.current > 0) return;
@@ -171,7 +171,7 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
 
   // Handle wheel events for overscroll resistance
   const handleWheel = (e: WheelEvent) => {
-    if (activePanelRef.current !== 'meet-maarten' || switchedRef.current) return;
+    if ((activePanelRef.current !== 'meet-maarten' && activePanelRef.current !== 'meet-merel') || switchedRef.current) return;
 
     if (isAtBottom() && e.deltaY > 0) {
       // Scrolling down at bottom — accumulate overscroll with heavy resistance
@@ -223,7 +223,7 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
   };
 
   const handleTouchMove = (e: TouchEvent) => {
-    if (activePanelRef.current !== 'meet-maarten' || switchedRef.current || touchStartYRef.current === null) return;
+    if ((activePanelRef.current !== 'meet-maarten' && activePanelRef.current !== 'meet-merel') || switchedRef.current || touchStartYRef.current === null) return;
 
     const currentY = e.touches[0].clientY;
     const deltaY = touchStartYRef.current - currentY; // positive = scrolling down
@@ -399,10 +399,13 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
     };
   }, [isOpen, activePanel]);
 
-  // Overscroll listeners for phase 2 resistance (wheel + touch)
+  // Overscroll listeners for phase 2 resistance (desktop only)
   useEffect(() => {
     const el = contentRef.current;
     if (!el || !isOpen) return;
+
+    const isMobile = window.innerWidth < 768;
+    if (isMobile) return;
 
     const onWheel = (e: WheelEvent) => {
       handleWheel(e);
@@ -410,15 +413,9 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
     };
 
     el.addEventListener('wheel', onWheel, { passive: false });
-    el.addEventListener('touchstart', handleTouchStart, { passive: true });
-    el.addEventListener('touchmove', handleTouchMove, { passive: false });
-    el.addEventListener('touchend', handleTouchEnd, { passive: true });
 
     return () => {
       el.removeEventListener('wheel', onWheel);
-      el.removeEventListener('touchstart', handleTouchStart);
-      el.removeEventListener('touchmove', handleTouchMove);
-      el.removeEventListener('touchend', handleTouchEnd);
       stopDecay();
       stopLerpLoop();
       if (wheelTimeoutRef.current) clearTimeout(wheelTimeoutRef.current);
@@ -435,7 +432,7 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
 
   // Sync context progress (from StartNuPanel steps) to CSS variable
   useEffect(() => {
-    if (activePanelRef.current !== 'meet-maarten' && panelRef.current) {
+    if (activePanelRef.current !== 'meet-maarten' && activePanelRef.current !== 'meet-merel' && panelRef.current) {
       panelRef.current.style.setProperty('--panel-progress', String(progress));
     }
   }, [progress]);

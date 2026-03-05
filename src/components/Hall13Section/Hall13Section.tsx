@@ -55,9 +55,12 @@ export default function Hall13Section() {
           Ontdek Hall 13
         </a>
       </div>
-      <img
-        src={`${basePath}/img/run.png`}
-        alt="Hall 13"
+      <video
+        src={`${basePath}/img/degym.mp4`}
+        autoPlay
+        loop
+        muted
+        playsInline
         className="img-cover"
       />
     </section>

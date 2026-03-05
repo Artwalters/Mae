@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import gsap from 'gsap';
+import { usePanel } from '@/context/PanelContext';
 import styles from './MeetMaartenPanel.module.css';
 import basePath from '@/lib/basePath';
 
@@ -12,6 +13,7 @@ const credentials = [
 export default function MeetMerelPanel() {
   const [activeCredential, setActiveCredential] = useState(0);
   const titleRef = useRef<HTMLHeadingElement>(null);
+  const { openPanel } = usePanel();
 
   useEffect(() => {
     if (titleRef.current) {
@@ -69,15 +71,13 @@ export default function MeetMerelPanel() {
           <span className={styles.aboutLabel}>Over Merel</span>
           <span className={styles.aboutNumber}>[01]</span>
         </div>
+        <h3 className={styles.aboutSubtitle}>Transformatie vanuit ervaring</h3>
         <div className={styles.aboutText}>
           <p className={styles.text}>
-            Als leefstijlcoach en krachtsporter heb ik uit eigen ervaring geleerd hoe cruciaal een gezonde
-            verbinding met voeding en beweging is. Mijn eigen worsteling heeft mij doen inzien hoe deze
-            aspecten kunnen bijdragen aan herstel, zowel fysiek als mentaal.
+            Mijn naam is Merel en ik ben fervent krachtsporter, leefstijlcoach en personal coach. Ondanks mijn langdurige haat-liefde relatie met sport en voeding, heb ik geleerd hoe cruciaal een gezonde verbinding met deze aspecten is, zowel fysiek als mentaal. Mijn eigen worsteling met zelfbeeld en gezondheid heeft mij doen inzien hoe voeding en beweging kunnen bijdragen aan herstel, zowel in tijden van fysieke als mentale ziekte.
           </p>
           <p className={styles.text}>
-            Ik geloof niet in diëten, maar in duurzame verandering. Samen werken we aan een levensstijl
-            die past bij jouw identiteit en waarden, waarin zelfacceptatie centraal staat.
+            Uit deze persoonlijke ervaring is een diepgewortelde liefde ontstaan om anderen te helpen bij het bereiken van een gezonder en meer gebalanceerd leven, waarbij zelfacceptatie centraal staat. Ik deel graag mijn geleerde lessen en ondersteun anderen bij hun transformatie naar een gezondere levensstijl.
           </p>
         </div>
         <div className={styles.photoGrid}>
@@ -177,12 +177,9 @@ export default function MeetMerelPanel() {
 
       {/* CTA */}
       <section className={styles.ctaSection}>
-        <p className={styles.ctaText}>
-          Klaar voor een duurzame verandering? Plan een vrijblijvend kennismakingsgesprek.
-        </p>
-        <a href="#contact" className={styles.ctaButton}>
-          <span>Plan een afspraak</span>
-        </a>
+        <button className={styles.ctaButton} onClick={() => openPanel('start-nu', 'leefstijl')}>
+          <span>Start Traject</span>
+        </button>
       </section>
     </div>
   );

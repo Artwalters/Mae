@@ -4,11 +4,21 @@ import { useState, useEffect } from 'react';
 import { usePanel } from '@/context/PanelContext';
 import styles from './StartNuPanel.module.css';
 
-type Step = 'situatie' | 'verdieping' | 'contact' | 'bevestiging';
-type Situatie = 'pijn' | 'fitter' | 'leefstijl' | 'weet-niet' | null;
+type Step = 'doel' | 'verdieping' | 'contact' | 'bevestiging';
 
-const VERDIEPING_OPTIONS: Record<string, { question: string; options: string[] }[]> = {
-  pijn: [
+/* ── Fysio flow (Maarten) ── */
+
+type FysioDoel = 'pijnvrij' | 'sterker' | 'terug-sport' | 'preventie' | null;
+
+const FYSIO_DOELEN: { key: FysioDoel; title: string; text: string }[] = [
+  { key: 'pijnvrij', title: 'Pijnvrij bewegen', text: 'Klachten, blessures of herstel na een operatie' },
+  { key: 'sterker', title: 'Sterker & krachtiger worden', text: 'Meer kracht opbouwen en je lichaam uitdagen' },
+  { key: 'terug-sport', title: 'Terug naar sport na blessure', text: 'Veilig en sterk terugkeren op je oude niveau' },
+  { key: 'preventie', title: 'Preventie & optimalisatie', text: 'Blessures voorkomen en je lichaam optimaliseren' },
+];
+
+const FYSIO_VERDIEPING: Record<string, { question: string; options: string[] }[]> = {
+  pijnvrij: [
     {
       question: 'Waar zit de klacht?',
       options: ['Nek / schouder', 'Rug / onderrug', 'Knie', 'Heup', 'Enkel / voet', 'Elleboog / pols', 'Anders'],
@@ -18,24 +28,54 @@ const VERDIEPING_OPTIONS: Record<string, { question: string; options: string[] }
       options: ['Minder dan een week', 'Een paar weken', 'Een paar maanden', 'Langer dan een half jaar'],
     },
   ],
-  fitter: [
+  sterker: [
     {
-      question: 'Wat wil je bereiken?',
-      options: ['Sterker worden', 'Afvallen', 'Betere conditie', 'Terugkomen na blessure', 'Algeheel fitter'],
+      question: 'Wat is je ervaring met krachtsport?',
+      options: ['Helemaal nieuw', 'Een beetje ervaring', 'Regelmatig getraind', 'Ervaren'],
     },
   ],
-  leefstijl: [
+  'terug-sport': [
     {
-      question: 'Waar wil je mee beginnen?',
-      options: ['Voeding', 'Meer bewegen', 'Meer energie', 'Beter slapen', 'Stressvermindering', 'Een totale reset'],
+      question: 'Welke sport wil je weer oppakken?',
+      options: ['Hardlopen', 'Voetbal / veldsport', 'Krachtsport', 'Racket / slagsport', 'Anders'],
+    },
+    {
+      question: 'Hoe lang geleden was de blessure?',
+      options: ['Minder dan een maand', 'Een paar maanden', 'Langer dan een half jaar'],
+    },
+  ],
+  preventie: [
+    {
+      question: 'Waar wil je je op richten?',
+      options: ['Mobiliteit verbeteren', 'Sterker worden', 'Blessurepreventie', 'Algehele optimalisatie'],
     },
   ],
 };
 
+/* ── Leefstijl flow (Merel) ── */
+
+type LeefstijlDoel = 'energie' | 'eten' | 'afvallen' | 'gewoontes' | 'reset' | null;
+
+const LEEFSTIJL_DOELEN: { key: LeefstijlDoel; title: string; text: string }[] = [
+  { key: 'energie', title: 'Meer energie', text: 'Je wilt je fitter en energieker voelen in het dagelijks leven' },
+  { key: 'eten', title: 'Gezonder eten', text: 'Betere voedingskeuzes maken zonder strenge diëten' },
+  { key: 'afvallen', title: 'Afvallen', text: 'Op een duurzame manier gewicht verliezen' },
+  { key: 'gewoontes', title: 'Betere gewoontes', text: 'Structuur en routine in je dagelijks leven brengen' },
+  { key: 'reset', title: 'Een totale reset', text: 'Je hele levensstijl onder de loep nemen en vernieuwen' },
+];
+
+const LEEFSTIJL_VERDIEPING: { question: string; options: string[] }[] = [
+  {
+    question: 'Waar wil je mee beginnen?',
+    options: ['Voeding', 'Meer bewegen', 'Beter slapen', 'Stressvermindering'],
+  },
+];
+
 export default function StartNuPanel() {
-  const { setProgress, setOnBack } = usePanel();
-  const [currentStep, setCurrentStep] = useState<Step>('situatie');
-  const [situatie, setSituatie] = useState<Situatie>(null);
+  const { panelVariant, activePanel, setProgress, setOnBack } = usePanel();
+  const [currentStep, setCurrentStep] = useState<Step>('doel');
+  const [fysioDoel, setFysioDoel] = useState<FysioDoel>(null);
+  const [leefstijlDoel, setLeefstijlDoel] = useState<LeefstijlDoel>(null);
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [firstName, setFirstName] = useState('');
@@ -44,23 +84,47 @@ export default function StartNuPanel() {
   const [email, setEmail] = useState('');
   const [extra, setExtra] = useState('');
 
-  const handleSituatie = (choice: Situatie) => {
-    setSituatie(choice);
+  // Reset all state when variant changes or panel reopens
+  useEffect(() => {
+    setCurrentStep('doel');
+    setFysioDoel(null);
+    setLeefstijlDoel(null);
     setAnswers({});
     setCurrentQuestion(0);
+    setFirstName('');
+    setLastName('');
+    setPhone('');
+    setEmail('');
+    setExtra('');
+  }, [panelVariant, activePanel]);
 
-    if (choice === 'weet-niet') {
-      setCurrentStep('contact');
-    } else {
-      setCurrentStep('verdieping');
-    }
+  const isFysio = panelVariant === 'fysio';
+
+  // Get the verdieping questions for the current flow
+  const questions = isFysio
+    ? FYSIO_VERDIEPING[fysioDoel || ''] || []
+    : LEEFSTIJL_VERDIEPING;
+
+  /* ── Handlers ── */
+
+  const handleFysioDoel = (choice: FysioDoel) => {
+    setFysioDoel(choice);
+    setAnswers({});
+    setCurrentQuestion(0);
+    setCurrentStep('verdieping');
+  };
+
+  const handleLeefstijlDoel = (choice: LeefstijlDoel) => {
+    setLeefstijlDoel(choice);
+    setAnswers({});
+    setCurrentQuestion(0);
+    setCurrentStep('verdieping');
   };
 
   const handleAnswer = (answer: string) => {
     const newAnswers = { ...answers, [currentQuestion]: answer };
     setAnswers(newAnswers);
 
-    const questions = VERDIEPING_OPTIONS[situatie || ''] || [];
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
@@ -77,104 +141,91 @@ export default function StartNuPanel() {
     if (currentStep === 'bevestiging') {
       setCurrentStep('contact');
     } else if (currentStep === 'contact') {
-      if (situatie === 'weet-niet') {
-        setCurrentStep('situatie');
-      } else {
+      if (questions.length > 0) {
         setCurrentStep('verdieping');
-        const questions = VERDIEPING_OPTIONS[situatie || ''] || [];
         setCurrentQuestion(questions.length - 1);
+      } else {
+        setCurrentStep('doel');
       }
     } else if (currentStep === 'verdieping') {
       if (currentQuestion > 0) {
         setCurrentQuestion(currentQuestion - 1);
       } else {
-        setCurrentStep('situatie');
-        setSituatie(null);
+        setCurrentStep('doel');
+        setFysioDoel(null);
+        setLeefstijlDoel(null);
       }
     }
   };
 
-  const questions = situatie ? VERDIEPING_OPTIONS[situatie] || [] : [];
+  /* ── Progress ── */
 
-  // Evenly distributed progress after situatie
-  const stepsAfterSituatie =
-    situatie === 'weet-niet' ? 2 :
-    questions.length > 0 ? questions.length + 2 : 2;
+  const totalStepsAfterDoel = questions.length + 2; // verdieping questions + contact + bevestiging
 
   const currentStepIndex =
     currentStep === 'verdieping' ? 1 + currentQuestion :
-    currentStep === 'contact' ? (situatie === 'weet-niet' ? 1 : questions.length + 1) :
-    currentStep === 'bevestiging' ? stepsAfterSituatie :
+    currentStep === 'contact' ? questions.length + 1 :
+    currentStep === 'bevestiging' ? totalStepsAfterDoel :
     0;
 
   useEffect(() => {
-    if (currentStep === 'situatie') {
+    if (currentStep === 'doel') {
       setProgress(0);
     } else {
-      setProgress(currentStepIndex / stepsAfterSituatie);
+      setProgress(currentStepIndex / totalStepsAfterDoel);
     }
-  }, [currentStep, currentStepIndex, stepsAfterSituatie, setProgress]);
+  }, [currentStep, currentStepIndex, totalStepsAfterDoel, setProgress]);
 
-  // Register back handler in header bar
+  // Register back handler
   useEffect(() => {
-    if (currentStep === 'situatie') {
+    if (currentStep === 'doel') {
       setOnBack(null);
     } else {
       setOnBack(() => goBack);
     }
     return () => setOnBack(null);
-  }, [currentStep, currentQuestion, situatie, setOnBack]);
+  }, [currentStep, currentQuestion, fysioDoel, leefstijlDoel, setOnBack]);
+
+  /* ── Render ── */
+
+  const specialist = isFysio ? 'Maarten' : 'Merel';
 
   return (
     <div className={styles.panel}>
-      {/* Step 1: Situatie */}
-      {currentStep === 'situatie' && (
+      {/* Step 1: Doel */}
+      {currentStep === 'doel' && (
         <div className={styles.stepContent}>
           <div className={styles.sectionHeader}>
             <span className={styles.sectionLabel}>Start</span>
             <span className={styles.sectionNumber}>[01]</span>
           </div>
-          <h2 className={styles.sectionTitle}>Wat speelt er bij jou?</h2>
+          <h2 className={styles.sectionTitle}>
+            {isFysio ? 'Wat is je doel?' : 'Wat wil je bereiken?'}
+          </h2>
           <p className={`${styles.subtitle} par`}>
-            Kies wat het beste bij je situatie past. Wij stemmen alles af op jou.
+            {isFysio
+              ? 'Kies wat het beste bij je situatie past. Maarten stemt alles af op jou.'
+              : 'Kies wat het beste bij je past. Merel stemt alles af op jouw situatie.'}
           </p>
 
           <div className={styles.choiceGrid}>
-            <div className={styles.choiceCard} onClick={() => handleSituatie('pijn')}>
-              <div className={styles.choiceContent}>
-                <h3 className={styles.choiceTitle}>Ik heb pijn of een blessure</h3>
-                <p className={`${styles.choiceText} par`}>
-                  Klachten, blessures of herstel na een operatie
-                </p>
-              </div>
-            </div>
-
-            <div className={styles.choiceCard} onClick={() => handleSituatie('fitter')}>
-              <div className={styles.choiceContent}>
-                <h3 className={styles.choiceTitle}>Ik wil sterker of fitter worden</h3>
-                <p className={`${styles.choiceText} par`}>
-                  Krachtiger, betere conditie of terugkomen na een blessure
-                </p>
-              </div>
-            </div>
-
-            <div className={styles.choiceCard} onClick={() => handleSituatie('leefstijl')}>
-              <div className={styles.choiceContent}>
-                <h3 className={styles.choiceTitle}>Ik wil mijn leefstijl veranderen</h3>
-                <p className={`${styles.choiceText} par`}>
-                  Meer energie, betere gewoontes, gezonder leven
-                </p>
-              </div>
-            </div>
-
-            <div className={styles.choiceCard} onClick={() => handleSituatie('weet-niet')}>
-              <div className={styles.choiceContent}>
-                <h3 className={styles.choiceTitle}>Ik weet het nog niet precies</h3>
-                <p className={`${styles.choiceText} par`}>
-                  Geen probleem — we zoeken het samen uit
-                </p>
-              </div>
-            </div>
+            {isFysio
+              ? FYSIO_DOELEN.map((d) => (
+                  <div key={d.key} className={styles.choiceCard} onClick={() => handleFysioDoel(d.key)}>
+                    <div className={styles.choiceContent}>
+                      <h3 className={styles.choiceTitle}>{d.title}</h3>
+                      <p className={`${styles.choiceText} par`}>{d.text}</p>
+                    </div>
+                  </div>
+                ))
+              : LEEFSTIJL_DOELEN.map((d) => (
+                  <div key={d.key} className={styles.choiceCard} onClick={() => handleLeefstijlDoel(d.key)}>
+                    <div className={styles.choiceContent}>
+                      <h3 className={styles.choiceTitle}>{d.title}</h3>
+                      <p className={`${styles.choiceText} par`}>{d.text}</p>
+                    </div>
+                  </div>
+                ))}
           </div>
         </div>
       )}
@@ -182,7 +233,6 @@ export default function StartNuPanel() {
       {/* Step 2: Verdieping */}
       {currentStep === 'verdieping' && questions[currentQuestion] && (
         <div className={styles.stepContent}>
-
           <div className={styles.sectionHeader}>
             <span className={styles.sectionLabel}>Verdieping</span>
             <span className={styles.sectionNumber}>[{String(currentStepIndex).padStart(2, '0')}]</span>
@@ -206,14 +256,13 @@ export default function StartNuPanel() {
       {/* Step 3: Contact */}
       {currentStep === 'contact' && (
         <div className={styles.stepContent}>
-
           <div className={styles.sectionHeader}>
             <span className={styles.sectionLabel}>Contact</span>
             <span className={styles.sectionNumber}>[{String(currentStepIndex).padStart(2, '0')}]</span>
           </div>
           <h2 className={styles.sectionTitle}>Hoe kunnen we je bereiken?</h2>
           <p className={`${styles.subtitle} par`}>
-            We nemen via WhatsApp contact met je op. Kort, persoonlijk en vrijblijvend.
+            {specialist} neemt via WhatsApp contact met je op. Kort, persoonlijk en vrijblijvend.
           </p>
 
           <form className={styles.form} onSubmit={handleSubmit}>
@@ -267,7 +316,9 @@ export default function StartNuPanel() {
               value={extra}
               onChange={(e) => setExtra(e.target.value)}
               rows={4}
-              placeholder="Bijvoorbeeld: hoe lang je al klachten hebt, wat je al geprobeerd hebt..."
+              placeholder={isFysio
+                ? 'Bijvoorbeeld: hoe lang je al klachten hebt, wat je al geprobeerd hebt...'
+                : 'Bijvoorbeeld: wat je al geprobeerd hebt, wat je het moeilijkst vindt...'}
             />
 
             <div className={styles.formActions}>
@@ -287,7 +338,7 @@ export default function StartNuPanel() {
             Bedankt{firstName ? ` ${firstName}` : ''}!
           </h2>
           <p className={`${styles.confirmationText} par`}>
-            We nemen binnen 24 uur contact met je op via WhatsApp.
+            {specialist} neemt binnen 24 uur contact met je op via WhatsApp.
           </p>
           <div className={styles.confirmationDetails}>
             <div className={styles.sectionHeader}>
@@ -303,7 +354,11 @@ export default function StartNuPanel() {
               <div className={styles.expectationItem}>
                 <span className={styles.expectationNumber}>2</span>
                 <div className={styles.expectationContent}>
-                  <p className="par">We bespreken samen wat de beste aanpak is</p>
+                  <p className="par">
+                    {isFysio
+                      ? 'Maarten bespreekt samen met jou de beste aanpak'
+                      : 'Merel bespreekt samen met jou de beste aanpak'}
+                  </p>
                 </div>
               </div>
               <div className={styles.expectationItem}>

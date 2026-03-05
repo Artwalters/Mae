@@ -62,10 +62,13 @@ export default function LeefstijlSection() {
             Meet Merel
           </button>
         </div>
-        <img
-          src={`${basePath}/img/run.png`}
-          alt="Leefstijl coaching"
-          className="img-cover img-grayscale"
+        <video
+          src={`${basePath}/img/merel.mp4`}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="img-cover"
         />
       </div>
 
@@ -81,7 +84,7 @@ export default function LeefstijlSection() {
           ontvang je een persoonlijk leefstijlplan, voedingsplan en trainingsschema
           waarmee je stapsgewijs naar jouw doelen toe kunt werken.
         </p>
-        <button className="btn-accent" onClick={() => openPanel('start-nu')}><span>Start nu</span></button>
+        <button className="btn-accent" onClick={() => openPanel('start-nu', 'leefstijl')}><span>Start nu</span></button>
       </div>
     </section>
   );

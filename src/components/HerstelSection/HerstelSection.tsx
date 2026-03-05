@@ -65,7 +65,7 @@ export default function HerstelSection() {
           feedbackmomenten en trainingsvideo&apos;s zorgen we dat je gemotiveerd en uitgedaagd blijft
           op weg naar belemmeringsvrij functioneren.
         </p>
-        <button className="btn-accent" onClick={() => openPanel('start-nu')}><span>Start nu</span></button>
+        <button className="btn-accent" onClick={() => openPanel('start-nu', 'fysio')}><span>Start nu</span></button>
       </div>
 
       {/* Right Image */}
@@ -78,10 +78,13 @@ export default function HerstelSection() {
             Meet Maarten
           </button>
         </div>
-        <img
-          src={`${basePath}/img/run.png`}
-          alt="Hardlopers tijdens marathon"
-          className="img-cover img-grayscale"
+        <video
+          src={`${basePath}/img/maarten.mp4`}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="img-cover"
         />
       </div>
     </section>

@@ -58,17 +58,21 @@ export default function GlobalPanel() {
     }
   };
 
-  const isMeetMaarten = panelToRender === 'meet-maarten';
+  const isMeetPanel = panelToRender === 'meet-maarten' || panelToRender === 'meet-merel';
   const isStartNu = panelToRender === 'start-nu';
-  const showStartTraject = isMeetMaarten && panelPhase === 2;
+  const showStartTraject = isMeetPanel && panelPhase === 2;
+  const isMerel = panelToRender === 'meet-merel' || (isStartNu && lastPanelRef.current === 'meet-merel');
+  const meetName = isMerel ? 'Meet Merel' : 'Meet Maarten';
+  const meetPanel = isMerel ? 'meet-merel' : 'meet-maarten';
+  const startVariant = isMerel ? 'leefstijl' : 'fysio';
 
   const navBar = (
     <div ref={navBarRef} className={styles.navBar}>
       <button
-        className={`${styles.navTab} ${isMeetMaarten && !showStartTraject ? styles.navTabActive : ''}`}
-        onClick={() => openPanel('meet-maarten')}
+        className={`${styles.navTab} ${isMeetPanel ? styles.navTabActive : ''} ${isMeetPanel ? styles.navTabMaarten : ''}`}
+        onClick={() => openPanel(meetPanel as 'meet-maarten' | 'meet-merel')}
       >
-        <span>Meet Maarten</span>
+        <span>{meetName}</span>
         <span className={styles.navTabNumber}>[01]</span>
       </button>
       {onBack && (
@@ -80,8 +84,8 @@ export default function GlobalPanel() {
         </button>
       )}
       <button
-        className={`${styles.navTab} ${isStartNu ? styles.navTabActive : ''} ${showStartTraject ? styles.navTabPhase2 : ''}`}
-        onClick={() => openPanel('start-nu')}
+        className={`${styles.navTab} ${isStartNu ? styles.navTabActive : ''} ${isMeetPanel ? styles.navTabStartNu : ''}`}
+        onClick={() => openPanel('start-nu', startVariant as 'fysio' | 'leefstijl')}
       >
         <span>{showStartTraject ? 'Start Traject' : 'Start Nu'}</span>
         <span className={styles.navTabNumber}>[02]</span>
