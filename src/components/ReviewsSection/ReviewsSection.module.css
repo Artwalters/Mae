@@ -29,6 +29,32 @@
   margin-bottom: 0;
 }
 
+/* Desktop/Mobile visibility */
+.mobileOnly {
+  display: none;
+}
+
+/* Draggable Marquee (mobile) */
+.draggableMarquee {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  overflow: hidden;
+}
+
+.draggableCollection {
+  display: flex;
+  align-items: stretch;
+  flex: none;
+  will-change: transform;
+}
+
+.draggableList {
+  display: flex;
+  align-items: stretch;
+  flex: none;
+}
+
 .marquee {
   width: 100vw;
   position: relative;
@@ -64,8 +90,10 @@
   transition: background 0.3s ease;
 }
 
-.reviewCard:hover {
-  background: #333333;
+@media (hover: hover) {
+  .reviewCard:hover {
+    background: #333333;
+  }
 }
 
 /* Stars */
@@ -128,6 +156,14 @@
 
 /* Responsive - Mobile */
 @media screen and (max-width: 767px) {
+  .desktopOnly {
+    display: none;
+  }
+
+  .mobileOnly {
+    display: block;
+  }
+
   .section {
     padding: 0.5em 0;
   }

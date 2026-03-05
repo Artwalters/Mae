@@ -3,9 +3,10 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Observer } from 'gsap/Observer';
 import styles from './ReviewsSection.module.css';
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, Observer);
 
 interface ReviewsSectionProps {
   type: 'fysio' | 'leefstijl';
@@ -106,6 +107,109 @@ function ReviewCard({ text, author }: ReviewCardProps) {
   );
 }
 
+/* ── Mobile: draggable marquee with momentum ── */
+function DraggableMarquee({ reviews, direction }: { reviews: typeof fysioReviews; direction: 'left' | 'right' }) {
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const collectionRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Only init on mobile
+    if (window.innerWidth >= 768) return;
+
+    const wrapper = wrapperRef.current;
+    const collection = collectionRef.current;
+    const list = listRef.current;
+    if (!wrapper || !collection || !list) return;
+
+    const duration = 80;
+    const multiplier = 35;
+    const sensitivity = 0.01;
+
+    const wrapperWidth = wrapper.getBoundingClientRect().width;
+    const listWidth = list.scrollWidth || list.getBoundingClientRect().width;
+    if (!wrapperWidth || !listWidth) return;
+
+    // Clone lists to fill viewport
+    const minRequiredWidth = wrapperWidth + listWidth + 2;
+    while (collection.scrollWidth < minRequiredWidth) {
+      const clone = list.cloneNode(true) as HTMLElement;
+      clone.setAttribute('aria-hidden', 'true');
+      collection.appendChild(clone);
+    }
+
+    const wrapX = gsap.utils.wrap(-listWidth, 0);
+    gsap.set(collection, { x: 0 });
+
+    const marqueeLoop = gsap.to(collection, {
+      x: -listWidth,
+      duration,
+      ease: 'none',
+      repeat: -1,
+      onReverseComplete() { marqueeLoop.progress(1); },
+      modifiers: {
+        x: (x: string) => wrapX(parseFloat(x)) + 'px',
+      },
+    });
+
+    const baseDirection = direction === 'right' ? -1 : 1;
+    const timeScale = { value: baseDirection };
+
+    if (baseDirection < 0) marqueeLoop.progress(1);
+
+    function applyTimeScale() {
+      marqueeLoop.timeScale(timeScale.value);
+    }
+    applyTimeScale();
+
+    const observer = Observer.create({
+      target: wrapper,
+      type: 'pointer,touch',
+      preventDefault: true,
+      debounce: false,
+      onChangeX(obs) {
+        let velocityTimeScale = obs.velocityX * -sensitivity;
+        velocityTimeScale = gsap.utils.clamp(-multiplier, multiplier, velocityTimeScale);
+        gsap.killTweensOf(timeScale);
+        const restingDirection = velocityTimeScale < 0 ? -1 : 1;
+        gsap.timeline({ onUpdate: applyTimeScale })
+          .to(timeScale, { value: velocityTimeScale, duration: 0.1, overwrite: true })
+          .to(timeScale, { value: restingDirection, duration: 1.0 });
+      },
+    });
+
+    const st = ScrollTrigger.create({
+      trigger: wrapper,
+      start: 'top bottom',
+      end: 'bottom top',
+      onEnter() { marqueeLoop.resume(); applyTimeScale(); observer.enable(); },
+      onEnterBack() { marqueeLoop.resume(); applyTimeScale(); observer.enable(); },
+      onLeave() { marqueeLoop.pause(); observer.disable(); },
+      onLeaveBack() { marqueeLoop.pause(); observer.disable(); },
+    });
+
+    return () => {
+      marqueeLoop.kill();
+      observer.kill();
+      st.kill();
+      collection.querySelectorAll('[aria-hidden]').forEach((el) => el.remove());
+    };
+  }, [direction]);
+
+  return (
+    <div ref={wrapperRef} className={styles.draggableMarquee}>
+      <div ref={collectionRef} className={styles.draggableCollection}>
+        <div ref={listRef} className={styles.draggableList}>
+          {reviews.map((review, index) => (
+            <ReviewCard key={index} {...review} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── Desktop: auto-scrolling marquee with skew ── */
 interface MarqueeRowProps {
   reviews: typeof fysioReviews;
   direction: 'left' | 'right';
@@ -228,8 +332,11 @@ export default function ReviewsSection({ type }: ReviewsSectionProps) {
 
   return (
     <section className={sectionClasses}>
-      <div className={styles.marqueeWrapper}>
+      <div className={`${styles.marqueeWrapper} ${styles.desktopOnly}`}>
         <MarqueeRow reviews={reviews} direction={direction} />
+      </div>
+      <div className={`${styles.marqueeWrapper} ${styles.mobileOnly}`}>
+        <DraggableMarquee reviews={reviews} direction={direction} />
       </div>
     </section>
   );
