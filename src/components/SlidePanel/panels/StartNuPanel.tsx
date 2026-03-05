@@ -83,6 +83,8 @@ export default function StartNuPanel() {
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [extra, setExtra] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   // Reset all state when variant changes or panel reopens
   useEffect(() => {
@@ -96,6 +98,8 @@ export default function StartNuPanel() {
     setPhone('');
     setEmail('');
     setExtra('');
+    setIsSubmitting(false);
+    setSubmitError(null);
   }, [panelVariant, activePanel]);
 
   const isFysio = panelVariant === 'fysio';
@@ -132,9 +136,42 @@ export default function StartNuPanel() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setCurrentStep('bevestiging');
+    setIsSubmitting(true);
+    setSubmitError(null);
+
+    const doel = isFysio
+      ? FYSIO_DOELEN.find((d) => d.key === fysioDoel)?.title || ''
+      : LEEFSTIJL_DOELEN.find((d) => d.key === leefstijlDoel)?.title || '';
+
+    try {
+      const res = await fetch('/api/intake', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email,
+          phone,
+          extra,
+          variant: isFysio ? 'fysio' : 'leefstijl',
+          doel,
+          answers,
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || 'Er ging iets mis.');
+      }
+
+      setCurrentStep('bevestiging');
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : 'Er ging iets mis. Probeer het opnieuw.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const goBack = () => {
@@ -321,9 +358,13 @@ export default function StartNuPanel() {
                 : 'Bijvoorbeeld: wat je al geprobeerd hebt, wat je het moeilijkst vindt...'}
             />
 
+            {submitError && (
+              <p className={styles.formError}>{submitError}</p>
+            )}
+
             <div className={styles.formActions}>
-              <button type="submit" className={styles.ctaButton}>
-                <span>Verstuur</span>
+              <button type="submit" className={styles.ctaButton} disabled={isSubmitting}>
+                <span>{isSubmitting ? 'Versturen...' : 'Verstuur'}</span>
               </button>
             </div>
           </form>

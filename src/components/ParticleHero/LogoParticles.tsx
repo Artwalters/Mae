@@ -9,12 +9,13 @@ import basePath from '@/lib/basePath';
 interface Logo3DProps {
   scale?: number;
   scrollProgressRef?: React.RefObject<number>;
+  mouseRef?: React.RefObject<{ x: number; y: number }>;
   mode?: 'hero' | 'footer';
   isMobile?: boolean;
   sharedTexture?: THREE.VideoTexture | null;
 }
 
-export default function Logo3D({ scale = 1, scrollProgressRef, mode = 'hero', isMobile = false, sharedTexture }: Logo3DProps) {
+export default function Logo3D({ scale = 1, scrollProgressRef, mouseRef, mode = 'hero', isMobile = false, sharedTexture }: Logo3DProps) {
   const groupRef = useRef<THREE.Group>(null);
   const materialRef = useRef<THREE.ShaderMaterial | null>(null);
   const [ready, setReady] = useState(false);
@@ -105,7 +106,14 @@ export default function Logo3D({ scale = 1, scrollProgressRef, mode = 'hero', is
         targetY = maxDrop * (1 - scrollProgress);
       }
 
-      groupRef.current.rotation.x += (targetRotationX - groupRef.current.rotation.x) * 0.1;
+      // Mouse-based tilt (desktop only, hero mode)
+      const mouse = mouseRef?.current ?? { x: 0, y: 0 };
+      const mouseTilt = !isMobile ? 0.15 : 0;
+      const targetRotationY = mouse.x * mouseTilt;
+      const targetMouseTiltX = mouse.y * -mouseTilt * 0.5;
+
+      groupRef.current.rotation.x += (targetRotationX + targetMouseTiltX - groupRef.current.rotation.x) * 0.05;
+      groupRef.current.rotation.y += (targetRotationY - groupRef.current.rotation.y) * 0.05;
       groupRef.current.position.y += (targetY - groupRef.current.position.y) * 0.1;
     }
   });

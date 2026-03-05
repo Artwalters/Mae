@@ -8,7 +8,7 @@ export default function InViewObserver() {
     const labels = document.querySelectorAll('.label');
 
     // Set initial state
-    gsap.set(labels, { opacity: 0, letterSpacing: '0.4em' });
+    gsap.set(labels, { opacity: 0 });
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -16,7 +16,6 @@ export default function InViewObserver() {
           if (entry.isIntersecting) {
             gsap.to(entry.target, {
               opacity: 1,
-              letterSpacing: '0.1em',
               duration: 1.6,
               ease: 'power2.out',
             });

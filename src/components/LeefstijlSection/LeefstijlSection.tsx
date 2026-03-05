@@ -62,12 +62,9 @@ export default function LeefstijlSection() {
             Meet Merel
           </button>
         </div>
-        <video
-          src={`${basePath}/img/merel.mp4`}
-          autoPlay
-          loop
-          muted
-          playsInline
+        <img
+          src={`${basePath}/img/merel.jpeg`}
+          alt="Merel"
           className="img-cover"
         />
       </div>

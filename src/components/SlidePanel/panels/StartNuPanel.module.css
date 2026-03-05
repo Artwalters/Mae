@@ -245,8 +245,20 @@
   transition: opacity 0.3s ease;
 }
 
-.ctaButton:hover {
+.ctaButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ctaButton:hover:not(:disabled) {
   opacity: 0.85;
+}
+
+.formError {
+  font-family: var(--font-secondary);
+  font-size: var(--font-small);
+  color: #c0392b;
+  margin: 0;
 }
 
 /* Confirmation — Step 4 */

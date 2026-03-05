@@ -21,6 +21,7 @@ export default function ParticleFooter() {
   const containerRef = useRef<HTMLDivElement>(null);
   const footerTagsRef = useRef<HTMLDivElement>(null);
   const { video: sharedVideo, texture: sharedTexture } = useSharedVideo();
+  const mouseRef = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -45,6 +46,17 @@ export default function ParticleFooter() {
     window.addEventListener('resize', checkScreenSize);
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
+
+  // Mouse tracking for 3D logo tilt (desktop only)
+  useEffect(() => {
+    if (screenSize === 'mobile') return;
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseRef.current.x = (e.clientX / window.innerWidth) * 2 - 1;
+      mouseRef.current.y = (e.clientY / window.innerHeight) * 2 - 1;
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, [screenSize]);
 
   // Scroll-based: logo comes from above into center
   useEffect(() => {
@@ -140,7 +152,7 @@ export default function ParticleFooter() {
         <Suspense fallback={null}>
           <group position={[0, getLogoYOffset(), 0]}>
             <Center precise>
-              <Logo3D scale={scale} scrollProgressRef={scrollProgressRef} mode="footer" isMobile={isMobile} sharedTexture={sharedTexture} />
+              <Logo3D scale={scale} scrollProgressRef={scrollProgressRef} mouseRef={mouseRef} mode="footer" isMobile={isMobile} sharedTexture={sharedTexture} />
             </Center>
           </group>
           {WaterComponent && <WaterComponent sharedTexture={sharedTexture} sharedVideo={sharedVideo} />}
