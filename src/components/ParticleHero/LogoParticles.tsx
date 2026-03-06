@@ -130,11 +130,10 @@ export default function Logo3D({ scale = 1, scrollProgressRef, mouseRef, mode = 
       let targetRotationX: number;
       let targetY: number;
 
-      // Intro offset acts as additional scroll progress (logo starts tilted+dropped like scrolled away)
-      const introProgress = introOffsetRef?.current ?? 0;
-      const combinedProgress = Math.min(scrollProgress + introProgress, 1.5);
-
       if (mode === 'hero') {
+        // Intro offset pushes logo below screen (only applies to hero)
+        const introProgress = introOffsetRef?.current ?? 0;
+        const combinedProgress = Math.min(scrollProgress + introProgress, 2.0);
         targetRotationX = combinedProgress * -maxTilt;
         targetY = -(combinedProgress * combinedProgress) * maxDrop;
       } else {
@@ -148,8 +147,8 @@ export default function Logo3D({ scale = 1, scrollProgressRef, mouseRef, mode = 
       const targetRotationY = mouse.x * mouseTilt;
       const targetMouseTiltX = mouse.y * -mouseTilt * 0.5;
 
-      // On first frame, snap to position (no smoothing) to avoid FOUC
-      if (!initializedRef.current) {
+      // On first frame in hero mode, snap to position to avoid FOUC
+      if (!initializedRef.current && mode === 'hero' && introOffsetRef) {
         initializedRef.current = true;
         groupRef.current.rotation.x = targetRotationX + targetMouseTiltX;
         groupRef.current.rotation.y = targetRotationY;

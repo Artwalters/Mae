@@ -407,10 +407,10 @@ export default function WaterEffect({ brightness = 0.07, sharedTexture, sharedVi
         material.uniforms.uResolution.value.set(size.width, size.height);
         material.uniforms.uMouse.value.copy(mouse.current);
 
-        // Start dark (0.02), brighten slightly to normal (0.07) as logo arrives
+        // Start dark, brighten to normal as logo arrives
         const introProgress = introOffsetRef?.current ?? 0;
         const darkStart = 0.02;
-        const t = Math.min(introProgress / 1.5, 1.0);
+        const t = Math.min(introProgress / 2.0, 1.0);
         material.uniforms.uBrightness.value = brightness + (darkStart - brightness) * t;
 
         if (sharedTexture) {

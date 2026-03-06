@@ -157,7 +157,7 @@
   height: 100%;
   object-fit: cover;
   z-index: 0;
-  /* brightness controlled dynamically via JS for intro animation */
+  filter: brightness(0.18);
 }
 
 /* Bottom Bar */

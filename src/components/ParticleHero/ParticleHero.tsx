@@ -24,16 +24,21 @@ function MobileVideoBackground({ video, brightnessRef }: { video: HTMLVideoEleme
 
     // Animate mobile video brightness via filter
     let raf: number;
+    let running = true;
     const updateBrightness = () => {
-      if (video) {
+      // Only update if the video is still in this container
+      if (running && video.parentNode === containerRef.current) {
         video.style.filter = `brightness(${brightnessRef.current})`;
       }
-      raf = requestAnimationFrame(updateBrightness);
+      if (running) raf = requestAnimationFrame(updateBrightness);
     };
     raf = requestAnimationFrame(updateBrightness);
 
     return () => {
+      running = false;
       cancelAnimationFrame(raf);
+      // Reset filter when video leaves hero
+      video.style.filter = '';
       if (video.parentNode === containerRef.current) {
         containerRef.current?.removeChild(video);
       }
@@ -54,7 +59,7 @@ export default function ParticleHero() {
   const { video: sharedVideo, texture: sharedTexture } = useSharedVideo();
   const { openPanel } = usePanel();
   const mouseRef = useRef({ x: 0, y: 0 });
-  const introOffsetRef = useRef(1.5); // Logo starts tilted+dropped (like scrolled away)
+  const introOffsetRef = useRef(2.0); // Logo starts tilted+dropped below screen
   const brightnessRef = useRef(0.05); // Start very dark
   const loaderRef = useRef<HTMLDivElement>(null);
   const [introComplete, setIntroComplete] = useState(false);
@@ -255,24 +260,27 @@ export default function ParticleHero() {
         </div>
       )}
 
-      <Canvas
-        orthographic
-        camera={{ position: [0, 0, 100], zoom, near: 0.1, far: 200 }}
-        gl={{ antialias: true, alpha: true }}
-        dpr={[1, 2]}
-      >
-        <ambientLight intensity={0.5} />
-        <directionalLight position={[0, 0, 10]} intensity={2.5} />
+      {/* Only render Canvas once screenSize is known to prevent zoom/scale flash */}
+      {screenSize !== null && (
+        <Canvas
+          orthographic
+          camera={{ position: [0, 0, 100], zoom, near: 0.1, far: 200 }}
+          gl={{ antialias: true, alpha: true }}
+          dpr={[1, 2]}
+        >
+          <ambientLight intensity={0.5} />
+          <directionalLight position={[0, 0, 10]} intensity={2.5} />
 
-        <Suspense fallback={null}>
-          <group position={[0, getLogoYOffset(), 0]}>
-            <Center precise>
-              <Logo3D scale={scale} scrollProgressRef={scrollProgressRef} mouseRef={mouseRef} mode="hero" isMobile={isMobile} sharedTexture={sharedTexture} introOffsetRef={introOffsetRef} />
-            </Center>
-          </group>
-          {WaterComponent && <WaterComponent sharedTexture={sharedTexture} sharedVideo={sharedVideo} isMobile={isMobile} introOffsetRef={introOffsetRef} />}
-        </Suspense>
-      </Canvas>
+          <Suspense fallback={null}>
+            <group position={[0, getLogoYOffset(), 0]}>
+              <Center precise>
+                <Logo3D scale={scale} scrollProgressRef={scrollProgressRef} mouseRef={mouseRef} mode="hero" isMobile={isMobile} sharedTexture={sharedTexture} introOffsetRef={introOffsetRef} />
+              </Center>
+            </group>
+            {WaterComponent && <WaterComponent sharedTexture={sharedTexture} sharedVideo={sharedVideo} isMobile={isMobile} introOffsetRef={introOffsetRef} />}
+          </Suspense>
+        </Canvas>
+      )}
     </div>
   );
 }
