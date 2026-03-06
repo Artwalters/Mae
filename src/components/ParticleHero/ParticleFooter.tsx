@@ -9,10 +9,26 @@ import Logo3D from './LogoParticles';
 import WaterEffect from './WaterEffect';
 import { useSharedVideo } from '@/context/SharedVideoContext';
 import { usePanel } from '@/context/PanelContext';
-import cdn from '@/lib/cdn';
 import styles from './ParticleHero.module.css';
 
 gsap.registerPlugin(ScrollTrigger);
+
+function FooterMobileVideo({ video }: { video: HTMLVideoElement | null }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!video || !containerRef.current) return;
+    video.className = styles.mobileVideo;
+    containerRef.current.appendChild(video);
+    return () => {
+      if (video.parentNode === containerRef.current) {
+        containerRef.current?.removeChild(video);
+      }
+    };
+  }, [video]);
+
+  return <div ref={containerRef} />;
+}
 
 type ScreenSize = 'mobile' | 'tablet-sm' | 'tablet-md' | 'tablet' | 'desktop-sm' | 'desktop' | 'desktop-lg' | null;
 
@@ -49,9 +65,19 @@ export default function ParticleFooter() {
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
 
-  // Mouse tracking for 3D logo tilt (desktop only)
+  // Mouse tracking (desktop) / auto-drift (mobile) — same as hero
   useEffect(() => {
-    if (screenSize === 'mobile') return;
+    if (screenSize === 'mobile') {
+      let raf: number;
+      const animate = (time: number) => {
+        const t = time * 0.001;
+        mouseRef.current.x = Math.sin(t * 0.4) * 0.8 + Math.sin(t * 1.1) * 0.5 + Math.cos(t * 0.7) * 0.3;
+        mouseRef.current.y = Math.cos(t * 0.3) * 0.7 + Math.sin(t * 0.9) * 0.4 + Math.cos(t * 1.4) * 0.3;
+        raf = requestAnimationFrame(animate);
+      };
+      raf = requestAnimationFrame(animate);
+      return () => cancelAnimationFrame(raf);
+    }
     const handleMouseMove = (e: MouseEvent) => {
       mouseRef.current.x = (e.clientX / window.innerWidth) * 2 - 1;
       mouseRef.current.y = (e.clientY / window.innerHeight) * 2 - 1;
@@ -72,7 +98,6 @@ export default function ParticleFooter() {
       scrub: true,
       onUpdate: (self) => {
         scrollProgressRef.current = self.progress;
-        // Update footer tags opacity directly via DOM
         if (footerTagsRef.current) {
           footerTagsRef.current.style.opacity = String(Math.max(0, (self.progress - 0.7) / 0.3));
         }
@@ -120,17 +145,8 @@ export default function ParticleFooter() {
 
   return (
     <div ref={containerRef} className={styles.container}>
-      {/* Mobile video background */}
-      {isMobile && (
-        <video
-          className={styles.mobileVideo}
-          src={`${cdn}/hero.mp4`}
-          autoPlay
-          muted
-          loop
-          playsInline
-        />
-      )}
+      {/* Mobile video background — reuse the shared video element */}
+      {isMobile && <FooterMobileVideo video={sharedVideo} />}
 
       {/* Footer Tags - fade in when logo reaches center */}
       <div ref={footerTagsRef} className={styles.footerTags} style={{ opacity: 0 }}>
@@ -186,24 +202,27 @@ export default function ParticleFooter() {
         </div>
       )}
 
-      <Canvas
-        orthographic
-        camera={{ position: [0, 0, 100], zoom, near: 0.1, far: 200 }}
-        gl={{ antialias: true, alpha: true }}
-        dpr={[1, 2]}
-      >
-        <ambientLight intensity={0.5} />
-        <directionalLight position={[0, 0, 10]} intensity={2.5} />
+      {/* Only render Canvas once screenSize is known */}
+      {screenSize !== null && (
+        <Canvas
+          orthographic
+          camera={{ position: [0, 0, 100], zoom, near: 0.1, far: 200 }}
+          gl={{ antialias: true, alpha: true }}
+          dpr={[1, 2]}
+        >
+          <ambientLight intensity={0.5} />
+          <directionalLight position={[0, 0, 10]} intensity={2.5} />
 
-        <Suspense fallback={null}>
-          <group position={[0, getLogoYOffset(), 0]}>
-            <Center precise>
-              <Logo3D scale={scale} scrollProgressRef={scrollProgressRef} mouseRef={mouseRef} mode="footer" isMobile={isMobile} sharedTexture={sharedTexture} />
-            </Center>
-          </group>
-          {WaterComponent && <WaterComponent sharedTexture={sharedTexture} sharedVideo={sharedVideo} />}
-        </Suspense>
-      </Canvas>
+          <Suspense fallback={null}>
+            <group position={[0, getLogoYOffset(), 0]}>
+              <Center precise>
+                <Logo3D scale={scale} scrollProgressRef={scrollProgressRef} mouseRef={mouseRef} mode="footer" isMobile={isMobile} sharedTexture={sharedTexture} />
+              </Center>
+            </group>
+            {WaterComponent && <WaterComponent sharedTexture={sharedTexture} sharedVideo={sharedVideo} isMobile={isMobile} />}
+          </Suspense>
+        </Canvas>
+      )}
     </div>
   );
 }
