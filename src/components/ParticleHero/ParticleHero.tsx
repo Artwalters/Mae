@@ -21,6 +21,8 @@ function MobileVideoBackground({ video, brightnessRef }: { video: HTMLVideoEleme
     if (!video || !containerRef.current) return;
     video.className = styles.mobileVideo;
     containerRef.current.appendChild(video);
+    // Re-trigger play after appending to DOM (required on mobile Safari)
+    video.play().catch(() => {});
 
     // Animate mobile video brightness via filter
     let raf: number;

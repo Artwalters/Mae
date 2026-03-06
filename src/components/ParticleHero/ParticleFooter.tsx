@@ -20,6 +20,7 @@ function FooterMobileVideo({ video }: { video: HTMLVideoElement | null }) {
     if (!video || !containerRef.current) return;
     video.className = styles.mobileVideo;
     containerRef.current.appendChild(video);
+    video.play().catch(() => {});
     return () => {
       if (video.parentNode === containerRef.current) {
         containerRef.current?.removeChild(video);
