@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { usePanel } from '@/context/PanelContext';
 import styles from './MeetMaartenPanel.module.css';
-import basePath from '@/lib/basePath';
+import cdn from '@/lib/cdn';
 
 const credentials = [
   { year: '2022', text: 'Bachelor Fysiotherapie' },
@@ -75,7 +75,7 @@ export default function MeetMaartenPanel() {
 
       {/* Hero Image */}
       <div className={styles.heroImage}>
-        <img src={`${basePath}/img/maarten.png`} alt="Maarten" className="img-cover" />
+        <img src={`${cdn}/maarten-sled.webp`} alt="Maarten fysiotherapeut bij MAE Coaching en Fysiotherapie" className="img-cover" style={{ objectPosition: 'center 30%' }} />
       </div>
 
       {/* Over Maarten Section */}
@@ -97,13 +97,13 @@ export default function MeetMaartenPanel() {
         </div>
         <div className={styles.photoGrid}>
           <div className={styles.photo}>
-            <img src={`${basePath}/img/maarten.png`} alt="Maarten" className="img-cover" />
+            <img src={`${cdn}/maarten-groepssessie.webp`} alt="Maarten bespreekt trainingsplan met cliënten bij MAE" className="img-cover" />
           </div>
           <div className={styles.photo}>
-            <img src={`${basePath}/img/run.png`} alt="Training" className="img-cover" />
+            <img src={`${cdn}/maarten-behandelplan.webp`} alt="Maarten schrijft revalidatieplan op whiteboard" className="img-cover" />
           </div>
           <div className={styles.photo}>
-            <img src={`${basePath}/img/RICKv2.png`} alt="Sessie" className="img-cover" />
+            <img src={`${cdn}/maarten-training.webp`} alt="Maarten begeleidt krachttraining bij fysiotherapie" className="img-cover" />
           </div>
         </div>
       </section>

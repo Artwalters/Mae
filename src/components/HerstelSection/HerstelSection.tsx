@@ -5,7 +5,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { usePanel } from '@/context/PanelContext';
 import styles from './HerstelSection.module.css';
-import basePath from '@/lib/basePath';
+import cdn from '@/lib/cdn';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -79,7 +79,7 @@ export default function HerstelSection() {
           </button>
         </div>
         <img
-          src={`${basePath}/img/maarten-sled.png`}
+          src={`${cdn}/maarten-sled.webp`}
           alt="Maarten"
           className="img-cover"
         />

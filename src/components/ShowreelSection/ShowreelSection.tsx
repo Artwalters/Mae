@@ -1,7 +1,7 @@
 'use client';
 
 import styles from './ShowreelSection.module.css';
-import basePath from '@/lib/basePath';
+import cdn from '@/lib/cdn';
 
 export default function ShowreelSection() {
   return (
@@ -10,7 +10,7 @@ export default function ShowreelSection() {
         <div className={styles.videoContainer}>
           <video
             className={styles.video}
-            src={`${basePath}/img/hero.mp4`}
+            src={`${cdn}/hero.mp4`}
             autoPlay
             muted
             loop

@@ -8,7 +8,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Logo3D from './LogoParticles';
 import WaterEffect from './WaterEffect';
 import { useSharedVideo } from '@/context/SharedVideoContext';
-import basePath from '@/lib/basePath';
+import cdn from '@/lib/cdn';
 import styles from './ParticleHero.module.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -122,7 +122,7 @@ export default function ParticleFooter() {
       {isMobile && (
         <video
           className={styles.mobileVideo}
-          src={`${basePath}/img/hero.mp4`}
+          src={`${cdn}/hero.mp4`}
           autoPlay
           muted
           loop

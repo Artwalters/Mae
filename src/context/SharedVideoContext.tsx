@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import basePath from '@/lib/basePath';
+import cdn from '@/lib/cdn';
 
 interface SharedVideoContextType {
   video: HTMLVideoElement | null;
@@ -22,7 +22,7 @@ export function SharedVideoProvider({ children }: { children: React.ReactNode })
 
   useEffect(() => {
     const video = document.createElement('video');
-    video.src = `${basePath}/img/hero.mp4`;
+    video.src = `${cdn}/hero.mp4`;
     video.crossOrigin = 'anonymous';
     video.loop = true;
     video.muted = true;

@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import styles from './Hall13Section.module.css';
-import basePath from '@/lib/basePath';
+import cdn from '@/lib/cdn';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -56,7 +56,7 @@ export default function Hall13Section() {
         </a>
       </div>
       <video
-        src={`${basePath}/img/degym.mp4`}
+        src={`${cdn}/degym.mp4`}
         autoPlay
         loop
         muted

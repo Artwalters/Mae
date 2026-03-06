@@ -5,7 +5,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { usePanel } from '@/context/PanelContext';
 import styles from './LeefstijlSection.module.css';
-import basePath from '@/lib/basePath';
+import cdn from '@/lib/cdn';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -63,7 +63,7 @@ export default function LeefstijlSection() {
           </button>
         </div>
         <img
-          src={`${basePath}/img/merel.jpeg`}
+          src={`${cdn}/merel.webp`}
           alt="Merel"
           className="img-cover"
         />

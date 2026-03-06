@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { usePanel } from '@/context/PanelContext';
 import styles from './MeetMaartenPanel.module.css';
-import basePath from '@/lib/basePath';
+import cdn from '@/lib/cdn';
 
 const credentials = [
   { year: '2025', text: 'Sportkunde' },
@@ -62,7 +62,7 @@ export default function MeetMerelPanel() {
 
       {/* Hero Image */}
       <div className={styles.heroImage}>
-        <img src={`${basePath}/img/merel-consult.jpeg`} alt="Merel leefstijlcoach bij MAE in gesprek met cliënt" className="img-cover" style={{ objectPosition: 'center 5%' }} />
+        <img src={`${cdn}/merel-consult.webp`} alt="Merel leefstijlcoach bij MAE in gesprek met cliënt" className="img-cover" style={{ objectPosition: 'center 5%' }} />
       </div>
 
       {/* Over Merel Section */}
@@ -82,13 +82,13 @@ export default function MeetMerelPanel() {
         </div>
         <div className={styles.photoGrid}>
           <div className={styles.photo}>
-            <img src={`${basePath}/img/merel-coaching.jpeg`} alt="Merel begeleidt cliënt bij leefstijlcoaching" className="img-cover" />
+            <img src={`${cdn}/merel-coaching.webp`} alt="Merel begeleidt cliënt bij leefstijlcoaching" className="img-cover" />
           </div>
           <div className={styles.photo}>
-            <img src={`${basePath}/img/merel-training.jpeg`} alt="Merel begeleidt functionele training bij MAE" className="img-cover" />
+            <img src={`${cdn}/merel-training.webp`} alt="Merel begeleidt functionele training bij MAE" className="img-cover" />
           </div>
           <div className={styles.photo}>
-            <img src={`${basePath}/img/merel-meting.jpeg`} alt="Lichaamsmeting als onderdeel van leefstijlcoaching" className="img-cover" />
+            <img src={`${cdn}/merel-meting.webp`} alt="Lichaamsmeting als onderdeel van leefstijlcoaching" className="img-cover" />
           </div>
         </div>
       </section>
