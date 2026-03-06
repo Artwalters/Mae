@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useState, useEffect, useRef } from 'react';
+import { Suspense, useState, useEffect, useRef, useCallback } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Center } from '@react-three/drei';
 import { gsap } from 'gsap';
@@ -9,23 +9,36 @@ import Logo3D from './LogoParticles';
 import WaterEffect from './WaterEffect';
 import { useSharedVideo } from '@/context/SharedVideoContext';
 import { usePanel } from '@/context/PanelContext';
+import { useLenis } from '@/components/SmoothScroll';
 import styles from './ParticleHero.module.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
-function MobileVideoBackground({ video }: { video: HTMLVideoElement | null }) {
+function MobileVideoBackground({ video, brightnessRef }: { video: HTMLVideoElement | null; brightnessRef: React.RefObject<number> }) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!video || !containerRef.current) return;
     video.className = styles.mobileVideo;
     containerRef.current.appendChild(video);
+
+    // Animate mobile video brightness via filter
+    let raf: number;
+    const updateBrightness = () => {
+      if (video) {
+        video.style.filter = `brightness(${brightnessRef.current})`;
+      }
+      raf = requestAnimationFrame(updateBrightness);
+    };
+    raf = requestAnimationFrame(updateBrightness);
+
     return () => {
+      cancelAnimationFrame(raf);
       if (video.parentNode === containerRef.current) {
         containerRef.current?.removeChild(video);
       }
     };
-  }, [video]);
+  }, [video, brightnessRef]);
 
   return <div ref={containerRef} />;
 }
@@ -37,9 +50,15 @@ export default function ParticleHero() {
   const scrollProgressRef = useRef(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const sideLabelsRef = useRef<HTMLDivElement>(null);
+  const mobileCtaRef = useRef<HTMLDivElement>(null);
   const { video: sharedVideo, texture: sharedTexture } = useSharedVideo();
   const { openPanel } = usePanel();
   const mouseRef = useRef({ x: 0, y: 0 });
+  const introOffsetRef = useRef(1.5); // Logo starts tilted+dropped (like scrolled away)
+  const brightnessRef = useRef(0.05); // Start very dark
+  const loaderRef = useRef<HTMLDivElement>(null);
+  const [introComplete, setIntroComplete] = useState(false);
+  const lenis = useLenis();
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -84,6 +103,65 @@ export default function ParticleHero() {
     };
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, [screenSize]);
+
+
+  // Intro animation: video plays 4s → loader fades → logo rises → UI fades in
+  useEffect(() => {
+    if (screenSize === null) return;
+
+    const startDelay = 1; // Logo starts after 1 second
+    const logoDuration = 2.0;
+    const brightenDuration = 2.0;
+    const fadeDuration = 0.8;
+    const isMob = screenSize === 'mobile';
+
+    // Fade out loader as logo starts
+    if (loaderRef.current) {
+      gsap.to(loaderRef.current, {
+        opacity: 0,
+        duration: 0.6,
+        delay: startDelay - 0.3,
+        ease: 'power2.inOut',
+      });
+    }
+
+    // After 1 second: logo animates up
+    gsap.to(introOffsetRef, {
+      current: 0,
+      duration: logoDuration,
+      delay: startDelay,
+      ease: 'power3.out',
+    });
+
+    // Background brightens gradually after logo has mostly landed
+    const brightenDelay = startDelay + logoDuration * 0.5;
+    if (isMob) {
+      gsap.to(brightnessRef, {
+        current: 0.22,
+        duration: brightenDuration,
+        delay: brightenDelay,
+        ease: 'power2.out',
+      });
+    }
+
+    // Fade in side labels + mobile CTA after background starts brightening
+    const uiFadeDelay = brightenDelay + brightenDuration * 0.4;
+
+    gsap.to([sideLabelsRef.current, mobileCtaRef.current].filter(Boolean), {
+      opacity: 1,
+      duration: fadeDuration,
+      delay: uiFadeDelay,
+      ease: 'power2.out',
+    });
+
+    // Navigation fades in + scroll unblocked after UI elements
+    const navTimer = setTimeout(() => {
+      window.dispatchEvent(new CustomEvent('heroIntroComplete'));
+      setIntroComplete(true);
+    }, (uiFadeDelay + fadeDuration * 0.3) * 1000);
+
+    return () => clearTimeout(navTimer);
   }, [screenSize]);
 
   // Scroll-based: tilt + drop when scrolling away from hero
@@ -145,11 +223,18 @@ export default function ParticleHero() {
 
   return (
     <div ref={containerRef} className={styles.container}>
-      {/* Mobile video background — reuse the shared video element */}
-      {isMobile && <MobileVideoBackground video={sharedVideo} />}
+      {/* Intro loader */}
+      {!introComplete && (
+        <div ref={loaderRef} className={styles.loader}>
+          <span className={styles.loaderText}>Move Adapt Evolve</span>
+        </div>
+      )}
 
-      {/* Side Labels - fade out as you scroll */}
-      <div ref={sideLabelsRef} className={styles.sideLabels}>
+      {/* Mobile video background — reuse the shared video element */}
+      {isMobile && <MobileVideoBackground video={sharedVideo} brightnessRef={brightnessRef} />}
+
+      {/* Side Labels - start hidden, fade in after intro */}
+      <div ref={sideLabelsRef} className={styles.sideLabels} style={{ opacity: 0 }}>
         <button className={`${styles.sideLabel} ${styles.left}`} onClick={() => openPanel('start-nu', 'fysio')}>
           [START FYSIOTHERAPIE]
         </button>
@@ -158,9 +243,9 @@ export default function ParticleHero() {
         </button>
       </div>
 
-      {/* Mobile CTA buttons */}
+      {/* Mobile CTA buttons — start hidden, fade in after intro */}
       {isMobile && (
-        <div className={styles.mobileCta}>
+        <div ref={mobileCtaRef} className={styles.mobileCta} style={{ opacity: 0 }}>
           <button className={styles.mobileCtaGreen} onClick={() => openPanel('start-nu', 'fysio')}>
             Fysiotherapie
           </button>
@@ -182,10 +267,10 @@ export default function ParticleHero() {
         <Suspense fallback={null}>
           <group position={[0, getLogoYOffset(), 0]}>
             <Center precise>
-              <Logo3D scale={scale} scrollProgressRef={scrollProgressRef} mouseRef={mouseRef} mode="hero" isMobile={isMobile} sharedTexture={sharedTexture} />
+              <Logo3D scale={scale} scrollProgressRef={scrollProgressRef} mouseRef={mouseRef} mode="hero" isMobile={isMobile} sharedTexture={sharedTexture} introOffsetRef={introOffsetRef} />
             </Center>
           </group>
-          {WaterComponent && <WaterComponent sharedTexture={sharedTexture} sharedVideo={sharedVideo} isMobile={isMobile} />}
+          {WaterComponent && <WaterComponent sharedTexture={sharedTexture} sharedVideo={sharedVideo} isMobile={isMobile} introOffsetRef={introOffsetRef} />}
         </Suspense>
       </Canvas>
     </div>

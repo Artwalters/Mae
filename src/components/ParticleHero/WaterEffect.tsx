@@ -9,9 +9,10 @@ interface WaterEffectProps {
   sharedTexture?: THREE.VideoTexture | null;
   sharedVideo?: HTMLVideoElement | null;
   isMobile?: boolean;
+  introOffsetRef?: React.RefObject<number>;
 }
 
-export default function WaterEffect({ brightness = 0.07, sharedTexture, sharedVideo, isMobile = false }: WaterEffectProps) {
+export default function WaterEffect({ brightness = 0.07, sharedTexture, sharedVideo, isMobile = false, introOffsetRef }: WaterEffectProps) {
   const { gl, size, scene, camera } = useThree();
   const meshRef = useRef<THREE.Mesh>(null);
   const mouse = useRef(new THREE.Vector2(0.5, 0.5));
@@ -405,6 +406,12 @@ export default function WaterEffect({ brightness = 0.07, sharedTexture, sharedVi
         material.uniforms.uTime.value = state.clock.elapsedTime;
         material.uniforms.uResolution.value.set(size.width, size.height);
         material.uniforms.uMouse.value.copy(mouse.current);
+
+        // Start dark (0.02), brighten slightly to normal (0.07) as logo arrives
+        const introProgress = introOffsetRef?.current ?? 0;
+        const darkStart = 0.02;
+        const t = Math.min(introProgress / 1.5, 1.0);
+        material.uniforms.uBrightness.value = brightness + (darkStart - brightness) * t;
 
         if (sharedTexture) {
           if (sharedVideo && sharedVideo.readyState >= sharedVideo.HAVE_CURRENT_DATA) {

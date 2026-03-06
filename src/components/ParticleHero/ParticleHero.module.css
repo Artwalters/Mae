@@ -6,6 +6,33 @@
   justify-content: center;
 }
 
+/* Intro Loader */
+.loader {
+  position: absolute;
+  bottom: 2em;
+  left: 0;
+  width: 100%;
+  z-index: 20;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.loaderText {
+  font-family: var(--font-secondary);
+  font-size: var(--font-tag);
+  font-weight: var(--font-weight);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--color-gray);
+  animation: loaderPulse 2s ease-in-out infinite;
+}
+
+@keyframes loaderPulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
 /* Side Labels */
 .sideLabels {
   position: absolute;
@@ -130,7 +157,7 @@
   height: 100%;
   object-fit: cover;
   z-index: 0;
-  filter: brightness(0.18);
+  /* brightness controlled dynamically via JS for intro animation */
 }
 
 /* Bottom Bar */

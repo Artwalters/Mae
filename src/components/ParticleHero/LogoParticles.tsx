@@ -13,11 +13,13 @@ interface Logo3DProps {
   mode?: 'hero' | 'footer';
   isMobile?: boolean;
   sharedTexture?: THREE.VideoTexture | null;
+  introOffsetRef?: React.RefObject<number>;
 }
 
-export default function Logo3D({ scale = 1, scrollProgressRef, mouseRef, mode = 'hero', isMobile = false, sharedTexture }: Logo3DProps) {
+export default function Logo3D({ scale = 1, scrollProgressRef, mouseRef, mode = 'hero', isMobile = false, sharedTexture, introOffsetRef }: Logo3DProps) {
   const groupRef = useRef<THREE.Group>(null);
   const materialRef = useRef<THREE.ShaderMaterial | null>(null);
+  const initializedRef = useRef(false);
   const [ready, setReady] = useState(false);
 
   // Load GLB model
@@ -128,9 +130,13 @@ export default function Logo3D({ scale = 1, scrollProgressRef, mouseRef, mode = 
       let targetRotationX: number;
       let targetY: number;
 
+      // Intro offset acts as additional scroll progress (logo starts tilted+dropped like scrolled away)
+      const introProgress = introOffsetRef?.current ?? 0;
+      const combinedProgress = Math.min(scrollProgress + introProgress, 1.5);
+
       if (mode === 'hero') {
-        targetRotationX = scrollProgress * -maxTilt;
-        targetY = -(scrollProgress * scrollProgress) * maxDrop;
+        targetRotationX = combinedProgress * -maxTilt;
+        targetY = -(combinedProgress * combinedProgress) * maxDrop;
       } else {
         targetRotationX = -maxTilt * (1 - scrollProgress);
         targetY = maxDrop * (1 - scrollProgress);
@@ -142,9 +148,17 @@ export default function Logo3D({ scale = 1, scrollProgressRef, mouseRef, mode = 
       const targetRotationY = mouse.x * mouseTilt;
       const targetMouseTiltX = mouse.y * -mouseTilt * 0.5;
 
-      groupRef.current.rotation.x += (targetRotationX + targetMouseTiltX - groupRef.current.rotation.x) * 0.05;
-      groupRef.current.rotation.y += (targetRotationY - groupRef.current.rotation.y) * 0.05;
-      groupRef.current.position.y += (targetY - groupRef.current.position.y) * 0.1;
+      // On first frame, snap to position (no smoothing) to avoid FOUC
+      if (!initializedRef.current) {
+        initializedRef.current = true;
+        groupRef.current.rotation.x = targetRotationX + targetMouseTiltX;
+        groupRef.current.rotation.y = targetRotationY;
+        groupRef.current.position.y = targetY;
+      } else {
+        groupRef.current.rotation.x += (targetRotationX + targetMouseTiltX - groupRef.current.rotation.x) * 0.05;
+        groupRef.current.rotation.y += (targetRotationY - groupRef.current.rotation.y) * 0.05;
+        groupRef.current.position.y += (targetY - groupRef.current.position.y) * 0.1;
+      }
     }
   });
 

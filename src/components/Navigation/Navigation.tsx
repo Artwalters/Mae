@@ -29,6 +29,7 @@ const sectionColors: { id: string; bg: string }[] = [
 
 export default function Navigation() {
   const [active, setActive] = useState(false);
+  const [introReady, setIntroReady] = useState(false);
   const hamburgerRef = useRef<HTMLButtonElement>(null);
   const lottieRef = useRef<any>(null);
   const tagLeftRef = useRef<HTMLButtonElement>(null);
@@ -36,6 +37,13 @@ export default function Navigation() {
   const menuItemRefs = useRef<(HTMLLIElement | null)[]>([]);
   const hoveredIndexRef = useRef(0);
   const lenis = useLenis();
+
+  // Listen for hero intro complete event
+  useEffect(() => {
+    const handleIntroComplete = () => setIntroReady(true);
+    window.addEventListener('heroIntroComplete', handleIntroComplete);
+    return () => window.removeEventListener('heroIntroComplete', handleIntroComplete);
+  }, []);
 
   const open = useCallback(() => {
     setActive(true);
@@ -184,6 +192,7 @@ export default function Navigation() {
     <nav
       className={styles.nav}
       data-navigation-status={active ? 'active' : 'not-active'}
+      style={{ opacity: introReady ? 1 : 0, transition: 'opacity 0.8s ease' }}
     >
       {/* Hamburger */}
       <button
