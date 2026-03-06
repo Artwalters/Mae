@@ -65,7 +65,7 @@ html::-webkit-scrollbar {
 
   /* Typography - Golden Ratio (1.618) */
   --font-ratio: 1.618;
-  --font-tag: 0.5em; /*tags and buttons*/
+  --font-tag: 0.55em; /*tags and buttons*/
   --font-small: 0.65em;
   --font-par: 0.90em;
   --font-h4: 1.618em;

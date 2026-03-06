@@ -8,6 +8,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Logo3D from './LogoParticles';
 import WaterEffect from './WaterEffect';
 import { useSharedVideo } from '@/context/SharedVideoContext';
+import { usePanel } from '@/context/PanelContext';
 import cdn from '@/lib/cdn';
 import styles from './ParticleHero.module.css';
 
@@ -21,6 +22,7 @@ export default function ParticleFooter() {
   const containerRef = useRef<HTMLDivElement>(null);
   const footerTagsRef = useRef<HTMLDivElement>(null);
   const { video: sharedVideo, texture: sharedTexture } = useSharedVideo();
+  const { openPanel } = usePanel();
   const mouseRef = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
@@ -140,19 +142,49 @@ export default function ParticleFooter() {
         </button>
       </div>
 
-      {/* Bottom bar */}
-      <div className={styles.bottomBar}>
-        <span className={styles.bottomBarText}>&copy; 2026 M.A.E. All rights reserved.</span>
-        <div className={styles.bottomBarSocials}>
-          <a href="https://www.instagram.com/m.a.e.coaching.fysiotherapie/" target="_blank" rel="noopener noreferrer" className={styles.bottomBarSocialLink}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-          </a>
-          <a href="https://www.tiktok.com/@maecoaching" target="_blank" rel="noopener noreferrer" className={styles.bottomBarSocialLink}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 0 0-.79-.05A6.34 6.34 0 0 0 3.15 15a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.7a8.18 8.18 0 0 0 4.76 1.52v-3.4a4.85 4.85 0 0 1-1-.13z"/></svg>
-          </a>
+      {/* Mobile: socials + legal above CTA buttons */}
+      {isMobile && (
+        <div className={styles.footerMobileBottom}>
+          <a href="/privacy" className={styles.footerMobileLegalLink}>Legal</a>
+          <div className={styles.footerMobileSocials}>
+            <a href="https://www.instagram.com/m.a.e.coaching.fysiotherapie/" target="_blank" rel="noopener noreferrer" className={styles.bottomBarSocialLink}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="https://www.tiktok.com/@maecoaching" target="_blank" rel="noopener noreferrer" className={styles.bottomBarSocialLink}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 0 0-.79-.05A6.34 6.34 0 0 0 3.15 15a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.7a8.18 8.18 0 0 0 4.76 1.52v-3.4a4.85 4.85 0 0 1-1-.13z"/></svg>
+            </a>
+          </div>
+          <a href="https://walters.studio" target="_blank" rel="noopener noreferrer" className={styles.footerMobileLegalLink}>by walters.studio</a>
         </div>
-        <a href="/privacy" className={styles.bottomBarLink}>Privacy Policy</a>
-      </div>
+      )}
+
+      {/* Mobile CTA buttons */}
+      {isMobile && (
+        <div className={styles.mobileCta}>
+          <button className={styles.mobileCtaGreen} onClick={() => openPanel('start-nu', 'fysio')}>
+            Fysiotherapie
+          </button>
+          <button className={styles.mobileCtaGray} onClick={() => openPanel('start-nu', 'leefstijl')}>
+            Leefstijlcoaching
+          </button>
+        </div>
+      )}
+
+      {/* Bottom bar - desktop only */}
+      {!isMobile && (
+        <div className={styles.bottomBar}>
+          <span className={styles.bottomBarText}>&copy; 2026 M.A.E. All rights reserved.</span>
+          <div className={styles.bottomBarSocials}>
+            <a href="https://www.instagram.com/m.a.e.coaching.fysiotherapie/" target="_blank" rel="noopener noreferrer" className={styles.bottomBarSocialLink}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="https://www.tiktok.com/@maecoaching" target="_blank" rel="noopener noreferrer" className={styles.bottomBarSocialLink}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 0 0-.79-.05A6.34 6.34 0 0 0 3.15 15a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.7a8.18 8.18 0 0 0 4.76 1.52v-3.4a4.85 4.85 0 0 1-1-.13z"/></svg>
+            </a>
+          </div>
+          <a href="/privacy" className={styles.bottomBarLink}>Privacy Policy</a>
+        </div>
+      )}
 
       <Canvas
         orthographic

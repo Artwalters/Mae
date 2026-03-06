@@ -19,8 +19,8 @@
   border: none;
   justify-content: center;
   align-items: center;
-  width: 4em;
-  height: 4em;
+  width: 40px;
+  height: 40px;
   display: flex;
   position: fixed;
   top: 1em;
@@ -38,50 +38,26 @@
   display: block;
   position: absolute;
   background-color: currentColor;
-  width: 2em;
-  height: 0.125em;
-  transition: transform 0.5s cubic-bezier(.7, 0, .3, 1), opacity 0.3s ease;
-  transform: translate(0, 0) rotate(0.001deg);
+  width: 16px;
+  height: 2px;
+  transition: transform 0.4s cubic-bezier(.7, 0, .3, 1);
 }
 
 .hamburgerBar:nth-child(1) {
-  transform: translate(0, -0.45em) scale(1, 1) rotate(0.001deg);
+  transform: translate(0, -3px) rotate(0.001deg);
 }
 
-.hamburgerBar:nth-child(3) {
-  transform: translate(0, 0.45em) scale(1, 1) rotate(0.001deg);
-}
-
-/* Hamburger hover */
-.hamburger:hover .hamburgerBar:nth-child(1) {
-  transform: translate(0, -0.45em) scale(0.5, 1) rotate(0.001deg);
-}
-
-.hamburger:hover .hamburgerBar:nth-child(3) {
-  transform: translate(0, 0.45em) scale(0.5, 1) rotate(0.001deg);
+.hamburgerBar:nth-child(2) {
+  transform: translate(0, 3px) rotate(0.001deg);
 }
 
 /* Hamburger active (X) */
 [data-navigation-status="active"] .hamburgerBar:nth-child(1) {
-  transform: translate(0, 0) rotate(45deg) scale(1, 1);
+  transform: translate(0, 0) rotate(45deg);
 }
 
 [data-navigation-status="active"] .hamburgerBar:nth-child(2) {
-  transform: translate(-200%, 0) rotate(0.001deg) scale(0, 1);
-  opacity: 0;
-}
-
-[data-navigation-status="active"] .hamburgerBar:nth-child(3) {
-  transform: translate(0, 0) rotate(-45deg) scale(1, 1);
-}
-
-/* Hamburger hover when active */
-[data-navigation-status="active"] .hamburger:hover .hamburgerBar:nth-child(1) {
-  transform: translate(0, 0) rotate(45deg) scale(0.7, 1);
-}
-
-[data-navigation-status="active"] .hamburger:hover .hamburgerBar:nth-child(3) {
-  transform: translate(0, 0) rotate(-45deg) scale(0.7, 1);
+  transform: translate(0, 0) rotate(-45deg);
 }
 
 /* --------------------------------- Menu Logo --------------------------------- */
@@ -245,21 +221,13 @@
 
 @media screen and (max-width: 767px) {
   .hamburger {
-    width: 5em;
-    height: 5em;
+    width: 40px;
+    height: 40px;
   }
 
   .hamburgerBar {
-    width: 2.2em;
-    height: 0.15em;
-  }
-
-  .hamburgerBar:nth-child(1) {
-    transform: translate(0, -0.4em) scale(1, 1) rotate(0.001deg);
-  }
-
-  .hamburgerBar:nth-child(3) {
-    transform: translate(0, 0.4em) scale(1, 1) rotate(0.001deg);
+    width: 16px;
+    height: 2px;
   }
 
   .menuLink {
@@ -270,7 +238,7 @@
     inset: auto auto 6.5em 50%;
     transform: translateX(-50%);
     text-align: center;
-    font-size: 0.75em;
+    font-size: var(--font-tag);
   }
 
   .menuTagRight {

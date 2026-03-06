@@ -194,7 +194,6 @@ export default function Navigation() {
       >
         <span className={styles.hamburgerBar} />
         <span className={styles.hamburgerBar} />
-        <span className={styles.hamburgerBar} />
       </button>
 
       {/* Fullscreen overlay */}
