@@ -109,7 +109,7 @@
 .tileBgAccent {
   position: absolute;
   inset: 0;
-  background: var(--color-accent);
+  background: linear-gradient(180deg, var(--color-dark) 0, var(--color-dark) 3.5em, var(--color-accent) 3.5em);
 }
 
 .tileBgDark {

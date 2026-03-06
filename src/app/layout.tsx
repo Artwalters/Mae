@@ -52,9 +52,6 @@ export const metadata: Metadata = {
       follow: true,
     },
   },
-  other: {
-    "theme-color": "#272727",
-  },
 };
 
 export default function RootLayout({
@@ -65,6 +62,7 @@ export default function RootLayout({
   return (
     <html lang="nl" suppressHydrationWarning>
       <head>
+        <meta name="theme-color" content="#272727" />
         <FontStyles />
         <Script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.3/dist/dotlottie-wc.js" type="module" crossOrigin="anonymous" strategy="beforeInteractive" />
         <script
