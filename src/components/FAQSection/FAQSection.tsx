@@ -116,7 +116,7 @@ export default function FAQSection() {
       <h2 className={styles.title}>
         <span className={styles.titleLine}>VRAGEN?</span>
         <span className={styles.titleLine}>WIJ HEBBEN</span>
-        <span className={styles.titleLine}>ANTWOORDEN.</span>
+        <span className={styles.titleLine}><span style={{ fontFeatureSettings: '"ss02" 1' }}>A</span>NTWOORDEN.</span>
       </h2>
 
       <div className={styles.list}>

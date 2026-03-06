@@ -124,7 +124,7 @@ export default function MaeSection() {
 
       {/* Main Title */}
       <h1 className={styles.title}>
-        <span className={styles.titleLine}>THE PLACE</span>
+        <span className={styles.titleLine}>THE PL<span style={{ fontFeatureSettings: '"ss02" 1' }}>A</span>CE</span>
         <span className={styles.titleLine}>WHERE YOU MOVE</span>
         <span className={styles.titleLine}>ADAPT EVOLVE</span>
       </h1>

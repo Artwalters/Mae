@@ -13,7 +13,7 @@ export default function CTASection() {
         </span>
         <h2 className={styles.title}>
           <span className={styles.titleLine}>ARE YOU READY</span>
-          <span className={styles.titleLine}>TO EVOLVE?</span>
+          <span className={styles.titleLine}>TO E<span style={{ fontFeatureSettings: '"ss02" 1' }}>V</span>OL<span style={{ fontFeatureSettings: '"ss02" 1' }}>V</span>E?</span>
         </h2>
       </div>
 
