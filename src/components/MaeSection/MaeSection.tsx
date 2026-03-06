@@ -96,7 +96,6 @@ export default function MaeSection() {
           rotation: 0,
           ease: 'power1.inOut',
           duration: duration,
-          force3d: true,
         }, delay);
 
         if (shadows[index - 1]) {
@@ -158,7 +157,7 @@ export default function MaeSection() {
                   <p className={`${styles.description} par`}>{item.description}</p>
                   <div className={styles.keywords}>
                     {item.keywords.map((keyword, i) => (
-                      <span key={i}>{keyword}{i < item.keywords.length - 1 ? ' /' : ''}</span>
+                      <span key={i} className={styles.keywordTag}>{keyword}</span>
                     ))}
                   </div>
                 </div>

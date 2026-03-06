@@ -139,12 +139,19 @@
 .keywords {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5em;
-  font-family: 'Inter', sans-serif;
-  font-size: var(--font-small);
-  font-weight: 100;
-  font-style: italic;
+  gap: 0.3em;
+}
+
+.keywordTag {
+  font-family: var(--font-mono);
+  font-size: calc(var(--font-tag) * 0.8);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   color: var(--color-dark);
+  background: var(--color-accent);
+  padding: 0.2em 0.5em;
+  line-height: 1;
 }
 
 /* Image */
@@ -211,11 +218,6 @@
   }
 
   .keywords {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 0.5em;
-    font-size: 0.5em;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+    gap: 0.25em;
   }
 }

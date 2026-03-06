@@ -1,5 +1,5 @@
 .panel {
-  color: var(--color-dark);
+  color: var(--color-white);
 }
 
 /* Hero Section */
@@ -40,7 +40,7 @@
 .aboutSection {
   margin-bottom: 2em;
   padding-bottom: 2em;
-  border-bottom: 0.25px solid rgba(0, 0, 0, 0.3);
+  border-bottom: 0.25px solid rgba(255, 255, 255, 0.2);
 }
 
 .aboutHeader {
@@ -48,7 +48,7 @@
   justify-content: space-between;
   align-items: center;
   padding-top: 1em;
-  border-top: 0.25px solid rgba(0, 0, 0, 0.3);
+  border-top: 0.25px solid rgba(255, 255, 255, 0.2);
   margin-bottom: 2em;
 }
 
@@ -90,7 +90,7 @@
   gap: 1em;
   margin-top: 2em;
   padding-top: 2em;
-  border-top: 0.25px solid rgba(0, 0, 0, 0.3);
+  border-top: 0.25px solid rgba(255, 255, 255, 0.2);
 }
 
 .photo {
@@ -129,7 +129,7 @@
 .section {
   margin-bottom: 2em;
   padding-bottom: 2em;
-  border-bottom: 0.25px solid rgba(0, 0, 0, 0.3);
+  border-bottom: 0.25px solid rgba(255, 255, 255, 0.2);
 }
 
 .section .aboutHeader {
@@ -163,7 +163,7 @@
   display: grid;
   grid-template-columns: 0.5fr 1fr;
   padding: 2em 0;
-  border-bottom: 0.25px solid rgba(0, 0, 0, 0.3);
+  border-bottom: 0.25px solid rgba(255, 255, 255, 0.2);
 }
 
 .step:last-child {
@@ -212,9 +212,9 @@
   width: 40px;
   height: 40px;
   background: transparent;
-  border: 1px solid var(--color-dark);
+  border: 1px solid var(--color-white);
   border-radius: 0.15em;
-  color: var(--color-dark);
+  color: var(--color-white);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -246,7 +246,7 @@
   display: flex;
   justify-content: space-between;
   padding-top: 1.5em;
-  border-top: 0.25px solid rgba(0, 0, 0, 0.3);
+  border-top: 0.25px solid rgba(255, 255, 255, 0.2);
 }
 
 .timelineItem {
@@ -273,7 +273,7 @@
   font-size: var(--font-h4);
   font-weight: 400;
   line-height: 1;
-  color: var(--color-dark);
+  color: var(--color-white);
   display: block;
 }
 

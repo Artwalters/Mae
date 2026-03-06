@@ -32,24 +32,6 @@
   object-fit: cover;
 }
 
-.sticker {
-  position: absolute;
-  top: -3em;
-  right: -3em;
-  width: 18em;
-  pointer-events: none;
-  z-index: 2;
-  filter: drop-shadow(0 0.25em 1em rgba(0, 0, 0, 0.3));
-  transform: rotate(12deg);
-}
-
-.typeBanner {
-  width: 25%;
-  margin-top: 0.4em;
-  pointer-events: none;
-  user-select: none;
-  filter: invert(1);
-}
 
 /* Responsive - Tablet */
 @media screen and (max-width: 991px) {
@@ -76,13 +58,4 @@
     min-height: 50vh;
   }
 
-  .sticker {
-    width: 10em;
-    top: -2em;
-    right: -1.5em;
-  }
-
-  .typeBanner {
-    width: 50%;
-  }
 }

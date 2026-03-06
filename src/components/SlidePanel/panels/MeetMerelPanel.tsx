@@ -62,7 +62,7 @@ export default function MeetMerelPanel() {
 
       {/* Hero Image */}
       <div className={styles.heroImage}>
-        <img src={`${basePath}/img/maarten.png`} alt="Merel" className="img-cover" />
+        <img src={`${basePath}/img/merel-consult.jpeg`} alt="Merel leefstijlcoach bij MAE in gesprek met cliënt" className="img-cover" style={{ objectPosition: 'center 5%' }} />
       </div>
 
       {/* Over Merel Section */}
@@ -82,13 +82,13 @@ export default function MeetMerelPanel() {
         </div>
         <div className={styles.photoGrid}>
           <div className={styles.photo}>
-            <img src={`${basePath}/img/maarten.png`} alt="Merel" className="img-cover" />
+            <img src={`${basePath}/img/merel-coaching.jpeg`} alt="Merel begeleidt cliënt bij leefstijlcoaching" className="img-cover" />
           </div>
           <div className={styles.photo}>
-            <img src={`${basePath}/img/run.png`} alt="Training" className="img-cover" />
+            <img src={`${basePath}/img/merel-training.jpeg`} alt="Merel begeleidt functionele training bij MAE" className="img-cover" />
           </div>
           <div className={styles.photo}>
-            <img src={`${basePath}/img/RICKv2.png`} alt="Coaching" className="img-cover" />
+            <img src={`${basePath}/img/merel-meting.jpeg`} alt="Lichaamsmeting als onderdeel van leefstijlcoaching" className="img-cover" />
           </div>
         </div>
       </section>

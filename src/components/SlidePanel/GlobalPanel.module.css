@@ -21,12 +21,12 @@
   border-radius: 0.15em;
   cursor: pointer;
   transition: all 0.4s ease;
-  background: rgba(0, 0, 0, 0.04);
-  color: var(--color-dark);
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-white);
 }
 
 .navTab:hover {
-  background: rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .navTabActive {
@@ -57,7 +57,7 @@
   background: linear-gradient(
     120deg,
     color-mix(in srgb, var(--color-accent) 90%, var(--color-dark)) calc(var(--panel-progress, 0) * 100%),
-    rgba(0, 0, 0, 0.04) calc(var(--panel-progress, 0) * 100%)
+    rgba(255, 255, 255, 0.1) calc(var(--panel-progress, 0) * 100%)
   );
   color: var(--color-white);
 }
@@ -66,17 +66,17 @@
   background: linear-gradient(
     120deg,
     color-mix(in srgb, var(--color-accent) 90%, var(--color-dark)) calc(var(--panel-progress, 0) * 100%),
-    rgba(0, 0, 0, 0.04) calc(var(--panel-progress, 0) * 100%)
+    rgba(255, 255, 255, 0.1) calc(var(--panel-progress, 0) * 100%)
   );
 }
 
 .backButton {
   aspect-ratio: 1;
   flex-shrink: 0;
-  background: var(--color-dark);
+  background: var(--color-light);
   border: none;
   border-radius: 0.15em;
-  color: var(--color-white);
+  color: var(--color-dark);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -98,6 +98,7 @@
   font-family: var(--font-mono);
   font-size: var(--font-tag);
 }
+
 
 @media screen and (max-width: 767px) {
   .navTab {

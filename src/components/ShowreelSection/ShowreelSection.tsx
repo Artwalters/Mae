@@ -16,17 +16,7 @@ export default function ShowreelSection() {
             loop
             playsInline
           />
-          <img
-            src={`${basePath}/img/sticker.png`}
-            alt="MAE sticker"
-            className={styles.sticker}
-          />
         </div>
-        <img
-          src={`${basePath}/img/type-banner.png`}
-          alt=""
-          className={styles.typeBanner}
-        />
       </div>
     </section>
   );

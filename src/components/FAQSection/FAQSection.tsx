@@ -90,7 +90,6 @@ export default function FAQSection() {
           rotation: 0,
           ease: 'power1.inOut',
           duration: duration,
-          force3d: true,
         }, delay);
 
         if (shadows[index - 1]) {

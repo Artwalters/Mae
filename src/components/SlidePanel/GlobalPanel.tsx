@@ -94,7 +94,7 @@ export default function GlobalPanel() {
   );
 
   return (
-    <SlidePanel isOpen={activePanel !== null} onClose={closePanel} header={navBar}>
+    <SlidePanel isOpen={activePanel !== null} onClose={closePanel} header={navBar} dark>
       {renderPanelContent()}
     </SlidePanel>
   );

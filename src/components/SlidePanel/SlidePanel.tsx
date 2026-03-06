@@ -15,6 +15,7 @@ interface SlidePanelProps {
   onClose: () => void;
   children: ReactNode;
   header?: ReactNode;
+  dark?: boolean;
 }
 
 // How much overscroll (in px of wheel delta) to fill phase 2
@@ -24,7 +25,7 @@ const OVERSCROLL_DECAY = 0.94;
 // Lerp speed for smooth progress bar animation (0-1, lower = smoother)
 const PROGRESS_LERP = 0.12;
 
-export default function SlidePanel({ isOpen, onClose, children, header }: SlidePanelProps) {
+export default function SlidePanel({ isOpen, onClose, children, header, dark }: SlidePanelProps) {
   const panelRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -457,7 +458,7 @@ export default function SlidePanel({ isOpen, onClose, children, header }: SlideP
         onClick={onClose}
       />
 
-      <div ref={panelRef} className={styles.panel}>
+      <div ref={panelRef} className={styles.panel} data-panel-dark={dark ? 'true' : undefined}>
         <div ref={contentRef} className={styles.content} data-lenis-prevent>
           <div className={styles.panelHeader}>
             <div className={styles.panelHeaderInner}>
