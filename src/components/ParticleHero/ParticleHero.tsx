@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useState, useEffect, useRef, useCallback } from 'react';
+import { Suspense, useState, useEffect, useRef } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Center } from '@react-three/drei';
 import { gsap } from 'gsap';
@@ -9,43 +9,25 @@ import Logo3D from './LogoParticles';
 import WaterEffect from './WaterEffect';
 import { useSharedVideo } from '@/context/SharedVideoContext';
 import { usePanel } from '@/context/PanelContext';
-import { useLenis } from '@/components/SmoothScroll';
 import styles from './ParticleHero.module.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
-function MobileVideoBackground({ video, brightnessRef }: { video: HTMLVideoElement | null; brightnessRef: React.RefObject<number> }) {
+function MobileVideoBackground({ video }: { video: HTMLVideoElement | null }) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!video || !containerRef.current) return;
     video.className = styles.mobileVideo;
     containerRef.current.appendChild(video);
-    // Re-trigger play after appending to DOM (required on mobile Safari)
     video.play().catch(() => {});
 
-    // Animate mobile video brightness via filter
-    let raf: number;
-    let running = true;
-    const updateBrightness = () => {
-      // Only update if the video is still in this container
-      if (running && video.parentNode === containerRef.current) {
-        video.style.filter = `brightness(${brightnessRef.current})`;
-      }
-      if (running) raf = requestAnimationFrame(updateBrightness);
-    };
-    raf = requestAnimationFrame(updateBrightness);
-
     return () => {
-      running = false;
-      cancelAnimationFrame(raf);
-      // Reset filter when video leaves hero
-      video.style.filter = '';
       if (video.parentNode === containerRef.current) {
         containerRef.current?.removeChild(video);
       }
     };
-  }, [video, brightnessRef]);
+  }, [video]);
 
   return <div ref={containerRef} />;
 }
@@ -62,10 +44,9 @@ export default function ParticleHero() {
   const { openPanel } = usePanel();
   const mouseRef = useRef({ x: 0, y: 0 });
   const introOffsetRef = useRef(2.0); // Logo starts tilted+dropped below screen
-  const brightnessRef = useRef(0.05); // Start very dark
+  const mobileVideoWrapRef = useRef<HTMLDivElement>(null);
   const loaderRef = useRef<HTMLDivElement>(null);
   const [introComplete, setIntroComplete] = useState(false);
-  const lenis = useLenis();
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -141,11 +122,11 @@ export default function ParticleHero() {
       ease: 'power3.out',
     });
 
-    // Background brightens gradually after logo has mostly landed
+    // Background fades in gradually after logo has mostly landed
     const brightenDelay = startDelay + logoDuration * 0.5;
-    if (isMob) {
-      gsap.to(brightnessRef, {
-        current: 0.22,
+    if (isMob && mobileVideoWrapRef.current) {
+      gsap.to(mobileVideoWrapRef.current, {
+        opacity: 1,
         duration: brightenDuration,
         delay: brightenDelay,
         ease: 'power2.out',
@@ -238,7 +219,11 @@ export default function ParticleHero() {
       )}
 
       {/* Mobile video background — reuse the shared video element */}
-      {isMobile && <MobileVideoBackground video={sharedVideo} brightnessRef={brightnessRef} />}
+      {isMobile && (
+        <div ref={mobileVideoWrapRef} className={styles.mobileVideoWrap} style={{ opacity: 0 }}>
+          <MobileVideoBackground video={sharedVideo} />
+        </div>
+      )}
 
       {/* Side Labels - start hidden, fade in after intro */}
       <div ref={sideLabelsRef} className={styles.sideLabels} style={{ opacity: 0 }}>
