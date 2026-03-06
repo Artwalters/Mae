@@ -17,26 +17,32 @@ const fysioReviews = [
   {
     text: 'Na jaren dagelijkse pijn kan ik weer vrij bewegen. Waar anderen zeggen "minder bewegen", helpt Maarten juist door in beweging te blijven. Mijn kwaliteit van leven is echt verbeterd.',
     author: 'Lisa Nooijen',
+    tag: 'Pijnvrij bewegen',
   },
   {
     text: 'Kwam met rugklachten, til nu deadlifts boven de 100kg,zonder pijn. Iets wat ik nooit voor mogelijk had gehouden.',
     author: 'Kimberly Fellings',
+    tag: 'Krachtsport',
   },
   {
     text: 'Andere fysio\'s zeiden: minder zwaar tillen. Maarten liet me juist wél zwaar tillen, op de juiste manier. Rugklachten verdwenen.',
     author: 'Jools Korver',
+    tag: 'Rugklachten',
   },
   {
     text: 'Dacht dat mijn rugpijn niet meer weg zou gaan. Dankzij Maarten ben ik nu sterker dan daarvoor en kan ik pijnvrij powerliften.',
     author: 'Kim de Haar',
+    tag: 'Powerlifting',
   },
   {
     text: 'Maarten ontdekte de oorzaak van mijn knieproblemen,bijzonder vanwege mijn onderbeenamputatie. Sindsdien klachtenvrij. Hij pusht op het juiste moment, maar remt ook af waar nodig.',
     author: 'Shn',
+    tag: 'Revalidatie',
   },
   {
     text: 'Na een paar weken al verbetering, inmiddels klachtenvrij. De persoonlijke aandacht en deskundigheid maken echt het verschil.',
     author: 'Gijs Pinckers',
+    tag: 'Herstel',
   },
 ];
 
@@ -45,26 +51,32 @@ const leefstijlReviews = [
   {
     text: 'Merel kijkt verder dan voeding en beweging,ook slaap, zelfbeeld en mentale gezondheid krijgen aandacht. Stap voor stap dichter bij mijn doelen.',
     author: 'MK',
+    tag: 'Mentale gezondheid',
   },
   {
     text: 'Merel gaat verder dan alleen voeding en sport. Volledig maatwerk, professioneel en motiverend. Vanaf moment één voelde ik me gehoord.',
     author: 'Fauve Clignet',
+    tag: 'Maatwerk',
   },
   {
     text: 'Merel maakte me bewust van mijn eetgedrag in combinatie met emoties. Ik maak nu bewuste keuzes, maar blijf genieten.',
     author: 'Lieke Colier',
+    tag: 'Voeding',
   },
   {
     text: 'Merel luistert goed naar mijn wensen en leert me enorm veel over sporten en voeding. Resultaten komen op precies het juiste tempo.',
     author: 'Dounia Bellari',
+    tag: 'Sport & voeding',
   },
   {
     text: 'Merel liet me inzien dat gezondheid veel meer is dan fitness en voeding. Begeleiding die aansluit op mij als persoon.',
     author: 'Koen van de Berg',
+    tag: 'Leefstijl',
   },
   {
     text: 'Na 5 jaar zelfstandig fitnessen liep ik vast. Bij MAE werd er aandacht gegeven aan hoe ik in mijn vel zat, niet alleen aan resultaten. Aan te bevelen voor beginner én gevorderd.',
     author: 'Jodie Van Hek',
+    tag: 'Zelfbeeld',
   },
 ];
 
@@ -79,11 +91,12 @@ function StarIcon({ className }: { className: string }) {
 interface ReviewCardProps {
   text: string;
   author: string;
+  tag: string;
 }
 
 const GOOGLE_REVIEWS_URL = 'https://www.google.com/search?si=AL3DRZEsmMGCryMMFSHJ3StBhOdZ2-6yYkXd_doETEE1OR-qOXL0frrsiugcngnYD9TKzoJjmCFtk1r6hFr4Vw13AN8ohrXHxyZw4DjqsdgofjgipVpLVXkIR6eJ42B5N8FoL9EWB6BQmXE4rSmPiealtE06X7Ddi0zv8mvSZwnUp9pcdgBWxWM%3D&q=M.A.E.+Coaching+en+Fysiotherapie+Reviews';
 
-function ReviewCard({ text, author }: ReviewCardProps) {
+function ReviewCard({ text, author, tag }: ReviewCardProps) {
   const initial = author.charAt(0).toUpperCase();
 
   return (
@@ -93,15 +106,11 @@ function ReviewCard({ text, author }: ReviewCardProps) {
       rel="noopener noreferrer"
       className={styles.reviewCard}
     >
-      <div className={styles.reviewStars}>
-        {[...Array(5)].map((_, i) => (
-          <StarIcon key={i} className={styles.reviewStar} />
-        ))}
-      </div>
       <p className={`${styles.reviewText} par`}>{text}</p>
       <div className={styles.reviewAuthorRow}>
         <div className={styles.reviewInitial}>{initial}</div>
         <span className={styles.reviewAuthor}>{author}</span>
+        <span className={styles.reviewTag}>{tag}</span>
       </div>
     </a>
   );

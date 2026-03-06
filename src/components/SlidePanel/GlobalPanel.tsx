@@ -9,7 +9,7 @@ import StartNuPanel from './panels/StartNuPanel';
 import styles from './GlobalPanel.module.css';
 
 export default function GlobalPanel() {
-  const { activePanel, openPanel, closePanel, onBack } = usePanel();
+  const { activePanel, panelVariant, openPanel, closePanel, onBack } = usePanel();
   const lastPanelRef = useRef<string | null>(null);
   const navBarRef = useRef<HTMLDivElement>(null);
   const [panelPhase, setPanelPhase] = useState(1);
@@ -61,7 +61,7 @@ export default function GlobalPanel() {
   const isMeetPanel = panelToRender === 'meet-maarten' || panelToRender === 'meet-merel';
   const isStartNu = panelToRender === 'start-nu';
   const showStartTraject = isMeetPanel && panelPhase === 2;
-  const isMerel = panelToRender === 'meet-merel' || (isStartNu && lastPanelRef.current === 'meet-merel');
+  const isMerel = panelToRender === 'meet-merel' || (isStartNu && (panelVariant === 'leefstijl' || lastPanelRef.current === 'meet-merel'));
   const meetName = isMerel ? 'Meet Merel' : 'Meet Maarten';
   const meetPanel = isMerel ? 'meet-merel' : 'meet-maarten';
   const startVariant = isMerel ? 'leefstijl' : 'fysio';

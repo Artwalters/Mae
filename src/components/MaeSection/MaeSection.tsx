@@ -71,7 +71,6 @@ export default function MaeSection() {
           y: -offset,
           rotation: -3 - (index - 1) * 1.5,
           transformOrigin: 'right top',
-          force3d: true,
         });
       }
     });

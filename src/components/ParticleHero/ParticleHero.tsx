@@ -8,6 +8,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Logo3D from './LogoParticles';
 import WaterEffect from './WaterEffect';
 import { useSharedVideo } from '@/context/SharedVideoContext';
+import { usePanel } from '@/context/PanelContext';
 import styles from './ParticleHero.module.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -37,6 +38,7 @@ export default function ParticleHero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const sideLabelsRef = useRef<HTMLDivElement>(null);
   const { video: sharedVideo, texture: sharedTexture } = useSharedVideo();
+  const { openPanel } = usePanel();
   const mouseRef = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
@@ -138,11 +140,11 @@ export default function ParticleHero() {
 
       {/* Side Labels - fade out as you scroll */}
       <div ref={sideLabelsRef} className={styles.sideLabels}>
-        <span className={`${styles.sideLabel} ${styles.left}`}>
-          [CONTACT]
-        </span>
-        <button className={`${styles.sideLabel} ${styles.right}`} onClick={() => document.getElementById('mae-section')?.scrollIntoView({ behavior: 'smooth' })}>
-          [SCROLL DOWN]
+        <button className={`${styles.sideLabel} ${styles.left}`} onClick={() => openPanel('start-nu', 'fysio')}>
+          [START FYSIOTHERAPIE]
+        </button>
+        <button className={`${styles.sideLabel} ${styles.right}`} onClick={() => openPanel('start-nu', 'leefstijl')}>
+          [START LEEFSTIJL COACHING]
         </button>
       </div>
 
