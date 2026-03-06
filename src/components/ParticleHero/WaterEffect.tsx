@@ -8,9 +8,10 @@ interface WaterEffectProps {
   brightness?: number;
   sharedTexture?: THREE.VideoTexture | null;
   sharedVideo?: HTMLVideoElement | null;
+  isMobile?: boolean;
 }
 
-export default function WaterEffect({ brightness = 0.07, sharedTexture, sharedVideo }: WaterEffectProps) {
+export default function WaterEffect({ brightness = 0.07, sharedTexture, sharedVideo, isMobile = false }: WaterEffectProps) {
   const { gl, size, scene, camera } = useThree();
   const meshRef = useRef<THREE.Mesh>(null);
   const mouse = useRef(new THREE.Vector2(0.5, 0.5));
@@ -342,6 +343,17 @@ export default function WaterEffect({ brightness = 0.07, sharedTexture, sharedVi
   useFrame((state, delta) => {
     const clampedDelta = Math.min(delta * 60, 1.4);
     const currentTarget = gl.getRenderTarget();
+
+    // Auto-drift mouse on mobile
+    if (isMobile) {
+      const t = state.clock.elapsedTime;
+      const newX = 0.5 + Math.sin(t * 0.4) * 0.3 + Math.sin(t * 1.1) * 0.15;
+      const newY = 0.5 + Math.cos(t * 0.3) * 0.25 + Math.sin(t * 0.9) * 0.15;
+      mouseVelocity.current.x = newX - mouse.current.x;
+      mouseVelocity.current.y = newY - mouse.current.y;
+      mouse.current.x = newX;
+      mouse.current.y = newY;
+    }
 
     // 1. Water simulation
     try {

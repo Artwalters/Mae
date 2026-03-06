@@ -34,27 +34,53 @@ export default function Logo3D({ scale = 1, scrollProgressRef, mouseRef, mode = 
     materialRef.current = new THREE.ShaderMaterial({
       uniforms: {
         map: { value: tex },
+        uMobile: { value: isMobile ? 1.0 : 0.0 },
+        uTime: { value: 0.0 },
       },
       vertexShader: `
         varying vec2 vUv;
+        varying vec2 vScreenPos;
         void main() {
           vUv = vec2(uv.x, uv.y - 0.1);
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+          vec4 clipPos = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+          vScreenPos = clipPos.xy / clipPos.w * 0.5 + 0.5;
+          gl_Position = clipPos;
         }
       `,
       fragmentShader: `
         uniform sampler2D map;
+        uniform float uMobile;
+        uniform float uTime;
         varying vec2 vUv;
+        varying vec2 vScreenPos;
         void main() {
           vec3 edgeColor = vec3(0.616, 0.941, 0.196);
           float margin = 0.02;
           bool isEdge = vUv.x < margin || vUv.x > 1.0 - margin ||
                         vUv.y < margin || vUv.y > 1.0 - margin;
+
+          vec3 color;
           if (isEdge) {
-            gl_FragColor = vec4(edgeColor, 1.0);
+            color = edgeColor;
           } else {
-            gl_FragColor = texture2D(map, vUv);
+            color = texture2D(map, vUv).rgb;
           }
+
+          if (uMobile > 0.5) {
+            float gray = dot(color, vec3(0.299, 0.587, 0.114));
+            vec3 grayColor = vec3(gray);
+
+            vec2 reveal = vec2(
+              0.5 + sin(uTime * 0.4) * 0.3 + sin(uTime * 1.1) * 0.15,
+              0.5 + cos(uTime * 0.3) * 0.25 + sin(uTime * 0.9) * 0.15
+            );
+            float dist = distance(vScreenPos, reveal);
+            float radius = 0.35;
+            float blend = smoothstep(radius, radius * 0.15, dist);
+            color = mix(grayColor, color, blend);
+          }
+
+          gl_FragColor = vec4(color, 1.0);
         }
       `,
     });
@@ -88,8 +114,12 @@ export default function Logo3D({ scale = 1, scrollProgressRef, mouseRef, mode = 
   }, [scene, ready]);
 
   // Smooth rotation and position based on scroll
-  useFrame(() => {
+  useFrame((state) => {
     if (!groupRef.current) return;
+
+    if (materialRef.current?.uniforms.uTime) {
+      materialRef.current.uniforms.uTime.value = state.clock.elapsedTime;
+    }
 
     {
       const scrollProgress = scrollProgressRef?.current ?? 0;
@@ -106,9 +136,9 @@ export default function Logo3D({ scale = 1, scrollProgressRef, mouseRef, mode = 
         targetY = maxDrop * (1 - scrollProgress);
       }
 
-      // Mouse-based tilt (desktop only, hero mode)
+      // Mouse-based tilt
       const mouse = mouseRef?.current ?? { x: 0, y: 0 };
-      const mouseTilt = !isMobile ? 0.15 : 0;
+      const mouseTilt = isMobile ? 0.25 : 0.15;
       const targetRotationY = mouse.x * mouseTilt;
       const targetMouseTiltX = mouse.y * -mouseTilt * 0.5;
 

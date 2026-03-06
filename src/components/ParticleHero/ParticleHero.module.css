@@ -195,7 +195,49 @@
   color: var(--color-white);
 }
 
+/* Mobile CTA Buttons */
+.mobileCta {
+  display: none;
+}
+
 @media screen and (max-width: 767px) {
+  .mobileCta {
+    display: flex;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    gap: 0;
+    z-index: 10;
+  }
+
+  .mobileCtaGreen,
+  .mobileCtaGray {
+    flex: 1;
+    padding: 0.9em 1em;
+    font-family: var(--font-secondary);
+    font-size: var(--font-small);
+    font-weight: var(--font-weight);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+  }
+
+  .mobileCtaGreen {
+    background: var(--color-accent);
+    color: var(--color-dark);
+    clip-path: polygon(0 0, 100% 0, calc(100% - 1em) 100%, 0 100%);
+  }
+
+  .mobileCtaGray {
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--color-white);
+    margin-left: -1em;
+    clip-path: polygon(1em 0, 100% 0, 100% 100%, 0 100%);
+  }
+
   .sideLabels {
     display: none;
   }

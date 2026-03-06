@@ -9,11 +9,11 @@ import styles from './Navigation.module.css';
 gsap.registerPlugin(ScrollTrigger);
 
 const navItems = [
-  { label: 'Home', target: 'top', tagLeft: 'info@mae-studio.nl', tagRight: 'Instagram', linkLeft: 'mailto:info@mae-studio.nl', linkRight: 'https://instagram.com' },
+  { label: 'Home', target: 'top', tagLeft: 'info@moveadaptevolve.nl', tagRight: 'Instagram', linkLeft: 'mailto:info@moveadaptevolve.nl', linkRight: 'https://www.instagram.com/m.a.e.coaching.fysiotherapie/' },
   { label: 'Fysio', target: 'herstel-section', tagLeft: 'Meet Maarten', tagRight: 'Meer info', linkLeft: 'herstel-section', linkRight: 'herstel-section' },
   { label: 'Leefstijl', target: 'leefstijl-section', tagLeft: 'Meet Merel', tagRight: 'Meer info', linkLeft: 'leefstijl-section', linkRight: 'leefstijl-section' },
   { label: 'FAQ', target: 'faq-section', tagLeft: 'Veelgestelde vragen', tagRight: 'Meer info', linkLeft: 'faq-section', linkRight: 'faq-section' },
-  { label: 'Contact', target: 'cta-section', accent: true, tagLeft: 'info@mae-studio.nl', tagRight: 'Neem contact op', linkLeft: 'mailto:info@mae-studio.nl', linkRight: 'cta-section' },
+  { label: 'Contact', target: 'cta-section', accent: true, tagLeft: 'info@moveadaptevolve.nl', tagRight: 'Neem contact op', linkLeft: 'mailto:info@moveadaptevolve.nl', linkRight: 'cta-section' },
 ];
 
 const sectionColors: { id: string; bg: string }[] = [
@@ -229,7 +229,7 @@ export default function Navigation() {
           ))}
         </ul>
 
-        <button ref={tagLeftRef} className={`${styles.menuTag} ${styles.menuTagLeft}`} onClick={() => handleTagClick('left')}>[info@mae-studio.nl]</button>
+        <button ref={tagLeftRef} className={`${styles.menuTag} ${styles.menuTagLeft}`} onClick={() => handleTagClick('left')}>[info@moveadaptevolve.nl]</button>
         <button ref={tagRightRef} className={`${styles.menuTag} ${styles.menuTagRight}`} onClick={() => handleTagClick('right')}>[Instagram]</button>
       </div>
     </nav>

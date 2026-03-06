@@ -65,9 +65,19 @@ export default function ParticleHero() {
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
 
-  // Mouse tracking for 3D logo tilt (desktop only)
+  // Mouse tracking for 3D logo tilt (desktop) / random drift (mobile)
   useEffect(() => {
-    if (screenSize === 'mobile') return;
+    if (screenSize === 'mobile') {
+      let raf: number;
+      const animate = (time: number) => {
+        const t = time * 0.001;
+        mouseRef.current.x = Math.sin(t * 0.4) * 0.8 + Math.sin(t * 1.1) * 0.5 + Math.cos(t * 0.7) * 0.3;
+        mouseRef.current.y = Math.cos(t * 0.3) * 0.7 + Math.sin(t * 0.9) * 0.4 + Math.cos(t * 1.4) * 0.3;
+        raf = requestAnimationFrame(animate);
+      };
+      raf = requestAnimationFrame(animate);
+      return () => cancelAnimationFrame(raf);
+    }
     const handleMouseMove = (e: MouseEvent) => {
       mouseRef.current.x = (e.clientX / window.innerWidth) * 2 - 1;
       mouseRef.current.y = (e.clientY / window.innerHeight) * 2 - 1;
@@ -148,6 +158,18 @@ export default function ParticleHero() {
         </button>
       </div>
 
+      {/* Mobile CTA buttons */}
+      {isMobile && (
+        <div className={styles.mobileCta}>
+          <button className={styles.mobileCtaGreen} onClick={() => openPanel('start-nu', 'fysio')}>
+            Fysiotherapie
+          </button>
+          <button className={styles.mobileCtaGray} onClick={() => openPanel('start-nu', 'leefstijl')}>
+            Leefstijlcoaching
+          </button>
+        </div>
+      )}
+
       <Canvas
         orthographic
         camera={{ position: [0, 0, 100], zoom, near: 0.1, far: 200 }}
@@ -163,7 +185,7 @@ export default function ParticleHero() {
               <Logo3D scale={scale} scrollProgressRef={scrollProgressRef} mouseRef={mouseRef} mode="hero" isMobile={isMobile} sharedTexture={sharedTexture} />
             </Center>
           </group>
-          {WaterComponent && <WaterComponent sharedTexture={sharedTexture} sharedVideo={sharedVideo} />}
+          {WaterComponent && <WaterComponent sharedTexture={sharedTexture} sharedVideo={sharedVideo} isMobile={isMobile} />}
         </Suspense>
       </Canvas>
     </div>
