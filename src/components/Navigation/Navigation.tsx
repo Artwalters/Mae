@@ -207,6 +207,10 @@ export default function Navigation() {
 
       {/* Fullscreen overlay */}
       <div className={styles.tile}>
+        <div className={styles.tileBg}>
+          <div className={styles.tileBgAccent} />
+          <div className={styles.tileBgDark} />
+        </div>
         {/* Logo top-left */}
         <button className={styles.logo} onClick={() => scrollTo('top')} aria-label="Home">
           <dotlottie-wc

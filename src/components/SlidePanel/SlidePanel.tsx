@@ -458,22 +458,25 @@ export default function SlidePanel({ isOpen, onClose, children, header, dark }: 
         onClick={onClose}
       />
 
-      <div ref={panelRef} className={styles.panel} data-panel-dark={dark ? 'true' : undefined}>
-        <div ref={contentRef} className={styles.content} data-lenis-prevent>
-          <div className={styles.panelHeader}>
-            <div className={styles.panelHeaderInner}>
-              {header}
-              <button className={styles.closeButton} onClick={onClose} onMouseEnter={handleCloseHover} onMouseLeave={handleCloseLeave}>
-                <svg ref={closeSvgRef} width="60%" height="60%" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                  <line ref={closeLine1Ref} x1="18" y1="6" x2="6" y2="18" />
-                  <line ref={closeLine2Ref} x1="6" y1="6" x2="18" y2="18" />
-                </svg>
-              </button>
+      <div ref={panelRef} className={styles.panelWrap} data-panel-dark={dark ? 'true' : undefined}>
+        <div className={styles.panelAccent} />
+        <div className={styles.panel}>
+          <div ref={contentRef} className={styles.content} data-lenis-prevent>
+            <div className={styles.panelHeader}>
+              <div className={styles.panelHeaderInner}>
+                {header}
+                <button className={styles.closeButton} onClick={onClose} onMouseEnter={handleCloseHover} onMouseLeave={handleCloseLeave}>
+                  <svg ref={closeSvgRef} width="60%" height="60%" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <line ref={closeLine1Ref} x1="18" y1="6" x2="6" y2="18" />
+                    <line ref={closeLine2Ref} x1="6" y1="6" x2="18" y2="18" />
+                  </svg>
+                </button>
+              </div>
+              <div className={styles.divider} />
             </div>
-            <div className={styles.divider} />
-          </div>
-          <div className={styles.contentInner}>
-            {children}
+            <div className={styles.contentInner}>
+              {children}
+            </div>
           </div>
         </div>
       </div>

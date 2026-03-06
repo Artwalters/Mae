@@ -31,7 +31,7 @@ export default function CTASection() {
         <div className={`${styles.card} ${styles.cardAccent}`}>
           <h3 className={styles.cardTitle}>Compleet overzicht</h3>
           <p className={`${styles.cardText} par`}>
-            Ontdek het volledige aanbod op HAL 13. Van coaching en training tot revalidatie — alles onder één dak.
+            Ontdek het volledige aanbod op Hal 13. Van coaching en training tot revalidatie, alles onder één dak.
           </p>
           <a href="https://www.hal13.nl/" target="_blank" rel="noopener noreferrer" className={`btn-bar ${styles.cardButton}`}>
             Bekijk alle diensten

@@ -10,12 +10,10 @@
   pointer-events: none;
 }
 
-.panel {
+/* Wrapper — handles positioning, clip-path, and data attributes */
+.panelWrap {
   position: fixed;
-  background: var(--color-dark);
   z-index: 999;
-  display: flex;
-  flex-direction: column;
   pointer-events: none;
 
   /* Desktop: right side, 65% width */
@@ -25,12 +23,38 @@
   height: 100%;
 
   clip-path: inset(0 0 0 100%);
+  transition: clip-path 1s cubic-bezier(.9, 0, .1, 1) 0.12s;
+}
+
+.panelWrap[data-panel-open="true"] {
+  clip-path: inset(0 0 0 0);
+  pointer-events: auto;
+  transition-delay: 0s;
+}
+
+/* Green accent panel — flashes behind the dark panel */
+.panelAccent {
+  position: absolute;
+  inset: 0;
+  background: var(--color-accent);
+  z-index: 0;
+}
+
+/* Dark content panel — slides in slightly delayed on open, first on close */
+.panel {
+  position: absolute;
+  inset: 0;
+  background: var(--color-dark);
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  clip-path: inset(0 0 0 100%);
   transition: clip-path 1s cubic-bezier(.9, 0, .1, 1);
 }
 
-.panel[data-panel-open="true"] {
+.panelWrap[data-panel-open="true"] .panel {
   clip-path: inset(0 0 0 0);
-  pointer-events: auto;
+  transition-delay: 0.12s;
 }
 
 /* Sticky header — bar + divider stay fixed at top */
@@ -53,7 +77,7 @@
   transition-delay: 0.05s;
 }
 
-.panel[data-panel-open="true"] .panelHeaderInner {
+.panelWrap[data-panel-open="true"] .panelHeaderInner {
   clip-path: inset(0 0 0 0);
   transform: translateY(0);
   transition-delay: 0.3s;
@@ -70,7 +94,7 @@
   transition-delay: 0.05s;
 }
 
-.panel[data-panel-open="true"] .divider {
+.panelWrap[data-panel-open="true"] .divider {
   transform: scaleX(1);
   transition-delay: 0.45s;
 }
@@ -118,22 +142,22 @@
   transition-delay: 0.05s;
 }
 
-.panel[data-panel-open="true"] .contentInner > * > * {
+.panelWrap[data-panel-open="true"] .contentInner > * > * {
   clip-path: inset(0 0 0 0);
   transform: translateY(0) rotate(0.001deg);
 }
 
 /* Staggered delays — same pattern as menu items */
-.panel[data-panel-open="true"] .contentInner > * > *:nth-child(1) { transition-delay: 0.35s; }
-.panel[data-panel-open="true"] .contentInner > * > *:nth-child(2) { transition-delay: 0.4s; }
-.panel[data-panel-open="true"] .contentInner > * > *:nth-child(3) { transition-delay: 0.45s; }
-.panel[data-panel-open="true"] .contentInner > * > *:nth-child(4) { transition-delay: 0.5s; }
-.panel[data-panel-open="true"] .contentInner > * > *:nth-child(5) { transition-delay: 0.55s; }
-.panel[data-panel-open="true"] .contentInner > * > *:nth-child(n+6) { transition-delay: 0.6s; }
+.panelWrap[data-panel-open="true"] .contentInner > * > *:nth-child(1) { transition-delay: 0.35s; }
+.panelWrap[data-panel-open="true"] .contentInner > * > *:nth-child(2) { transition-delay: 0.4s; }
+.panelWrap[data-panel-open="true"] .contentInner > * > *:nth-child(3) { transition-delay: 0.45s; }
+.panelWrap[data-panel-open="true"] .contentInner > * > *:nth-child(4) { transition-delay: 0.5s; }
+.panelWrap[data-panel-open="true"] .contentInner > * > *:nth-child(5) { transition-delay: 0.55s; }
+.panelWrap[data-panel-open="true"] .contentInner > * > *:nth-child(n+6) { transition-delay: 0.6s; }
 
 /* Mobile: bottom sheet, full width */
 @media screen and (max-width: 767px) {
-  .panel {
+  .panelWrap {
     top: auto;
     bottom: 0;
     left: 0;
@@ -143,7 +167,15 @@
     clip-path: inset(100% 0 0 0);
   }
 
-  .panel[data-panel-open="true"] {
+  .panelWrap[data-panel-open="true"] {
+    clip-path: inset(0 0 0 0);
+  }
+
+  .panel {
+    clip-path: inset(100% 0 0 0);
+  }
+
+  .panelWrap[data-panel-open="true"] .panel {
     clip-path: inset(0 0 0 0);
   }
 

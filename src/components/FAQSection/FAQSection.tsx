@@ -14,7 +14,7 @@ const faqs = [
   },
   {
     question: 'Wat kan ik verwachten bij mijn eerste bezoek?',
-    answer: 'We beginnen altijd met een uitgebreide intake van 45 minuten. Hierin bespreken we je klachten, doelen en situatie. Op basis daarvan stellen we samen een persoonlijk plan op dat aansluit bij wat jij nodig hebt.',
+    answer: 'We beginnen altijd met een uitgebreide intake van 60 minuten. Hierin bespreken we je klachten, doelen en situatie. Op basis daarvan stellen we samen een persoonlijk plan op dat aansluit bij wat jij nodig hebt.',
   },
   {
     question: 'Voor wie is MAE geschikt?',
