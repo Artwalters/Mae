@@ -3,15 +3,14 @@
 import { useEffect } from 'react';
 
 /**
- * Retries video.play() on first user interaction.
- * Handles browsers that block autoplay until a gesture occurs
- * (iOS Low Power Mode, Data Saver, strict autoplay policies).
+ * Retries video.play() on first user interaction and
+ * resumes playback when the page becomes visible again
+ * (e.g. returning from another tab/app on mobile).
  */
 export function useAutoplayRetry(video: HTMLVideoElement | null) {
+  // One-time: retry play on first user gesture
   useEffect(() => {
     if (!video) return;
-
-    // Already playing — nothing to do
     if (!video.paused) return;
 
     const events = ['click', 'touchstart', 'scroll', 'keydown'] as const;
@@ -32,5 +31,19 @@ export function useAutoplayRetry(video: HTMLVideoElement | null) {
     );
 
     return cleanup;
+  }, [video]);
+
+  // Persistent: resume when returning to tab/app
+  useEffect(() => {
+    if (!video) return;
+
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible' && video.paused) {
+        video.play().catch(() => {});
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibility);
+    return () => document.removeEventListener('visibilitychange', handleVisibility);
   }, [video]);
 }
