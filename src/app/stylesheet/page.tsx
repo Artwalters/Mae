@@ -1,4 +1,9 @@
+import type { Metadata } from 'next';
 import styles from './stylesheet.module.css';
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 export default function StylesheetPage() {
   return (
