@@ -12,7 +12,7 @@ interface WaterEffectProps {
   introOffsetRef?: React.RefObject<number>;
 }
 
-export default function WaterEffect({ brightness = 0.07, sharedTexture, sharedVideo, isMobile = false, introOffsetRef }: WaterEffectProps) {
+export default function WaterEffect({ brightness = 0.15, sharedTexture, sharedVideo, isMobile = false, introOffsetRef }: WaterEffectProps) {
   const { gl, size, scene, camera } = useThree();
   const meshRef = useRef<THREE.Mesh>(null);
   const mouse = useRef(new THREE.Vector2(0.5, 0.5));
