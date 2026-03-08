@@ -16,15 +16,40 @@ gsap.registerPlugin(ScrollTrigger);
 function FooterMobileVideo({ video }: { video: HTMLVideoElement | null }) {
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // Only claim the shared video when this container is visible
   useEffect(() => {
     if (!video || !containerRef.current) return;
-    video.className = styles.mobileVideo;
-    containerRef.current.appendChild(video);
-    video.play().catch(() => {});
-    return () => {
-      if (video.parentNode === containerRef.current) {
-        containerRef.current?.removeChild(video);
+    const container = containerRef.current;
+
+    const claimVideo = () => {
+      if (video.parentNode !== container) {
+        video.className = styles.mobileVideo;
+        container.appendChild(video);
+        video.play().catch(() => {});
       }
+    };
+
+    const releaseVideo = () => {
+      if (video.parentNode === container) {
+        container.removeChild(video);
+      }
+    };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          claimVideo();
+        } else {
+          releaseVideo();
+        }
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(container);
+
+    return () => {
+      observer.disconnect();
+      releaseVideo();
     };
   }, [video]);
 

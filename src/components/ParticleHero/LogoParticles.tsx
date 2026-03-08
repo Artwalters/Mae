@@ -14,9 +14,10 @@ interface Logo3DProps {
   isMobile?: boolean;
   sharedTexture?: THREE.VideoTexture | null;
   introOffsetRef?: React.RefObject<number>;
+  onReady?: () => void;
 }
 
-export default function Logo3D({ scale = 1, scrollProgressRef, mouseRef, mode = 'hero', isMobile = false, sharedTexture, introOffsetRef }: Logo3DProps) {
+export default function Logo3D({ scale = 1, scrollProgressRef, mouseRef, mode = 'hero', isMobile = false, sharedTexture, introOffsetRef, onReady }: Logo3DProps) {
   const groupRef = useRef<THREE.Group>(null);
   const materialRef = useRef<THREE.ShaderMaterial | null>(null);
   const initializedRef = useRef(false);
@@ -147,12 +148,19 @@ export default function Logo3D({ scale = 1, scrollProgressRef, mouseRef, mode = 
       const targetRotationY = mouse.x * mouseTilt;
       const targetMouseTiltX = mouse.y * -mouseTilt * 0.5;
 
-      // On first frame in hero mode, snap to position to avoid FOUC
+      // On first frame in hero mode, snap to off-screen position and signal ready.
+      // Force introOffsetRef back to 2.0 in case GSAP already started animating
+      // while the model was still loading (race condition).
       if (!initializedRef.current && mode === 'hero' && introOffsetRef) {
         initializedRef.current = true;
+        (introOffsetRef as React.MutableRefObject<number>).current = 2.0;
+        const resetProgress = Math.min(scrollProgress + 2.0, 2.0);
+        targetRotationX = resetProgress * -maxTilt;
+        targetY = -(resetProgress * resetProgress) * maxDrop;
         groupRef.current.rotation.x = targetRotationX + targetMouseTiltX;
         groupRef.current.rotation.y = targetRotationY;
         groupRef.current.position.y = targetY;
+        onReady?.();
       } else {
         groupRef.current.rotation.x += (targetRotationX + targetMouseTiltX - groupRef.current.rotation.x) * 0.05;
         groupRef.current.rotation.y += (targetRotationY - groupRef.current.rotation.y) * 0.05;

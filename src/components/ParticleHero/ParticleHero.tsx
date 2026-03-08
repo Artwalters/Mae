@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useState, useEffect, useRef } from 'react';
+import { Suspense, useState, useEffect, useRef, useCallback } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Center } from '@react-three/drei';
 import { gsap } from 'gsap';
@@ -16,16 +16,40 @@ gsap.registerPlugin(ScrollTrigger);
 function MobileVideoBackground({ video }: { video: HTMLVideoElement | null }) {
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // Only claim the shared video when this container is visible
   useEffect(() => {
     if (!video || !containerRef.current) return;
-    video.className = styles.mobileVideo;
-    containerRef.current.appendChild(video);
-    video.play().catch(() => {});
+    const container = containerRef.current;
+
+    const claimVideo = () => {
+      if (video.parentNode !== container) {
+        video.className = styles.mobileVideo;
+        container.appendChild(video);
+        video.play().catch(() => {});
+      }
+    };
+
+    const releaseVideo = () => {
+      if (video.parentNode === container) {
+        container.removeChild(video);
+      }
+    };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          claimVideo();
+        } else {
+          releaseVideo();
+        }
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(container);
 
     return () => {
-      if (video.parentNode === containerRef.current) {
-        containerRef.current?.removeChild(video);
-      }
+      observer.disconnect();
+      releaseVideo();
     };
   }, [video]);
 
@@ -47,6 +71,11 @@ export default function ParticleHero() {
   const mobileVideoWrapRef = useRef<HTMLDivElement>(null);
   const loaderRef = useRef<HTMLDivElement>(null);
   const [introComplete, setIntroComplete] = useState(false);
+  const [logoReady, setLogoReady] = useState(false);
+
+  const handleLogoReady = useCallback(() => {
+    setLogoReady(true);
+  }, []);
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -94,9 +123,9 @@ export default function ParticleHero() {
   }, [screenSize]);
 
 
-  // Intro animation: video plays 4s → loader fades → logo rises → UI fades in
+  // Intro animation: starts only after the 3D logo has rendered its first frame
   useEffect(() => {
-    if (screenSize === null) return;
+    if (!logoReady) return;
 
     const startDelay = 1; // Logo starts after 1 second
     const logoDuration = 2.0;
@@ -150,7 +179,7 @@ export default function ParticleHero() {
     }, (uiFadeDelay + fadeDuration * 0.3) * 1000);
 
     return () => clearTimeout(navTimer);
-  }, [screenSize]);
+  }, [logoReady]);
 
   // Scroll-based: tilt + drop when scrolling away from hero
   useEffect(() => {
@@ -261,7 +290,7 @@ export default function ParticleHero() {
           <Suspense fallback={null}>
             <group position={[0, getLogoYOffset(), 0]}>
               <Center precise>
-                <Logo3D scale={scale} scrollProgressRef={scrollProgressRef} mouseRef={mouseRef} mode="hero" isMobile={isMobile} sharedTexture={sharedTexture} introOffsetRef={introOffsetRef} />
+                <Logo3D scale={scale} scrollProgressRef={scrollProgressRef} mouseRef={mouseRef} mode="hero" isMobile={isMobile} sharedTexture={sharedTexture} introOffsetRef={introOffsetRef} onReady={handleLogoReady} />
               </Center>
             </group>
             {WaterComponent && <WaterComponent sharedTexture={sharedTexture} sharedVideo={sharedVideo} isMobile={isMobile} introOffsetRef={introOffsetRef} />}
