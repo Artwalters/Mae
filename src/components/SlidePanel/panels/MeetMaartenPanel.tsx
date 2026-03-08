@@ -16,7 +16,8 @@ export default function MeetMaartenPanel() {
   const titleRef = useRef<HTMLHeadingElement>(null);
   const prevSvgRef = useRef<SVGSVGElement>(null);
   const nextSvgRef = useRef<SVGSVGElement>(null);
-  const { openPanel } = usePanel();
+  const { openPanel, setPanelStep } = usePanel();
+  const sectionsRef = useRef<(HTMLElement | null)[]>([]);
 
   useEffect(() => {
     if (titleRef.current) {
@@ -56,6 +57,27 @@ export default function MeetMaartenPanel() {
     }
   };
 
+  // Track which section is visible and update navBar step number
+  useEffect(() => {
+    const sections = sectionsRef.current.filter(Boolean) as HTMLElement[];
+    if (sections.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            const idx = sections.indexOf(entry.target as HTMLElement);
+            if (idx !== -1) setPanelStep(String(idx + 1).padStart(2, '0'));
+          }
+        }
+      },
+      { threshold: 0.5, root: sections[0]?.closest('[data-lenis-prevent]') }
+    );
+
+    sections.forEach((s) => observer.observe(s));
+    return () => observer.disconnect();
+  }, [setPanelStep]);
+
   const handleArrowHover = (svgEl: SVGSVGElement | null, direction: 'left' | 'right') => {
     if (!svgEl) return;
     const tl = gsap.timeline();
@@ -79,7 +101,7 @@ export default function MeetMaartenPanel() {
       </div>
 
       {/* Over Maarten Section */}
-      <section className={styles.aboutSection}>
+      <section ref={(el) => { sectionsRef.current[0] = el; }} className={styles.aboutSection}>
         <div className={styles.aboutHeader}>
           <span className={styles.aboutLabel}>Over Maarten</span>
           <span className={styles.aboutNumber}>[01]</span>
@@ -109,7 +131,7 @@ export default function MeetMaartenPanel() {
       </section>
 
       {/* Work Method */}
-      <section className={styles.section}>
+      <section ref={(el) => { sectionsRef.current[1] = el; }} className={styles.section}>
         <div className={styles.aboutHeader}>
           <span className={styles.aboutLabel}>Werkwijze</span>
           <span className={styles.aboutNumber}>[02]</span>
@@ -147,7 +169,7 @@ export default function MeetMaartenPanel() {
       </section>
 
       {/* Credentials Timeline */}
-      <section className={styles.section}>
+      <section ref={(el) => { sectionsRef.current[2] = el; }} className={styles.section}>
         <div className={styles.aboutHeader}>
           <span className={styles.aboutLabel}>Certificeringen</span>
           <span className={styles.aboutNumber}>[03]</span>

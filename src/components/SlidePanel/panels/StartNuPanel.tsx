@@ -72,7 +72,7 @@ const LEEFSTIJL_VERDIEPING: { question: string; options: string[] }[] = [
 ];
 
 export default function StartNuPanel() {
-  const { panelVariant, activePanel, setProgress, setOnBack } = usePanel();
+  const { panelVariant, activePanel, setProgress, setOnBack, setPanelStep } = usePanel();
   const [currentStep, setCurrentStep] = useState<Step>('doel');
   const [fysioDoel, setFysioDoel] = useState<FysioDoel>(null);
   const [leefstijlDoel, setLeefstijlDoel] = useState<LeefstijlDoel>(null);
@@ -237,10 +237,15 @@ export default function StartNuPanel() {
   useEffect(() => {
     if (currentStep === 'doel') {
       setProgress(0);
+      setPanelStep('01');
     } else {
       setProgress(currentStepIndex / totalStepsAfterDoel);
+      const stepNumber = currentStep === 'verdieping' ? '02' :
+        currentStep === 'contact' ? '03' :
+        currentStep === 'bevestiging' ? '04' : '01';
+      setPanelStep(stepNumber);
     }
-  }, [currentStep, currentStepIndex, totalStepsAfterDoel, setProgress]);
+  }, [currentStep, currentStepIndex, totalStepsAfterDoel, setProgress, setPanelStep]);
 
   // Register back handler
   useEffect(() => {
@@ -301,7 +306,7 @@ export default function StartNuPanel() {
         <div className={styles.stepContent}>
           <div className={styles.sectionHeader}>
             <span className={styles.sectionLabel}>Verdieping</span>
-            <span className={styles.sectionNumber}>[{String(currentStepIndex).padStart(2, '0')}]</span>
+            <span className={styles.sectionNumber}>[02]</span>
           </div>
           <h2 className={styles.sectionTitle}>{questions[currentQuestion].question}</h2>
 
@@ -324,7 +329,7 @@ export default function StartNuPanel() {
         <div className={styles.stepContent}>
           <div className={styles.sectionHeader}>
             <span className={styles.sectionLabel}>Contact</span>
-            <span className={styles.sectionNumber}>[{String(currentStepIndex).padStart(2, '0')}]</span>
+            <span className={styles.sectionNumber}>[03]</span>
           </div>
           <h2 className={styles.sectionTitle}>Hoe kunnen we je bereiken?</h2>
           <p className={`${styles.subtitle} par`}>
@@ -371,7 +376,7 @@ export default function StartNuPanel() {
 
             <div className={styles.sectionHeader}>
               <span className={styles.sectionLabel}>Extra</span>
-              <span className={styles.sectionNumber}>[{String(currentStepIndex + 1).padStart(2, '0')}]</span>
+              <span className={styles.sectionNumber}>[04]</span>
             </div>
             <p className={`${styles.subtitle} par`}>
               Wil je nog iets kwijt? Dat mag hier.

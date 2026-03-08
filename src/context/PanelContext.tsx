@@ -14,6 +14,8 @@ interface PanelContextType {
   setProgress: (p: number) => void;
   onBack: (() => void) | null;
   setOnBack: (cb: (() => void) | null) => void;
+  panelStep: string;
+  setPanelStep: (s: string) => void;
 }
 
 const PanelContext = createContext<PanelContextType | undefined>(undefined);
@@ -23,9 +25,11 @@ export function PanelProvider({ children }: { children: ReactNode }) {
   const [panelVariant, setPanelVariant] = useState<PanelVariant>(null);
   const [progress, setProgress] = useState(0);
   const [onBack, setOnBack] = useState<(() => void) | null>(null);
+  const [panelStep, setPanelStep] = useState('01');
 
   const openPanel = (panel: PanelType, variant?: PanelVariant) => {
     setActivePanel(panel);
+    setPanelStep('01');
     if (variant !== undefined) {
       setPanelVariant(variant);
     }
@@ -36,10 +40,11 @@ export function PanelProvider({ children }: { children: ReactNode }) {
     setPanelVariant(null);
     setProgress(0);
     setOnBack(null);
+    setPanelStep('01');
   };
 
   return (
-    <PanelContext.Provider value={{ activePanel, panelVariant, openPanel, closePanel, progress, setProgress, onBack, setOnBack }}>
+    <PanelContext.Provider value={{ activePanel, panelVariant, openPanel, closePanel, progress, setProgress, onBack, setOnBack, panelStep, setPanelStep }}>
       {children}
     </PanelContext.Provider>
   );

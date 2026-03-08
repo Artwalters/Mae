@@ -9,7 +9,7 @@ import StartNuPanel from './panels/StartNuPanel';
 import styles from './GlobalPanel.module.css';
 
 export default function GlobalPanel() {
-  const { activePanel, panelVariant, openPanel, closePanel, onBack } = usePanel();
+  const { activePanel, panelVariant, openPanel, closePanel, onBack, panelStep } = usePanel();
   const lastPanelRef = useRef<string | null>(null);
   const navBarRef = useRef<HTMLDivElement>(null);
   const [panelPhase, setPanelPhase] = useState(1);
@@ -73,7 +73,7 @@ export default function GlobalPanel() {
         onClick={() => openPanel(meetPanel as 'meet-maarten' | 'meet-merel')}
       >
         <span>{meetName}</span>
-        <span className={styles.navTabNumber}>[01]</span>
+        <span className={styles.navTabNumber}>[{isMeetPanel ? panelStep : '00'}]</span>
       </button>
       {onBack && (
         <button className={`${styles.backButton} ${isStartNu ? styles.backButtonActive : ''}`} onClick={onBack}>
@@ -88,7 +88,7 @@ export default function GlobalPanel() {
         onClick={() => openPanel('start-nu', startVariant as 'fysio' | 'leefstijl')}
       >
         <span>{showStartTraject ? 'Start Traject' : 'Start Nu'}</span>
-        <span className={styles.navTabNumber}>[02]</span>
+        <span className={styles.navTabNumber}>[{isStartNu ? panelStep : '00'}]</span>
       </button>
     </div>
   );
