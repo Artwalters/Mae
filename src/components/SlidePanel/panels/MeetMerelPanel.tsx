@@ -84,7 +84,7 @@ export default function MeetMerelPanel() {
 
       {/* Hero Image */}
       <div className={styles.heroImage}>
-        <img src={`${cdn}/merel-consult.webp`} alt="Merel leefstijlcoach bij MAE in gesprek met cliënt" className="img-cover" style={{ objectPosition: 'center 5%' }} />
+        <img src={`${cdn}/merel-consult.webp`} alt="Merel leefstijlcoach bij MAE in gesprek met cliënt" className="img-cover" style={{ objectPosition: 'center 22%' }} />
       </div>
 
       {/* Over Merel Section */}
