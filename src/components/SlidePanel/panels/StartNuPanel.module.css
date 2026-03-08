@@ -175,6 +175,7 @@
   background: rgba(255, 255, 255, 0.08);
   border: none;
   color: var(--color-white);
+  caret-color: var(--color-accent);
   transition: background 0.3s ease;
 }
 
@@ -182,13 +183,21 @@
   color: rgba(255, 255, 255, 0.35);
 }
 
-.formInput:focus {
-  outline: none;
-  background: rgba(255, 255, 255, 0.12);
+.formInput:-webkit-autofill,
+.formInput:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--color-white);
+  -webkit-box-shadow: 0 0 0 1000px rgba(255, 255, 255, 0.08) inset;
+  caret-color: var(--color-accent);
+  transition: background-color 5000s ease-in-out 0s;
 }
 
-.formInput,
-.formTextarea {
+.formInput:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.15);
+  border-left: 2px solid var(--color-accent);
+}
+
+.form {
   -webkit-user-select: text;
   user-select: text;
 }
@@ -201,6 +210,7 @@
   background: rgba(255, 255, 255, 0.08);
   border: none;
   color: var(--color-white);
+  caret-color: var(--color-accent);
   resize: vertical;
   min-height: 6em;
   transition: background 0.3s ease;
@@ -212,7 +222,8 @@
 
 .formTextarea:focus {
   outline: none;
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.15);
+  border-left: 2px solid var(--color-accent);
 }
 
 .formDivider {

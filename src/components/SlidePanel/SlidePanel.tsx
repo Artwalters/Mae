@@ -301,6 +301,10 @@ export default function SlidePanel({ isOpen, onClose, children, header, dark }: 
       stopLerpLoop();
 
       panel.setAttribute('data-panel-open', 'true');
+      // Remove clip-path after animation settles so Chrome renders the caret
+      fallbackTimer = setTimeout(() => {
+        panel.setAttribute('data-panel-settled', 'true');
+      }, 1000);
 
       gsap.to(overlay, {
         opacity: 1,
@@ -309,6 +313,7 @@ export default function SlidePanel({ isOpen, onClose, children, header, dark }: 
         pointerEvents: 'auto'
       });
     } else {
+      panel.removeAttribute('data-panel-settled');
       panel.setAttribute('data-panel-open', 'false');
 
       gsap.to(overlay, {

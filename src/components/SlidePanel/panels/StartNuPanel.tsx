@@ -339,6 +339,9 @@ export default function StartNuPanel() {
           <form className={styles.form} onSubmit={handleSubmit}>
             <div className={styles.formGrid}>
               <input
+                id="intake-firstName"
+                name="firstName"
+                autoComplete="given-name"
                 type="text"
                 className={styles.formInput}
                 value={firstName}
@@ -347,6 +350,9 @@ export default function StartNuPanel() {
                 required
               />
               <input
+                id="intake-lastName"
+                name="lastName"
+                autoComplete="family-name"
                 type="text"
                 className={styles.formInput}
                 value={lastName}
@@ -355,6 +361,9 @@ export default function StartNuPanel() {
                 required
               />
               <input
+                id="intake-email"
+                name="email"
+                autoComplete="email"
                 type="email"
                 className={styles.formInput}
                 value={email}
@@ -363,6 +372,9 @@ export default function StartNuPanel() {
                 required
               />
               <input
+                id="intake-phone"
+                name="phone"
+                autoComplete="tel"
                 type="tel"
                 className={styles.formInput}
                 value={phone}
@@ -383,6 +395,8 @@ export default function StartNuPanel() {
             </p>
 
             <textarea
+              id="intake-extra"
+              name="extra"
               className={styles.formTextarea}
               value={extra}
               onChange={(e) => setExtra(e.target.value)}
