@@ -74,7 +74,7 @@ export default function HerstelSection() {
       <div id="herstel-image" className={styles.imageContainer}>
         <div ref={bannerRef} className={`banner-accent ${styles.banner}`}>
           <p className="banner-text par">
-            Ik ben Maarten, krachtsporter, fysiotherapeut en personal coach. Waar de zorg vaak te snel grenzen stelt, zie ik mogelijkheden. Ik zoek altijd actief naar oplossingen en alternatieven.
+            Maarten is krachtsporter en fysiotherapeut. Waar de zorg te snel grenzen stelt, zoekt hij naar wat wél kan. Met een aanpak die volledig op jou is afgestemd.
           </p>
           <button className={`btn-bar ${styles.bannerButton}`} onClick={() => openPanel('meet-maarten')}>
             Meet Maarten

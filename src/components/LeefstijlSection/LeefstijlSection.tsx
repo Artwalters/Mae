@@ -56,7 +56,7 @@ export default function LeefstijlSection() {
       <div id="leefstijl-image" className={styles.imageContainer}>
         <div ref={bannerRef} className={`banner-accent ${styles.banner}`}>
           <p className="banner-text par">
-            Merel helpt je bij het vinden van een duurzame levensstijl die bij jou past. Geen diëten, maar echte verandering met zelfacceptatie als uitgangspunt.
+            Merel is krachtsporter en leefstijlcoach. Ze helpt je een duurzame levensstijl te vinden die echt bij je past. Geen diëten, maar blijvende verandering.
           </p>
           <button className={`btn-bar ${styles.bannerButton}`} onClick={() => openPanel('meet-merel')}>
             Meet Merel

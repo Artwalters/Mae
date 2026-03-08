@@ -130,10 +130,10 @@ export default function Navigation() {
     hoveredIndexRef.current = index;
     const isMobile = window.matchMedia('(max-width: 767px)').matches;
 
+    if (isMobile) return;
+
     if (tagLeftRef.current) tagLeftRef.current.textContent = `[${navItems[index].tagLeft}]`;
     if (tagRightRef.current) tagRightRef.current.textContent = `[${navItems[index].tagRight}]`;
-
-    if (isMobile) return;
 
     const item = menuItemRefs.current[index];
     const tile = item?.closest(`.${styles.tile}`) as HTMLElement;

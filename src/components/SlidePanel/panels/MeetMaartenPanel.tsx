@@ -114,7 +114,10 @@ export default function MeetMaartenPanel() {
             Mijn aanpak gaat verder dan het standaard behandelprotocol; ik streef ernaar om een plan te creëren dat perfect is afgestemd op de unieke behoeften van de individuele cliënt. Ik zie elk obstakel als een mogelijkheid. In de huidige zorgpraktijk merk ik dat er vaak te snel grenzen worden gesteld aan wat cliënten kunnen bereiken. Hier zet ik mij tegen af door niet alleen te focussen op wat tijdelijk onmogelijk lijkt, maar door actief oplossingen en alternatieven te zoeken.
           </p>
           <p className={`${styles.text} par`}>
-            Van de dakdekker met aanhoudende rugklachten tot de sporter met een scheve rug, ik ben ervan overtuigd dat met de juiste benadering en begeleiding, iedereen kan werken aan een leven vrij van belemmeringen.
+            Ik begeleid mensen die willen blijven bewegen, sterker willen worden, of vastlopen door klachten of beperkingen. Niet door ze stil te zetten maar door te zoeken naar wat wél kan. En dat stap voor stap, verantwoord op te bouwen.
+          </p>
+          <p className={`${styles.text} par`}>
+            Voor mij is fysiotherapie geen opzichzelfstaand traject. Geen eindpunt. Geen &apos;pauze&apos; in je proces. Het is een onderdeel van het geheel.
           </p>
         </div>
         <div className={styles.photoGrid}>
