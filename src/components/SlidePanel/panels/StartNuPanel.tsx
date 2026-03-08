@@ -125,6 +125,34 @@ export default function StartNuPanel() {
     setCurrentStep('verdieping');
   };
 
+  const buildSummary = (finalAnswers: Record<number, string>) => {
+    if (isFysio) {
+      const loc = finalAnswers[0]?.toLowerCase();
+      const dur = finalAnswers[1]?.toLowerCase();
+      const exp = finalAnswers[0]?.toLowerCase();
+      const sport = finalAnswers[0]?.toLowerCase();
+      const since = finalAnswers[1]?.toLowerCase();
+      const focus = finalAnswers[0]?.toLowerCase();
+
+      switch (fysioDoel) {
+        case 'pijnvrij':
+          return `He Maarten, ik heb last van mijn ${loc} en dit speelt al ${dur}.`;
+        case 'sterker':
+          return `He Maarten, ik wil graag sterker worden. Mijn ervaring met krachtsport is ${exp}.`;
+        case 'terug-sport':
+          return `He Maarten, ik wil graag terug naar ${sport}. De blessure was ${since} geleden.`;
+        case 'preventie':
+          return `He Maarten, ik wil me graag richten op ${focus}.`;
+      }
+    } else {
+      const doelTitle = LEEFSTIJL_DOELEN.find((d) => d.key === leefstijlDoel)?.title.toLowerCase();
+      const start = finalAnswers[0]?.toLowerCase();
+
+      return `He Merel, ik wil graag werken aan ${doelTitle} en wil het liefst beginnen met ${start}.`;
+    }
+    return '';
+  };
+
   const handleAnswer = (answer: string) => {
     const newAnswers = { ...answers, [currentQuestion]: answer };
     setAnswers(newAnswers);
@@ -132,6 +160,7 @@ export default function StartNuPanel() {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
+      setExtra(buildSummary(newAnswers));
       setCurrentStep('contact');
     }
   };

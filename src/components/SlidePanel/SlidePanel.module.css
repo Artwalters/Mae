@@ -189,5 +189,14 @@
 
   .contentInner {
     padding: 1em 0.5em 2em;
+    overflow: hidden;
+  }
+
+  .contentInner > * > * {
+    transform: translateY(3em);
+  }
+
+  .panelWrap[data-panel-open="true"] .contentInner > * > * {
+    transform: translateY(0);
   }
 }
