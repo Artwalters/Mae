@@ -142,11 +142,14 @@ export default function Logo3D({ scale = 1, scrollProgressRef, mouseRef, mode = 
         targetY = maxDrop * (1 - scrollProgress);
       }
 
-      // Mouse-based tilt
+      // Mouse-based tilt + position offset
       const mouse = mouseRef?.current ?? { x: 0, y: 0 };
       const mouseTilt = isMobile ? 0.25 : 0.15;
       const targetRotationY = mouse.x * mouseTilt;
       const targetMouseTiltX = mouse.y * -mouseTilt * 0.5;
+      const mouseShift = isMobile ? 0 : 0.15;
+      const targetMouseX = mouse.x * mouseShift;
+      const targetMouseY = mouse.y * -mouseShift * 0.4;
 
       // On first frame in hero mode, snap to off-screen position and signal ready.
       // Force introOffsetRef back to 2.0 in case GSAP already started animating
@@ -159,12 +162,20 @@ export default function Logo3D({ scale = 1, scrollProgressRef, mouseRef, mode = 
         targetY = -(resetProgress * resetProgress) * maxDrop;
         groupRef.current.rotation.x = targetRotationX + targetMouseTiltX;
         groupRef.current.rotation.y = targetRotationY;
+        groupRef.current.position.x = targetMouseX;
         groupRef.current.position.y = targetY;
         onReady?.();
       } else {
+        // Subtle floating motion
+        const t = state.clock.elapsedTime;
+        const floatY = Math.sin(t * 0.6) * 0.04 + Math.sin(t * 1.1) * 0.02;
+        const floatRotZ = Math.sin(t * 0.4) * 0.008;
+
         groupRef.current.rotation.x += (targetRotationX + targetMouseTiltX - groupRef.current.rotation.x) * 0.05;
         groupRef.current.rotation.y += (targetRotationY - groupRef.current.rotation.y) * 0.05;
-        groupRef.current.position.y += (targetY - groupRef.current.position.y) * 0.1;
+        groupRef.current.rotation.z += (floatRotZ - groupRef.current.rotation.z) * 0.05;
+        groupRef.current.position.x += (targetMouseX - groupRef.current.position.x) * 0.05;
+        groupRef.current.position.y += (targetY + targetMouseY + floatY - groupRef.current.position.y) * 0.1;
       }
     }
   });
