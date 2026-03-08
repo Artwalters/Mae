@@ -1,9 +1,10 @@
 'use client';
 
-import { useRef, useMemo, useEffect } from 'react';
+import { useRef, useMemo, useEffect, useState } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import cdn from '@/lib/cdn';
+import { useAutoplayRetry } from '@/hooks/useAutoplayRetry';
 
 export default function WaterEffectMobile() {
   const { gl, size, scene, camera } = useThree();
@@ -14,6 +15,7 @@ export default function WaterEffectMobile() {
   const isInactive = useRef(false);
   const bgVideoTextureRef = useRef<THREE.VideoTexture | null>(null);
   const bgVideoRef = useRef<HTMLVideoElement | null>(null);
+  const [bgVideo, setBgVideo] = useState<HTMLVideoElement | null>(null);
 
   // Load background video
   useEffect(() => {
@@ -25,6 +27,7 @@ export default function WaterEffectMobile() {
     video.playsInline = true;
     video.autoplay = true;
     bgVideoRef.current = video;
+    setBgVideo(video);
 
     video.addEventListener('canplay', () => {
       const videoTexture = new THREE.VideoTexture(video);
@@ -43,8 +46,11 @@ export default function WaterEffectMobile() {
       video.removeAttribute('src');
       video.load();
       bgVideoTextureRef.current?.dispose();
+      setBgVideo(null);
     };
   }, []);
+
+  useAutoplayRetry(bgVideo);
 
   // Mobile-safe buffers with proper WebGL extension checking
   // Using useRef to prevent recreation on size changes (which happen often on mobile)

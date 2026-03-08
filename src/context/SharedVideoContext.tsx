@@ -1,6 +1,7 @@
 'use client';
 
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
+import { useAutoplayRetry } from '@/hooks/useAutoplayRetry';
 import * as THREE from 'three';
 import cdn from '@/lib/cdn';
 
@@ -16,22 +17,22 @@ export function useSharedVideo() {
 }
 
 export function SharedVideoProvider({ children }: { children: React.ReactNode }) {
-  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [video, setVideo] = useState<HTMLVideoElement | null>(null);
   const textureRef = useRef<THREE.VideoTexture | null>(null);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    const video = document.createElement('video');
-    video.src = `${cdn}/hero.mp4`;
-    video.crossOrigin = 'anonymous';
-    video.loop = true;
-    video.muted = true;
-    video.playsInline = true;
-    video.autoplay = true;
-    videoRef.current = video;
+    const vid = document.createElement('video');
+    vid.src = `${cdn}/hero.mp4`;
+    vid.crossOrigin = 'anonymous';
+    vid.loop = true;
+    vid.muted = true;
+    vid.playsInline = true;
+    vid.autoplay = true;
+    setVideo(vid);
 
-    video.addEventListener('canplay', () => {
-      const tex = new THREE.VideoTexture(video);
+    vid.addEventListener('canplay', () => {
+      const tex = new THREE.VideoTexture(vid);
       tex.minFilter = THREE.LinearFilter;
       tex.magFilter = THREE.LinearFilter;
       tex.wrapS = THREE.ClampToEdgeWrapping;
@@ -41,18 +42,21 @@ export function SharedVideoProvider({ children }: { children: React.ReactNode })
       setReady(true);
     }, { once: true });
 
-    video.play().catch(() => {});
+    vid.play().catch(() => {});
 
     return () => {
-      video.pause();
-      video.removeAttribute('src');
-      video.load();
+      vid.pause();
+      vid.removeAttribute('src');
+      vid.load();
       textureRef.current?.dispose();
+      setVideo(null);
     };
   }, []);
 
+  useAutoplayRetry(video);
+
   return (
-    <SharedVideoContext.Provider value={{ video: videoRef.current, texture: ready ? textureRef.current : null }}>
+    <SharedVideoContext.Provider value={{ video, texture: ready ? textureRef.current : null }}>
       {children}
     </SharedVideoContext.Provider>
   );
