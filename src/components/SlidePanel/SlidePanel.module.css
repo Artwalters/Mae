@@ -21,7 +21,7 @@
   height: 100%;
   background: var(--color-accent);
   clip-path: inset(0 0 0 100%);
-  transition: clip-path 1s cubic-bezier(.9, 0, .1, 1) 0.12s;
+  transition: clip-path 1s cubic-bezier(.9, 0, .1, 1) 0.24s;
 }
 
 .panelAccent[data-panel-open="true"] {
@@ -41,23 +41,31 @@
   width: 65%;
   height: 100%;
 
-  background: var(--color-dark);
   clip-path: inset(0 0 0 100%);
-  transition: clip-path 1s cubic-bezier(.9, 0, .1, 1);
+  transition: clip-path 1s cubic-bezier(.9, 0, .1, 1) 0.12s;
 }
 
 .panelWrap[data-panel-open="true"] {
   clip-path: inset(0 0 0 0);
   pointer-events: auto;
-  transition-delay: 0.12s;
+  transition-delay: 0s;
 }
 
-/* Dark content panel */
+/* Dark content panel — slides in slightly delayed on open, first on close */
 .panel {
   position: absolute;
   inset: 0;
+  background: var(--color-dark);
+  z-index: 1;
   display: flex;
   flex-direction: column;
+  clip-path: inset(0 0 0 100%);
+  transition: clip-path 1s cubic-bezier(.9, 0, .1, 1);
+}
+
+.panelWrap[data-panel-open="true"] .panel {
+  clip-path: inset(0 0 0 0);
+  transition-delay: 0.12s;
 }
 
 /* Sticky header — bar + divider stay fixed at top */
@@ -158,10 +166,10 @@
 .panelWrap[data-panel-open="true"] .contentInner > * > *:nth-child(5) { transition-delay: 0.55s; }
 .panelWrap[data-panel-open="true"] .contentInner > * > *:nth-child(n+6) { transition-delay: 0.6s; }
 
-/* After animation settles, remove clip-path so Chrome renders the caret in inputs */
+/* After animation settles, use inset(0) instead of none so it can still transition out */
 .panelWrap[data-panel-settled="true"] .contentInner > * > * {
-  clip-path: none !important;
-  transform: none !important;
+  clip-path: inset(0 0 0 0) !important;
+  transform: translateY(0) rotate(0.001deg) !important;
 }
 
 /* Mobile: bottom sheet, full width */
@@ -191,6 +199,14 @@
   }
 
   .panelWrap[data-panel-open="true"] {
+    clip-path: inset(0 0 0 0);
+  }
+
+  .panel {
+    clip-path: inset(100% 0 0 0);
+  }
+
+  .panelWrap[data-panel-open="true"] .panel {
     clip-path: inset(0 0 0 0);
   }
 
