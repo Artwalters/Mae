@@ -132,10 +132,12 @@ export default function MaeSection() {
       {/* Content rows */}
       <div className={styles.content}>
         <div ref={rowsWrapperRef} className={styles.rowsWrapper}>
-          {/* White overlay that hides all rows initially */}
+          {/* White overlay that hides all rows initially (desktop animation) */}
           <div ref={overlayRef} className={styles.overlay}>
             <div className={styles.divider} />
           </div>
+          {/* Mobile-only divider above first row (overlay is hidden on mobile) */}
+          <div className={styles.mobileDivider} />
           {maeData.map((item, index) => (
             <div
               key={index}

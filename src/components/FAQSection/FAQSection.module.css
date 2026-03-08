@@ -55,6 +55,19 @@
   background: var(--color-gray);
 }
 
+.mobileDivider {
+  display: none;
+}
+
+@media screen and (max-width: 767px) {
+  .mobileDivider {
+    display: block;
+    width: 100%;
+    height: 1px;
+    background: var(--color-gray);
+  }
+}
+
 /* Row */
 .row {
   background: var(--color-light);

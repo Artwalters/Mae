@@ -121,10 +121,12 @@ export default function FAQSection() {
 
       <div className={styles.list}>
         <div ref={rowsWrapperRef} className={styles.rowsWrapper}>
-          {/* White overlay that hides all rows initially */}
+          {/* White overlay that hides all rows initially (desktop animation) */}
           <div ref={overlayRef} className={styles.overlay}>
             <div className={styles.divider} />
           </div>
+          {/* Mobile-only divider above first row (overlay is hidden on mobile) */}
+          <div className={styles.mobileDivider} />
           {faqs.map((faq, index) => (
             <div
               key={index}

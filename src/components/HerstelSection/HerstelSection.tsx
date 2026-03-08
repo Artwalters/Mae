@@ -59,11 +59,13 @@ export default function HerstelSection() {
         </span>
         <h2 className={`title-chaney ${styles.title}`}>Herstel</h2>
         <p className={`text-description ${styles.description} par`}>
-          Bij M.A.E. benaderen we revalidatie op een unieke manier. Geen standaardprotocollen,
-          maar een doelgerichte, persoonlijke en stapsgewijze revalidatie. We creëren samen een
-          revalidatieplan dat aansluit op jouw lichaam, klachten en doelen. Met wekelijkse updates,
-          feedbackmomenten en trainingsvideo&apos;s zorgen we dat je gemotiveerd en uitgedaagd blijft
-          op weg naar belemmeringsvrij functioneren.
+          Bij MAE zien we fysiotherapie niet als een vast stramien, maar als een ingang. Een poort
+          naar het échte gesprek, naar beweging, naar ervaren, en vooral: naar verandering.
+          Geen standaardprotocols of voorspelbare trajecten, maar een behandeling die begint met
+          écht luisteren. Wat zegt je lichaam? Waar zit de belemmering? Wat wil er eigenlijk gehoord worden?
+          Want de waarheid is: Jij bent niet je klacht.
+          En herstel begint niet altijd met een behandelplan, maar met vertrouwen, inzicht en een
+          fysiotherapeut die naast je staat. Echt kijken naar de mens ACHTER de klacht!
         </p>
         <button className="btn-accent" onClick={() => openPanel('start-nu', 'fysio')}><span>Start nu</span></button>
       </div>

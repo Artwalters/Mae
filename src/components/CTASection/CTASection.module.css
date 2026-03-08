@@ -144,7 +144,7 @@
 /* Responsive - Mobile */
 @media screen and (max-width: 767px) {
   .section {
-    padding: 2em 2em 2em;
+    padding: 5em 1.5em;
   }
 
   .title {
