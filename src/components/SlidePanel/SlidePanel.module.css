@@ -10,6 +10,25 @@
   pointer-events: none;
 }
 
+/* Green accent panel — flashes behind the dark panel */
+.panelAccent {
+  position: fixed;
+  z-index: 998;
+  pointer-events: none;
+  top: 0;
+  right: 0;
+  width: 65%;
+  height: 100%;
+  background: var(--color-accent);
+  clip-path: inset(0 0 0 100%);
+  transition: clip-path 1s cubic-bezier(.9, 0, .1, 1) 0.12s;
+}
+
+.panelAccent[data-panel-open="true"] {
+  clip-path: inset(0 0 0 0);
+  transition-delay: 0s;
+}
+
 /* Wrapper — handles positioning, clip-path, and data attributes */
 .panelWrap {
   position: fixed;
@@ -22,39 +41,23 @@
   width: 65%;
   height: 100%;
 
+  background: var(--color-dark);
   clip-path: inset(0 0 0 100%);
-  transition: clip-path 1s cubic-bezier(.9, 0, .1, 1) 0.12s;
+  transition: clip-path 1s cubic-bezier(.9, 0, .1, 1);
 }
 
 .panelWrap[data-panel-open="true"] {
   clip-path: inset(0 0 0 0);
   pointer-events: auto;
-  transition-delay: 0s;
+  transition-delay: 0.12s;
 }
 
-/* Green accent panel — flashes behind the dark panel */
-.panelAccent {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, var(--color-dark) 0, var(--color-dark) 3.5em, var(--color-accent) 3.5em);
-  z-index: 0;
-}
-
-/* Dark content panel — slides in slightly delayed on open, first on close */
+/* Dark content panel */
 .panel {
   position: absolute;
   inset: 0;
-  background: var(--color-dark);
-  z-index: 1;
   display: flex;
   flex-direction: column;
-  clip-path: inset(0 0 0 100%);
-  transition: clip-path 1s cubic-bezier(.9, 0, .1, 1);
-}
-
-.panelWrap[data-panel-open="true"] .panel {
-  clip-path: inset(0 0 0 0);
-  transition-delay: 0.12s;
 }
 
 /* Sticky header — bar + divider stay fixed at top */
@@ -163,6 +166,20 @@
 
 /* Mobile: bottom sheet, full width */
 @media screen and (max-width: 767px) {
+  .panelAccent {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 85%;
+    clip-path: inset(100% 0 0 0);
+  }
+
+  .panelAccent[data-panel-open="true"] {
+    clip-path: inset(0 0 0 0);
+  }
+
   .panelWrap {
     top: auto;
     bottom: 0;
@@ -174,14 +191,6 @@
   }
 
   .panelWrap[data-panel-open="true"] {
-    clip-path: inset(0 0 0 0);
-  }
-
-  .panel {
-    clip-path: inset(100% 0 0 0);
-  }
-
-  .panelWrap[data-panel-open="true"] .panel {
     clip-path: inset(0 0 0 0);
   }
 

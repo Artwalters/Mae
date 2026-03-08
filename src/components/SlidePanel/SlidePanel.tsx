@@ -27,6 +27,7 @@ const PROGRESS_LERP = 0.12;
 
 export default function SlidePanel({ isOpen, onClose, children, header, dark }: SlidePanelProps) {
   const panelRef = useRef<HTMLDivElement>(null);
+  const accentRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const closeSvgRef = useRef<SVGSVGElement>(null);
@@ -301,6 +302,7 @@ export default function SlidePanel({ isOpen, onClose, children, header, dark }: 
       stopLerpLoop();
 
       panel.setAttribute('data-panel-open', 'true');
+      accentRef.current?.setAttribute('data-panel-open', 'true');
       // Remove clip-path after animation settles so Chrome renders the caret
       fallbackTimer = setTimeout(() => {
         panel.setAttribute('data-panel-settled', 'true');
@@ -315,6 +317,7 @@ export default function SlidePanel({ isOpen, onClose, children, header, dark }: 
     } else {
       panel.removeAttribute('data-panel-settled');
       panel.setAttribute('data-panel-open', 'false');
+      accentRef.current?.setAttribute('data-panel-open', 'false');
 
       gsap.to(overlay, {
         opacity: 0,
@@ -463,8 +466,8 @@ export default function SlidePanel({ isOpen, onClose, children, header, dark }: 
         onClick={onClose}
       />
 
+      <div ref={accentRef} className={styles.panelAccent} />
       <div ref={panelRef} className={styles.panelWrap} data-panel-dark={dark ? 'true' : undefined}>
-        <div className={styles.panelAccent} />
         <div className={styles.panel}>
           <div ref={contentRef} className={styles.content} data-lenis-prevent>
             <div className={styles.panelHeader}>

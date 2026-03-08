@@ -80,13 +80,29 @@
 
 /* --------------------------------- Tile --------------------------------- */
 
+.tileAccent {
+  position: fixed;
+  inset: 0;
+  z-index: 98;
+  background: var(--color-accent);
+  pointer-events: none;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%);
+  transition: clip-path 1s cubic-bezier(.9, 0, .1, 1) 0.12s;
+}
+
+[data-navigation-status="active"] .tileAccent {
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+  transition-delay: 0s;
+}
+
 .tile {
   position: fixed;
   inset: 0;
   z-index: 99;
   pointer-events: none;
+  background: var(--color-dark);
   clip-path: polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%);
-  transition: clip-path 1s cubic-bezier(.9, 0, .1, 1) 0.12s;
+  transition: clip-path 1s cubic-bezier(.9, 0, .1, 1);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -96,32 +112,6 @@
 [data-navigation-status="active"] .tile {
   clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
   pointer-events: auto;
-  transition-delay: 0s;
-}
-
-/* Layered background panels for wipe effect */
-.tileBg {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-}
-
-.tileBgAccent {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, var(--color-dark) 0, var(--color-dark) 3.5em, var(--color-accent) 3.5em);
-}
-
-.tileBgDark {
-  position: absolute;
-  inset: 0;
-  background: var(--color-dark);
-  clip-path: polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%);
-  transition: clip-path 1s cubic-bezier(.9, 0, .1, 1);
-}
-
-[data-navigation-status="active"] .tileBgDark {
-  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
   transition-delay: 0.12s;
 }
 

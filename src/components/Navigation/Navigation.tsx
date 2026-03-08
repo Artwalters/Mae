@@ -205,12 +205,10 @@ export default function Navigation() {
         <span className={styles.hamburgerBar} />
       </button>
 
+      {/* Green accent flash behind tile */}
+      <div className={styles.tileAccent} />
       {/* Fullscreen overlay */}
       <div className={styles.tile}>
-        <div className={styles.tileBg}>
-          <div className={styles.tileBgAccent} />
-          <div className={styles.tileBgDark} />
-        </div>
         {/* Logo top-left */}
         <button className={styles.logo} onClick={() => scrollTo('top')} aria-label="Home">
           <dotlottie-wc
