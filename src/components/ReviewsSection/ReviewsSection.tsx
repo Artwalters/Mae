@@ -275,7 +275,7 @@ function MarqueeRow({ reviews, direction, speed = 25, scrollSpeed = 10 }: Marque
     let currentSkew = 0;
     const maxSkew = 8;
 
-    ScrollTrigger.create({
+    const st = ScrollTrigger.create({
       trigger: marquee,
       start: 'top bottom',
       end: 'bottom top',
@@ -311,7 +311,9 @@ function MarqueeRow({ reviews, direction, speed = 25, scrollSpeed = 10 }: Marque
     tl.fromTo(marqueeScroll, { x: `${scrollStart}vw` }, { x: `${scrollEnd}vw`, ease: 'none' });
 
     return () => {
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      st.kill();
+      tl.scrollTrigger?.kill();
+      tl.kill();
     };
   }, [direction, speed, scrollSpeed]);
 

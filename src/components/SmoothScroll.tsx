@@ -4,9 +4,8 @@ import { useEffect, createContext, useContext, useRef, useCallback, useMemo } fr
 import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Flip } from 'gsap/Flip';
 
-gsap.registerPlugin(ScrollTrigger, Flip);
+gsap.registerPlugin(ScrollTrigger);
 
 interface LenisContextType {
   stop: () => void;
