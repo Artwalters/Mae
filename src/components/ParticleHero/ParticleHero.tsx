@@ -6,6 +6,7 @@ import { Center } from '@react-three/drei';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Logo3D from './LogoParticles';
+import VideoPlane from './VideoPlane';
 import { useSharedVideo } from '@/context/SharedVideoContext';
 import { usePanel } from '@/context/PanelContext';
 import styles from './ParticleHero.module.css';
@@ -21,11 +22,10 @@ export default function ParticleHero() {
   const sideLabelsRef = useRef<HTMLDivElement>(null);
   const mobileCtaRef = useRef<HTMLDivElement>(null);
   const { video: sharedVideo, texture: sharedTexture } = useSharedVideo();
-  const bgVideoWrapRef = useRef<HTMLDivElement>(null);
   const { openPanel } = usePanel();
   const mouseRef = useRef({ x: 0, y: 0 });
   const introOffsetRef = useRef(2.0); // Logo starts tilted+dropped below screen
-  const mobileVideoWrapRef = useRef<HTMLDivElement>(null);
+  const bgBrightnessRef = useRef({ value: 0 }); // Animated by GSAP
   const loaderRef = useRef<HTMLDivElement>(null);
   const [introComplete, setIntroComplete] = useState(false);
   const [logoReady, setLogoReady] = useState(false);
@@ -57,14 +57,6 @@ export default function ParticleHero() {
     window.addEventListener('resize', checkScreenSize);
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
-
-  // Place shared video in hero background on mount (hero is default home)
-  useEffect(() => {
-    if (!sharedVideo || !bgVideoWrapRef.current) return;
-    const container = bgVideoWrapRef.current;
-    sharedVideo.className = styles.mobileVideo;
-    container.appendChild(sharedVideo);
-  }, [sharedVideo]);
 
   // Mouse tracking for 3D logo tilt (desktop) / random drift (mobile)
   useEffect(() => {
@@ -117,14 +109,12 @@ export default function ParticleHero() {
 
     // Background fades in gradually after logo has mostly landed
     const brightenDelay = startDelay + logoDuration * 0.5;
-    if (mobileVideoWrapRef.current) {
-      gsap.to(mobileVideoWrapRef.current, {
-        opacity: 1,
-        duration: brightenDuration,
-        delay: brightenDelay,
-        ease: 'power2.out',
-      });
-    }
+    gsap.to(bgBrightnessRef.current, {
+      value: 0.18,
+      duration: brightenDuration,
+      delay: brightenDelay,
+      ease: 'power2.out',
+    });
 
     // Fade in side labels + mobile CTA after background starts brightening
     const uiFadeDelay = brightenDelay + brightenDuration * 0.4;
@@ -210,11 +200,6 @@ export default function ParticleHero() {
         </div>
       )}
 
-      {/* Video background — uses shared video element to stay in sync with 3D texture */}
-      <div ref={mobileVideoWrapRef} className={styles.mobileVideoWrap} style={{ opacity: 0 }}>
-        <div ref={bgVideoWrapRef} />
-      </div>
-
       {/* Side Labels - start hidden, fade in after intro */}
       <div ref={sideLabelsRef} className={styles.sideLabels} style={{ opacity: 0 }}>
         <button className={`${styles.sideLabel} ${styles.left}`} onClick={() => openPanel('start-nu', 'fysio')}>
@@ -248,6 +233,7 @@ export default function ParticleHero() {
           <ambientLight intensity={0.5} />
           <directionalLight position={[0, 0, 10]} intensity={2.5} />
 
+          <VideoPlane texture={sharedTexture} video={sharedVideo} brightnessRef={bgBrightnessRef} />
           <Suspense fallback={null}>
             <group position={[0, getLogoYOffset(), 0]}>
               <Center precise>

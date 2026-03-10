@@ -6,6 +6,7 @@ import { Center } from '@react-three/drei';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Logo3D from './LogoParticles';
+import VideoPlane from './VideoPlane';
 import { useSharedVideo } from '@/context/SharedVideoContext';
 import { usePanel } from '@/context/PanelContext';
 import styles from './ParticleHero.module.css';
@@ -22,7 +23,6 @@ export default function ParticleFooter() {
   const { video: sharedVideo, texture: sharedTexture } = useSharedVideo();
   const { openPanel } = usePanel();
   const mouseRef = useRef({ x: 0, y: 0 });
-  const bgVideoWrapRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -47,35 +47,6 @@ export default function ParticleFooter() {
     window.addEventListener('resize', checkScreenSize);
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
-
-  // Steal shared video when footer is visible, return to hero when not
-  useEffect(() => {
-    if (!sharedVideo || !bgVideoWrapRef.current) return;
-    const container = bgVideoWrapRef.current;
-    // Remember where the video lives (hero container) so we can return it
-    const heroHome = sharedVideo.parentNode as HTMLElement | null;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          sharedVideo.className = styles.mobileVideo;
-          container.appendChild(sharedVideo);
-        } else if (heroHome && sharedVideo.parentNode === container) {
-          heroHome.appendChild(sharedVideo);
-        }
-      },
-      { threshold: 0.1 }
-    );
-    observer.observe(container);
-
-    return () => {
-      observer.disconnect();
-      // Return video to hero on unmount
-      if (heroHome && sharedVideo.parentNode === container) {
-        heroHome.appendChild(sharedVideo);
-      }
-    };
-  }, [sharedVideo]);
 
   // Mouse tracking (desktop) / auto-drift (mobile) — same as hero
   useEffect(() => {
@@ -156,11 +127,6 @@ export default function ParticleFooter() {
 
   return (
     <div ref={containerRef} className={styles.container}>
-      {/* Video background — claims shared video element when visible */}
-      <div className={styles.mobileVideoWrap}>
-        <div ref={bgVideoWrapRef} />
-      </div>
-
       {/* Footer Tags - fade in when logo reaches center */}
       <div ref={footerTagsRef} className={styles.footerTags} style={{ opacity: 0 }}>
         <button className={styles.footerTag} onClick={() => document.getElementById('herstel-section')?.scrollIntoView({ behavior: 'smooth' })}>
@@ -220,6 +186,7 @@ export default function ParticleFooter() {
           <ambientLight intensity={0.5} />
           <directionalLight position={[0, 0, 10]} intensity={2.5} />
 
+          <VideoPlane texture={sharedTexture} video={sharedVideo} brightness={0.18} />
           <Suspense fallback={null}>
             <group position={[0, getLogoYOffset(), 0]}>
               <Center precise>

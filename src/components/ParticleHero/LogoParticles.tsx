@@ -30,13 +30,9 @@ export default function Logo3D({ scale = 1, scrollProgressRef, mouseRef, mode = 
   useEffect(() => {
     if (!sharedTexture) return;
 
-    // Clone texture for flipY override without affecting shared instance
-    const tex = sharedTexture.clone();
-    tex.flipY = false;
-
     materialRef.current = new THREE.ShaderMaterial({
       uniforms: {
-        map: { value: tex },
+        map: { value: sharedTexture },
         uMobile: { value: isMobile ? 1.0 : 0.0 },
         uTime: { value: 0.0 },
         uMouse: { value: new THREE.Vector2(0.5, 0.5) },
@@ -45,7 +41,7 @@ export default function Logo3D({ scale = 1, scrollProgressRef, mouseRef, mode = 
         varying vec2 vUv;
         varying vec2 vScreenPos;
         void main() {
-          vUv = vec2(uv.x, uv.y - 0.1);
+          vUv = vec2(uv.x, 1.0 - uv.y - 0.1);
           vec4 clipPos = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
           vScreenPos = clipPos.xy / clipPos.w * 0.5 + 0.5;
           gl_Position = clipPos;
