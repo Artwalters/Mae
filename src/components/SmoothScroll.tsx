@@ -39,6 +39,7 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
 
     lenis.on('scroll', ScrollTrigger.update);
 
+    gsap.ticker.lagSmoothing(0);
     const tick = (time: number) => {
       lenis.raf(time * 1000);
     };

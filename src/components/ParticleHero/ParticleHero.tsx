@@ -6,55 +6,11 @@ import { Center } from '@react-three/drei';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Logo3D from './LogoParticles';
-import WaterEffect from './WaterEffect';
 import { useSharedVideo } from '@/context/SharedVideoContext';
 import { usePanel } from '@/context/PanelContext';
 import styles from './ParticleHero.module.css';
 
 gsap.registerPlugin(ScrollTrigger);
-
-function MobileVideoBackground({ video }: { video: HTMLVideoElement | null }) {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  // Only claim the shared video when this container is visible
-  useEffect(() => {
-    if (!video || !containerRef.current) return;
-    const container = containerRef.current;
-
-    const claimVideo = () => {
-      if (video.parentNode !== container) {
-        video.className = styles.mobileVideo;
-        container.appendChild(video);
-        video.play().catch(() => {});
-      }
-    };
-
-    const releaseVideo = () => {
-      if (video.parentNode === container) {
-        container.removeChild(video);
-      }
-    };
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          claimVideo();
-        } else {
-          releaseVideo();
-        }
-      },
-      { threshold: 0.1 }
-    );
-    observer.observe(container);
-
-    return () => {
-      observer.disconnect();
-      releaseVideo();
-    };
-  }, [video]);
-
-  return <div ref={containerRef} />;
-}
 
 type ScreenSize = 'mobile' | 'tablet-sm' | 'tablet-md' | 'tablet' | 'desktop-sm' | 'desktop' | 'desktop-lg' | null;
 
@@ -65,6 +21,7 @@ export default function ParticleHero() {
   const sideLabelsRef = useRef<HTMLDivElement>(null);
   const mobileCtaRef = useRef<HTMLDivElement>(null);
   const { video: sharedVideo, texture: sharedTexture } = useSharedVideo();
+  const bgVideoWrapRef = useRef<HTMLDivElement>(null);
   const { openPanel } = usePanel();
   const mouseRef = useRef({ x: 0, y: 0 });
   const introOffsetRef = useRef(2.0); // Logo starts tilted+dropped below screen
@@ -101,6 +58,14 @@ export default function ParticleHero() {
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
 
+  // Place shared video in hero background on mount (hero is default home)
+  useEffect(() => {
+    if (!sharedVideo || !bgVideoWrapRef.current) return;
+    const container = bgVideoWrapRef.current;
+    sharedVideo.className = styles.mobileVideo;
+    container.appendChild(sharedVideo);
+  }, [sharedVideo]);
+
   // Mouse tracking for 3D logo tilt (desktop) / random drift (mobile)
   useEffect(() => {
     if (screenSize === 'mobile') {
@@ -131,7 +96,6 @@ export default function ParticleHero() {
     const logoDuration = 2.0;
     const brightenDuration = 2.0;
     const fadeDuration = 0.8;
-    const isMob = screenSize === 'mobile';
 
     // Fade out loader as logo starts
     if (loaderRef.current) {
@@ -153,7 +117,7 @@ export default function ParticleHero() {
 
     // Background fades in gradually after logo has mostly landed
     const brightenDelay = startDelay + logoDuration * 0.5;
-    if (isMob && mobileVideoWrapRef.current) {
+    if (mobileVideoWrapRef.current) {
       gsap.to(mobileVideoWrapRef.current, {
         opacity: 1,
         duration: brightenDuration,
@@ -205,7 +169,6 @@ export default function ParticleHero() {
   }, []);
 
   const isMobile = screenSize === 'mobile';
-  const WaterComponent = screenSize === null ? null : isMobile ? null : WaterEffect;
 
   const getScaleAndZoom = () => {
     switch (screenSize) {
@@ -247,12 +210,10 @@ export default function ParticleHero() {
         </div>
       )}
 
-      {/* Mobile video background — reuse the shared video element */}
-      {isMobile && (
-        <div ref={mobileVideoWrapRef} className={styles.mobileVideoWrap} style={{ opacity: 0 }}>
-          <MobileVideoBackground video={sharedVideo} />
-        </div>
-      )}
+      {/* Video background — uses shared video element to stay in sync with 3D texture */}
+      <div ref={mobileVideoWrapRef} className={styles.mobileVideoWrap} style={{ opacity: 0 }}>
+        <div ref={bgVideoWrapRef} />
+      </div>
 
       {/* Side Labels - start hidden, fade in after intro */}
       <div ref={sideLabelsRef} className={styles.sideLabels} style={{ opacity: 0 }}>
@@ -293,7 +254,6 @@ export default function ParticleHero() {
                 <Logo3D scale={scale} scrollProgressRef={scrollProgressRef} mouseRef={mouseRef} mode="hero" isMobile={isMobile} sharedTexture={sharedTexture} introOffsetRef={introOffsetRef} onReady={handleLogoReady} />
               </Center>
             </group>
-            {WaterComponent && <WaterComponent sharedTexture={sharedTexture} sharedVideo={sharedVideo} isMobile={isMobile} introOffsetRef={introOffsetRef} />}
           </Suspense>
         </Canvas>
       )}

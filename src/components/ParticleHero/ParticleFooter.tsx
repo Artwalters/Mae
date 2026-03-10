@@ -6,55 +6,11 @@ import { Center } from '@react-three/drei';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Logo3D from './LogoParticles';
-import WaterEffect from './WaterEffect';
 import { useSharedVideo } from '@/context/SharedVideoContext';
 import { usePanel } from '@/context/PanelContext';
 import styles from './ParticleHero.module.css';
 
 gsap.registerPlugin(ScrollTrigger);
-
-function FooterMobileVideo({ video }: { video: HTMLVideoElement | null }) {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  // Only claim the shared video when this container is visible
-  useEffect(() => {
-    if (!video || !containerRef.current) return;
-    const container = containerRef.current;
-
-    const claimVideo = () => {
-      if (video.parentNode !== container) {
-        video.className = styles.mobileVideo;
-        container.appendChild(video);
-        video.play().catch(() => {});
-      }
-    };
-
-    const releaseVideo = () => {
-      if (video.parentNode === container) {
-        container.removeChild(video);
-      }
-    };
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          claimVideo();
-        } else {
-          releaseVideo();
-        }
-      },
-      { threshold: 0.1 }
-    );
-    observer.observe(container);
-
-    return () => {
-      observer.disconnect();
-      releaseVideo();
-    };
-  }, [video]);
-
-  return <div ref={containerRef} />;
-}
 
 type ScreenSize = 'mobile' | 'tablet-sm' | 'tablet-md' | 'tablet' | 'desktop-sm' | 'desktop' | 'desktop-lg' | null;
 
@@ -66,6 +22,7 @@ export default function ParticleFooter() {
   const { video: sharedVideo, texture: sharedTexture } = useSharedVideo();
   const { openPanel } = usePanel();
   const mouseRef = useRef({ x: 0, y: 0 });
+  const bgVideoWrapRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -90,6 +47,35 @@ export default function ParticleFooter() {
     window.addEventListener('resize', checkScreenSize);
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
+
+  // Steal shared video when footer is visible, return to hero when not
+  useEffect(() => {
+    if (!sharedVideo || !bgVideoWrapRef.current) return;
+    const container = bgVideoWrapRef.current;
+    // Remember where the video lives (hero container) so we can return it
+    const heroHome = sharedVideo.parentNode as HTMLElement | null;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          sharedVideo.className = styles.mobileVideo;
+          container.appendChild(sharedVideo);
+        } else if (heroHome && sharedVideo.parentNode === container) {
+          heroHome.appendChild(sharedVideo);
+        }
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(container);
+
+    return () => {
+      observer.disconnect();
+      // Return video to hero on unmount
+      if (heroHome && sharedVideo.parentNode === container) {
+        heroHome.appendChild(sharedVideo);
+      }
+    };
+  }, [sharedVideo]);
 
   // Mouse tracking (desktop) / auto-drift (mobile) — same as hero
   useEffect(() => {
@@ -136,7 +122,6 @@ export default function ParticleFooter() {
   }, []);
 
   const isMobile = screenSize === 'mobile';
-  const WaterComponent = screenSize === null ? null : isMobile ? null : WaterEffect;
 
   const getScaleAndZoom = () => {
     switch (screenSize) {
@@ -171,8 +156,10 @@ export default function ParticleFooter() {
 
   return (
     <div ref={containerRef} className={styles.container}>
-      {/* Mobile video background — reuse the shared video element */}
-      {isMobile && <FooterMobileVideo video={sharedVideo} />}
+      {/* Video background — claims shared video element when visible */}
+      <div className={styles.mobileVideoWrap}>
+        <div ref={bgVideoWrapRef} />
+      </div>
 
       {/* Footer Tags - fade in when logo reaches center */}
       <div ref={footerTagsRef} className={styles.footerTags} style={{ opacity: 0 }}>
@@ -239,7 +226,6 @@ export default function ParticleFooter() {
                 <Logo3D scale={scale} scrollProgressRef={scrollProgressRef} mouseRef={mouseRef} mode="footer" isMobile={isMobile} sharedTexture={sharedTexture} />
               </Center>
             </group>
-            {WaterComponent && <WaterComponent sharedTexture={sharedTexture} sharedVideo={sharedVideo} isMobile={isMobile} />}
           </Suspense>
         </Canvas>
       )}

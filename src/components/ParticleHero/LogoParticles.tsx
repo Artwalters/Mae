@@ -39,6 +39,7 @@ export default function Logo3D({ scale = 1, scrollProgressRef, mouseRef, mode = 
         map: { value: tex },
         uMobile: { value: isMobile ? 1.0 : 0.0 },
         uTime: { value: 0.0 },
+        uMouse: { value: new THREE.Vector2(0.5, 0.5) },
       },
       vertexShader: `
         varying vec2 vUv;
@@ -54,6 +55,7 @@ export default function Logo3D({ scale = 1, scrollProgressRef, mouseRef, mode = 
         uniform sampler2D map;
         uniform float uMobile;
         uniform float uTime;
+        uniform vec2 uMouse;
         varying vec2 vUv;
         varying vec2 vScreenPos;
         void main() {
@@ -69,19 +71,23 @@ export default function Logo3D({ scale = 1, scrollProgressRef, mouseRef, mode = 
             color = texture2D(map, vUv).rgb;
           }
 
-          if (uMobile > 0.5) {
-            float gray = dot(color, vec3(0.299, 0.587, 0.114));
-            vec3 grayColor = vec3(gray);
+          // Grayscale with color reveal
+          float gray = dot(color, vec3(0.299, 0.587, 0.114));
+          vec3 grayColor = vec3(gray);
 
-            vec2 reveal = vec2(
+          vec2 reveal;
+          if (uMobile > 0.5) {
+            reveal = vec2(
               0.5 + sin(uTime * 0.4) * 0.3 + sin(uTime * 1.1) * 0.15,
               0.5 + cos(uTime * 0.3) * 0.25 + sin(uTime * 0.9) * 0.15
             );
-            float dist = distance(vScreenPos, reveal);
-            float radius = 0.35;
-            float blend = smoothstep(radius, radius * 0.15, dist);
-            color = mix(grayColor, color, blend);
+          } else {
+            reveal = uMouse;
           }
+          float dist = distance(vScreenPos, reveal);
+          float radius = 0.35;
+          float blend = smoothstep(radius, radius * 0.15, dist);
+          color = mix(grayColor, color, blend);
 
           gl_FragColor = vec4(color, 1.0);
         }
@@ -120,8 +126,14 @@ export default function Logo3D({ scale = 1, scrollProgressRef, mouseRef, mode = 
   useFrame((state) => {
     if (!groupRef.current) return;
 
-    if (materialRef.current?.uniforms.uTime) {
+    if (materialRef.current?.uniforms) {
       materialRef.current.uniforms.uTime.value = state.clock.elapsedTime;
+      const mouse = mouseRef?.current ?? { x: 0, y: 0 };
+      // Convert mouse from [-1,1] to [0,1] range for shader
+      materialRef.current.uniforms.uMouse.value.set(
+        mouse.x * 0.5 + 0.5,
+        1.0 - (mouse.y * 0.5 + 0.5)
+      );
     }
 
     {
