@@ -68,7 +68,7 @@ const LEEFSTIJL_VERDIEPING: Record<string, { question: string; options: string[]
   lekkerder: [
     {
       question: 'Waar merk je het meest dat je niet lekker in je vel zit?',
-      options: ['Weinig energie', 'Slechte slaap', 'Stress / onrust', 'Fysieke klachten'],
+      options: ['Weinig energie', 'Slechte slaap', 'Stress / onrust', 'Fysieke klachten', 'Negatief zelfbeeld', 'Een combinatie van dingen'],
     },
     {
       question: 'Hoe lang speelt dit al?',
@@ -78,37 +78,41 @@ const LEEFSTIJL_VERDIEPING: Record<string, { question: string; options: string[]
   energie: [
     {
       question: 'Wat is voor jou de grootste uitdaging?',
-      options: ['Weten wat gezond is', 'Volhouden van goede gewoontes', 'Geen tijd om gezond te koken', 'Emotioneel eten'],
+      options: ['Weten wat gezond is', 'Volhouden van goede gewoontes', 'Geen tijd om gezond te koken', 'Emotioneel eten', 'Snacken en tussendoor eten', 'Structuur in mijn eetpatroon'],
     },
     {
       question: 'Heb je eerder begeleiding gehad op het gebied van voeding?',
-      options: ['Nee, dit is nieuw', 'Ja, maar zonder resultaat', 'Ja, maar ik ben teruggevallen'],
+      options: ['Nee, dit is nieuw', 'Ja, maar zonder resultaat', 'Ja, maar ik ben teruggevallen', 'Ja, met goed resultaat maar ik wil verder'],
     },
   ],
   eten: [
     {
       question: 'Waar heb je het meeste last van?',
-      options: ['Eetbuien', 'Constant bezig zijn met eten', 'Schuldgevoel na het eten', 'Streng lijnen en terugvallen'],
+      options: ['Eetbuien', 'Constant bezig zijn met eten', 'Schuldgevoel na het eten', 'Streng lijnen en terugvallen', 'Emotioneel eten', 'Vermijden van bepaalde voedingsmiddelen'],
     },
     {
       question: 'Hoe lang speelt dit al?',
-      options: ['Een paar maanden', 'Een paar jaar', 'Al zo lang ik me kan herinneren'],
+      options: ['Een paar maanden', 'Één tot twee jaar', 'Meerdere jaren', 'Al zo lang ik me kan herinneren'],
     },
   ],
   afvallen: [
     {
       question: 'Heb je al eerder geprobeerd af te vallen?',
-      options: ['Nee, dit is de eerste keer', 'Ja, met diëten', 'Ja, met begeleiding', 'Ja, meerdere keren zonder blijvend resultaat'],
+      options: ['Nee, dit is de eerste keer', 'Ja, met diëten', 'Ja, met begeleiding', 'Ja, meerdere keren zonder blijvend resultaat', 'Ja, maar ik val steeds terug'],
     },
     {
       question: 'Wat is voor jou het belangrijkst?',
-      options: ['Gezonder voelen', 'Meer zelfvertrouwen', 'Fitter worden', 'Medische redenen'],
+      options: ['Gezonder voelen', 'Meer zelfvertrouwen', 'Fitter worden', 'Beter in mijn kleren passen', 'Medische redenen', 'Een combinatie'],
     },
   ],
   reset: [
     {
       question: 'Welk gebied heeft de meeste aandacht nodig?',
       options: ['Voeding', 'Beweging', 'Slaap en herstel', 'Stress en mindset', 'Alles eigenlijk'],
+    },
+    {
+      question: 'Wat triggerde de wens voor een reset?',
+      options: ['Ik voel me al lang niet goed', 'Een life event (scheiding, burn-out, etc.)', 'Gezondheidsklachten', 'Ik herken mezelf niet meer', 'Ik wil gewoon een frisse start'],
     },
   ],
 };
@@ -201,7 +205,7 @@ export default function StartNuPanel() {
         case 'afvallen':
           return `He Merel, ik wil graag afvallen. ${a0 === 'nee, dit is de eerste keer' ? 'Dit is mijn eerste poging' : `Ik heb al eerder geprobeerd: ${a0}`}. Het belangrijkst voor mij is ${a1}.`;
         case 'reset':
-          return `He Merel, ik wil een totale reset. Het gebied dat de meeste aandacht nodig heeft is ${a0}.`;
+          return `He Merel, ik wil een totale reset. Het gebied dat de meeste aandacht nodig heeft is ${a0}. De aanleiding: ${a1}.`;
         default:
           return `He Merel, ik wil graag werken aan ${doelTitle}.`;
       }
