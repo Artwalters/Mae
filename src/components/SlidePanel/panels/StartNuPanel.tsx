@@ -54,22 +54,64 @@ const FYSIO_VERDIEPING: Record<string, { question: string; options: string[] }[]
 
 /* ── Leefstijl flow (Merel) ── */
 
-type LeefstijlDoel = 'energie' | 'eten' | 'afvallen' | 'gewoontes' | 'reset' | null;
+type LeefstijlDoel = 'lekkerder' | 'energie' | 'eten' | 'afvallen' | 'reset' | null;
 
 const LEEFSTIJL_DOELEN: { key: LeefstijlDoel; title: string; text: string }[] = [
-  { key: 'energie', title: 'Meer energie', text: 'Je wilt je fitter en energieker voelen in het dagelijks leven' },
-  { key: 'eten', title: 'Gezonder eten', text: 'Betere voedingskeuzes maken zonder strenge diëten' },
-  { key: 'afvallen', title: 'Afvallen', text: 'Op een duurzame manier gewicht verliezen' },
-  { key: 'gewoontes', title: 'Betere gewoontes', text: 'Structuur en routine in je dagelijks leven brengen' },
-  { key: 'reset', title: 'Een totale reset', text: 'Je hele levensstijl onder de loep nemen en vernieuwen' },
+  { key: 'lekkerder', title: 'Lekkerder in je vel zitten', text: 'Meer energie hebben, je fitter voelen en genieten van je dagelijks leven.' },
+  { key: 'energie', title: 'Gezond eten en betere gewoontes', text: 'Betere voedingskeuzes maken zonder strenge diëten en weer leren luisteren naar je lichaam.' },
+  { key: 'eten', title: 'Een gezonde relatie met eten', text: 'Controle krijgen over je eetproblematiek en je gedachten rondom eten.' },
+  { key: 'afvallen', title: 'Afvallen', text: 'Op een duurzame manier gewicht verliezen die past bij jouw normen en waarden.' },
+  { key: 'reset', title: 'Een totale reset', text: 'Je hele levensstijl onder de loep nemen en vernieuwen.' },
 ];
 
-const LEEFSTIJL_VERDIEPING: { question: string; options: string[] }[] = [
-  {
-    question: 'Waar wil je mee beginnen?',
-    options: ['Voeding', 'Meer bewegen', 'Beter slapen', 'Stressvermindering'],
-  },
-];
+const LEEFSTIJL_VERDIEPING: Record<string, { question: string; options: string[] }[]> = {
+  lekkerder: [
+    {
+      question: 'Waar merk je het meest dat je niet lekker in je vel zit?',
+      options: ['Weinig energie', 'Slechte slaap', 'Stress / onrust', 'Fysieke klachten'],
+    },
+    {
+      question: 'Hoe lang speelt dit al?',
+      options: ['Een paar weken', 'Een paar maanden', 'Langer dan een half jaar', 'Al jaren'],
+    },
+  ],
+  energie: [
+    {
+      question: 'Wat is voor jou de grootste uitdaging?',
+      options: ['Weten wat gezond is', 'Volhouden van goede gewoontes', 'Geen tijd om gezond te koken', 'Emotioneel eten'],
+    },
+    {
+      question: 'Heb je eerder begeleiding gehad op het gebied van voeding?',
+      options: ['Nee, dit is nieuw', 'Ja, maar zonder resultaat', 'Ja, maar ik ben teruggevallen'],
+    },
+  ],
+  eten: [
+    {
+      question: 'Waar heb je het meeste last van?',
+      options: ['Eetbuien', 'Constant bezig zijn met eten', 'Schuldgevoel na het eten', 'Streng lijnen en terugvallen'],
+    },
+    {
+      question: 'Hoe lang speelt dit al?',
+      options: ['Een paar maanden', 'Een paar jaar', 'Al zo lang ik me kan herinneren'],
+    },
+  ],
+  afvallen: [
+    {
+      question: 'Heb je al eerder geprobeerd af te vallen?',
+      options: ['Nee, dit is de eerste keer', 'Ja, met diëten', 'Ja, met begeleiding', 'Ja, meerdere keren zonder blijvend resultaat'],
+    },
+    {
+      question: 'Wat is voor jou het belangrijkst?',
+      options: ['Gezonder voelen', 'Meer zelfvertrouwen', 'Fitter worden', 'Medische redenen'],
+    },
+  ],
+  reset: [
+    {
+      question: 'Welk gebied heeft de meeste aandacht nodig?',
+      options: ['Voeding', 'Beweging', 'Slaap en herstel', 'Stress en mindset', 'Alles eigenlijk'],
+    },
+  ],
+};
 
 export default function StartNuPanel() {
   const { panelVariant, activePanel, setProgress, setOnBack, setPanelStep } = usePanel();
@@ -107,7 +149,7 @@ export default function StartNuPanel() {
   // Get the verdieping questions for the current flow
   const questions = isFysio
     ? FYSIO_VERDIEPING[fysioDoel || ''] || []
-    : LEEFSTIJL_VERDIEPING;
+    : LEEFSTIJL_VERDIEPING[leefstijlDoel || ''] || [];
 
   /* ── Handlers ── */
 
@@ -146,9 +188,23 @@ export default function StartNuPanel() {
       }
     } else {
       const doelTitle = LEEFSTIJL_DOELEN.find((d) => d.key === leefstijlDoel)?.title.toLowerCase();
-      const start = finalAnswers[0]?.toLowerCase();
+      const a0 = finalAnswers[0]?.toLowerCase();
+      const a1 = finalAnswers[1]?.toLowerCase();
 
-      return `He Merel, ik wil graag werken aan ${doelTitle} en wil het liefst beginnen met ${start}.`;
+      switch (leefstijlDoel) {
+        case 'lekkerder':
+          return `He Merel, ik zit niet lekker in mijn vel. Ik merk dit vooral door ${a0} en dit speelt al ${a1}.`;
+        case 'energie':
+          return `He Merel, ik wil graag gezonder eten en betere gewoontes. Mijn grootste uitdaging is ${a0}. ${a1 ? `Eerdere ervaring: ${a1}.` : ''}`;
+        case 'eten':
+          return `He Merel, ik wil werken aan mijn relatie met eten. Ik heb vooral last van ${a0} en dit speelt al ${a1}.`;
+        case 'afvallen':
+          return `He Merel, ik wil graag afvallen. ${a0 === 'nee, dit is de eerste keer' ? 'Dit is mijn eerste poging' : `Ik heb al eerder geprobeerd: ${a0}`}. Het belangrijkst voor mij is ${a1}.`;
+        case 'reset':
+          return `He Merel, ik wil een totale reset. Het gebied dat de meeste aandacht nodig heeft is ${a0}.`;
+        default:
+          return `He Merel, ik wil graag werken aan ${doelTitle}.`;
+      }
     }
     return '';
   };
