@@ -93,7 +93,6 @@ export default function MeetMerelPanel() {
           <span className={styles.aboutLabel}>Over Merel</span>
           <span className={styles.aboutNumber}>[01]</span>
         </div>
-        <h3 className={styles.aboutSubtitle}>Transformatie vanuit ervaring</h3>
         <div className={styles.aboutText}>
           <p className={styles.text}>
             Mijn naam is Merel en ik ben fervent krachtsporter, leefstijlcoach en personal coach. Ondanks mijn langdurige haat-liefde relatie met sport en voeding, heb ik geleerd hoe cruciaal een gezonde verbinding met deze aspecten is, zowel fysiek als mentaal. Mijn eigen worsteling met zelfbeeld en gezondheid heeft mij doen inzien hoe voeding en beweging kunnen bijdragen aan herstel, zowel in tijden van fysieke als mentale ziekte.
