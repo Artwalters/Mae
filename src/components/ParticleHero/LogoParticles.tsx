@@ -75,7 +75,7 @@ export default function Logo3D({ scale = 1, scrollProgressRef, mouseRef, mode = 
           vec2 diff = vScreenPos - reveal;
           float distSq = dot(diff, diff);
           float radiusSq = 0.1225; // 0.35 * 0.35
-          float blend = smoothstep(radiusSq, radiusSq * 0.0225, distSq);
+          float blend = 1.0 - smoothstep(radiusSq * 0.0225, radiusSq, distSq);
           color = mix(grayColor, color, blend);
 
           gl_FragColor = vec4(color, 1.0);
@@ -111,12 +111,24 @@ export default function Logo3D({ scale = 1, scrollProgressRef, mouseRef, mode = 
     return cloned;
   }, [scene, ready]);
 
+  // Dispose cloned geometry on unmount
+  useEffect(() => {
+    return () => {
+      model.traverse((child) => {
+        if ((child as THREE.Mesh).isMesh) {
+          (child as THREE.Mesh).geometry?.dispose();
+        }
+      });
+    };
+  }, [model]);
+
   // Smooth rotation and position based on scroll
   useFrame((state) => {
     if (!groupRef.current) return;
 
     if (materialRef.current?.uniforms) {
       materialRef.current.uniforms.uTime.value = state.clock.elapsedTime;
+      materialRef.current.uniforms.uMobile.value = isMobile ? 1.0 : 0.0;
       const mouse = mouseRef?.current ?? { x: 0, y: 0 };
       // Convert mouse from [-1,1] to [0,1] range for shader
       materialRef.current.uniforms.uMouse.value.set(

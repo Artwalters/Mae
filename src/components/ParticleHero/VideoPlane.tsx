@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useMemo } from 'react';
+import { useRef, useMemo, useEffect } from 'react';
 import { useThree, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -53,16 +53,22 @@ export default function VideoPlane({ texture, video, brightness = 0.18, brightne
     });
   }, [brightness]);
 
-  useFrame(() => {
-    if (!material.uniforms) return;
+  useEffect(() => {
+    return () => { material.dispose(); };
+  }, [material]);
 
-    material.uniforms.uBrightness.value = brightnessRef ? brightnessRef.current.value : brightness;
-
+  // Set texture once when it becomes available
+  useEffect(() => {
     if (texture) {
       material.uniforms.uTexture.value = texture;
-      if (video && video.videoWidth && video.videoHeight) {
-        material.uniforms.uVideoAspect.value = video.videoWidth / video.videoHeight;
-      }
+    }
+  }, [texture, material]);
+
+  useFrame(() => {
+    material.uniforms.uBrightness.value = brightnessRef ? brightnessRef.current.value : brightness;
+
+    if (video && video.videoWidth) {
+      material.uniforms.uVideoAspect.value = video.videoWidth / video.videoHeight;
     }
     material.uniforms.uScreenAspect.value = viewport.width / viewport.height;
 

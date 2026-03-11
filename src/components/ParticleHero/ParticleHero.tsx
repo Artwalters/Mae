@@ -72,6 +72,7 @@ export default function ParticleHero() {
   // Mouse tracking for 3D logo tilt (desktop) / random drift (mobile)
   useEffect(() => {
     if (screenSize === 'mobile') {
+      if (!heroVisible) return;
       let raf: number;
       const animate = (time: number) => {
         const t = time * 0.001;
@@ -88,7 +89,7 @@ export default function ParticleHero() {
     };
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [screenSize]);
+  }, [screenSize, heroVisible]);
 
 
   // Intro animation: starts only after the 3D logo has rendered its first frame
@@ -249,9 +250,6 @@ export default function ParticleHero() {
           dpr={isStrongHardware ? [1, 1.5] : [1, 1]}
         >
           <Invalidator active={heroVisible} />
-          <ambientLight intensity={0.5} />
-          <directionalLight position={[0, 0, 10]} intensity={2.5} />
-
           <VideoPlane texture={sharedTexture} video={sharedVideo} brightnessRef={bgBrightnessRef} />
           <Suspense fallback={null}>
             <group position={[0, getLogoYOffset(), 0]}>

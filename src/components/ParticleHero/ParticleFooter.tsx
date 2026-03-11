@@ -72,6 +72,7 @@ export default function ParticleFooter() {
   // Mouse tracking (desktop) / auto-drift (mobile) — same as hero
   useEffect(() => {
     if (screenSize === 'mobile') {
+      if (!visible) return;
       let raf: number;
       const animate = (time: number) => {
         const t = time * 0.001;
@@ -88,7 +89,7 @@ export default function ParticleFooter() {
     };
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [screenSize]);
+  }, [screenSize, visible]);
 
   // Scroll-based: logo comes from above into center
   useEffect(() => {
@@ -206,9 +207,6 @@ export default function ParticleFooter() {
           dpr={isStrongHardware ? [1, 1.5] : [1, 1]}
         >
           <Invalidator active={visible} />
-          <ambientLight intensity={0.5} />
-          <directionalLight position={[0, 0, 10]} intensity={2.5} />
-
           <VideoPlane texture={sharedTexture} video={sharedVideo} brightness={0.18} />
           <Suspense fallback={null}>
             <group position={[0, getLogoYOffset(), 0]}>
