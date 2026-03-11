@@ -65,6 +65,8 @@ export default function LeefstijlSection() {
         <img
           src={`${cdn}/merel.webp`}
           alt="Merel"
+          loading="lazy"
+          decoding="async"
           className="img-cover"
         />
       </div>

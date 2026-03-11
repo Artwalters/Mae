@@ -57,6 +57,7 @@ export default function Hall13Section() {
       </div>
       <video
         src={`${cdn}/degym.mp4`}
+        preload="none"
         autoPlay
         loop
         muted

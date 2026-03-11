@@ -64,8 +64,9 @@ export default function RootLayout({
       <head>
         <meta name="theme-color" content="#272727" />
         <link rel="preconnect" href="https://HAL13xMAE.b-cdn.net" />
+        <link rel="preload" href="https://HAL13xMAE.b-cdn.net/hero.mp4" as="video" type="video/mp4" crossOrigin="anonymous" />
         <FontStyles />
-        <Script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.3/dist/dotlottie-wc.js" type="module" crossOrigin="anonymous" strategy="beforeInteractive" />
+        <Script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.3/dist/dotlottie-wc.js" type="module" crossOrigin="anonymous" strategy="lazyOnload" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

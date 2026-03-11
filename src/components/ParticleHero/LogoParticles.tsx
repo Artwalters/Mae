@@ -57,32 +57,25 @@ export default function Logo3D({ scale = 1, scrollProgressRef, mouseRef, mode = 
         void main() {
           vec3 edgeColor = vec3(0.616, 0.941, 0.196);
           float margin = 0.02;
-          bool isEdge = vUv.x < margin || vUv.x > 1.0 - margin ||
-                        vUv.y < margin || vUv.y > 1.0 - margin;
+          float edgeMask = step(margin, vUv.x) * step(vUv.x, 1.0 - margin) *
+                           step(margin, vUv.y) * step(vUv.y, 1.0 - margin);
 
-          vec3 color;
-          if (isEdge) {
-            color = edgeColor;
-          } else {
-            color = texture2D(map, vUv).rgb;
-          }
+          vec3 texColor = texture2D(map, vUv).rgb;
+          vec3 color = mix(edgeColor, texColor, edgeMask);
 
           // Grayscale with color reveal
           float gray = dot(color, vec3(0.299, 0.587, 0.114));
           vec3 grayColor = vec3(gray);
 
-          vec2 reveal;
-          if (uMobile > 0.5) {
-            reveal = vec2(
-              0.5 + sin(uTime * 0.4) * 0.3 + sin(uTime * 1.1) * 0.15,
-              0.5 + cos(uTime * 0.3) * 0.25 + sin(uTime * 0.9) * 0.15
-            );
-          } else {
-            reveal = uMouse;
-          }
-          float dist = distance(vScreenPos, reveal);
-          float radius = 0.35;
-          float blend = smoothstep(radius, radius * 0.15, dist);
+          vec2 mobileReveal = vec2(
+            0.5 + sin(uTime * 0.4) * 0.3 + sin(uTime * 1.1) * 0.15,
+            0.5 + cos(uTime * 0.3) * 0.25 + sin(uTime * 0.9) * 0.15
+          );
+          vec2 reveal = mix(uMouse, mobileReveal, uMobile);
+          vec2 diff = vScreenPos - reveal;
+          float distSq = dot(diff, diff);
+          float radiusSq = 0.1225; // 0.35 * 0.35
+          float blend = smoothstep(radiusSq, radiusSq * 0.0225, distSq);
           color = mix(grayColor, color, blend);
 
           gl_FragColor = vec4(color, 1.0);

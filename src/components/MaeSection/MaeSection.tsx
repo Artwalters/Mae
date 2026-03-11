@@ -168,6 +168,8 @@ export default function MaeSection() {
                   <img
                     src={item.image}
                     alt={item.title}
+                    loading="lazy"
+                    decoding="async"
                     className="img-cover img-grayscale"
                   />
                 </div>

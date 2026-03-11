@@ -1,7 +1,7 @@
 'use client';
 
 import { Suspense, useState, useEffect, useRef } from 'react';
-import { Canvas } from '@react-three/fiber';
+import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { Center } from '@react-three/drei';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -13,6 +13,15 @@ import styles from './ParticleHero.module.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const isStrongHardware = typeof navigator !== 'undefined' && navigator.hardwareConcurrency > 4;
+
+function Invalidator({ active }: { active: boolean }) {
+  const { invalidate } = useThree();
+  useEffect(() => { if (active) invalidate(); }, [active, invalidate]);
+  useFrame(() => { if (active) invalidate(); });
+  return null;
+}
+
 type ScreenSize = 'mobile' | 'tablet-sm' | 'tablet-md' | 'tablet' | 'desktop-sm' | 'desktop' | 'desktop-lg' | null;
 
 export default function ParticleFooter() {
@@ -23,6 +32,18 @@ export default function ParticleFooter() {
   const { video: sharedVideo, texture: sharedTexture } = useSharedVideo();
   const { openPanel } = usePanel();
   const mouseRef = useRef({ x: 0, y: 0 });
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setVisible(entry.isIntersecting),
+      { rootMargin: '50%' }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -180,9 +201,11 @@ export default function ParticleFooter() {
         <Canvas
           orthographic
           camera={{ position: [0, 0, 100], zoom, near: 0.1, far: 200 }}
-          gl={{ antialias: true, alpha: true }}
-          dpr={[1, 2]}
+          frameloop="demand"
+          gl={{ antialias: isStrongHardware, alpha: true }}
+          dpr={isStrongHardware ? [1, 1.5] : [1, 1]}
         >
+          <Invalidator active={visible} />
           <ambientLight intensity={0.5} />
           <directionalLight position={[0, 0, 10]} intensity={2.5} />
 

@@ -39,13 +39,11 @@ export default function VideoPlane({ texture, video, brightness = 0.18, brightne
 
         void main() {
           vec2 uv = vUv;
-          if (uScreenAspect > uVideoAspect) {
-            float scale = uVideoAspect / uScreenAspect;
-            uv.y = (uv.y - 0.5) * scale + 0.5;
-          } else {
-            float scale = uScreenAspect / uVideoAspect;
-            uv.x = (uv.x - 0.5) * scale + 0.5;
-          }
+          float screenWider = step(uVideoAspect, uScreenAspect);
+          float scaleY = uVideoAspect / uScreenAspect;
+          float scaleX = uScreenAspect / uVideoAspect;
+          uv.y = mix(uv.y, (uv.y - 0.5) * scaleY + 0.5, screenWider);
+          uv.x = mix(uv.x, (uv.x - 0.5) * scaleX + 0.5, 1.0 - screenWider);
 
           vec3 color = texture2D(uTexture, uv).rgb * uBrightness;
           gl_FragColor = vec4(color, 1.0);

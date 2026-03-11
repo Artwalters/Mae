@@ -1,7 +1,7 @@
 'use client';
 
 import { Suspense, useState, useEffect, useRef, useCallback } from 'react';
-import { Canvas } from '@react-three/fiber';
+import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { Center } from '@react-three/drei';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -12,6 +12,15 @@ import { usePanel } from '@/context/PanelContext';
 import styles from './ParticleHero.module.css';
 
 gsap.registerPlugin(ScrollTrigger);
+
+const isStrongHardware = typeof navigator !== 'undefined' && navigator.hardwareConcurrency > 4;
+
+function Invalidator({ active }: { active: boolean }) {
+  const { invalidate } = useThree();
+  useEffect(() => { if (active) invalidate(); }, [active, invalidate]);
+  useFrame(() => { if (active) invalidate(); });
+  return null;
+}
 
 type ScreenSize = 'mobile' | 'tablet-sm' | 'tablet-md' | 'tablet' | 'desktop-sm' | 'desktop' | 'desktop-lg' | null;
 
@@ -29,6 +38,8 @@ export default function ParticleHero() {
   const loaderRef = useRef<HTMLDivElement>(null);
   const [introComplete, setIntroComplete] = useState(false);
   const [logoReady, setLogoReady] = useState(false);
+  const [heroVisible, setHeroVisible] = useState(true);
+  const heroVisibleRef = useRef(true);
 
   const handleLogoReady = useCallback(() => {
     setLogoReady(true);
@@ -150,6 +161,12 @@ export default function ParticleHero() {
         // Update label opacity directly via DOM
         const opacity = String(Math.max(0, 1 - self.progress * 3));
         if (sideLabelsRef.current) sideLabelsRef.current.style.opacity = opacity;
+        // Pause canvas when hero is fully scrolled away
+        const nowVisible = self.progress < 1;
+        if (nowVisible !== heroVisibleRef.current) {
+          heroVisibleRef.current = nowVisible;
+          setHeroVisible(nowVisible);
+        }
       }
     });
 
@@ -227,9 +244,11 @@ export default function ParticleHero() {
         <Canvas
           orthographic
           camera={{ position: [0, 0, 100], zoom, near: 0.1, far: 200 }}
-          gl={{ antialias: true, alpha: true }}
-          dpr={[1, 2]}
+          frameloop="demand"
+          gl={{ antialias: isStrongHardware, alpha: true }}
+          dpr={isStrongHardware ? [1, 1.5] : [1, 1]}
         >
+          <Invalidator active={heroVisible} />
           <ambientLight intensity={0.5} />
           <directionalLight position={[0, 0, 10]} intensity={2.5} />
 

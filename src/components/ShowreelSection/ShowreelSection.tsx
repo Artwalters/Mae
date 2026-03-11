@@ -21,6 +21,7 @@ export default function ShowreelSection() {
             ref={videoRef}
             className={styles.video}
             src={`${cdn}/hero.mp4`}
+            preload="none"
             autoPlay
             muted
             loop

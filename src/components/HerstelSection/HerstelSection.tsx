@@ -83,6 +83,8 @@ export default function HerstelSection() {
         <img
           src={`${cdn}/maarten-sled.webp`}
           alt="Maarten"
+          loading="lazy"
+          decoding="async"
           className="img-cover"
         />
       </div>

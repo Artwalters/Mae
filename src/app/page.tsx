@@ -5,17 +5,17 @@ import Hall13Section from "@/components/Hall13Section";
 import HerstelSection from "@/components/HerstelSection";
 import LeefstijlSection from "@/components/LeefstijlSection";
 import MaeSection from "@/components/MaeSection";
-import ParticleHero from "@/components/ParticleHero";
-import { ParticleFooter } from "@/components/ParticleHero";
 import ReviewsSection from "@/components/ReviewsSection";
 import ShowreelSection from "@/components/ShowreelSection";
+import LazyParticleHero from "@/components/ParticleHero/LazyParticleHero";
+import LazyParticleFooter from "@/components/ParticleHero/LazyParticleFooter";
 
 export default function Home() {
   return (
     <>
     <div className={styles.hero}>
       <div className={styles.logoContainer}>
-        <ParticleHero />
+        <LazyParticleHero />
       </div>
     </div>
 
@@ -31,7 +31,7 @@ export default function Home() {
 
     <div id="footer-section" className={styles.hero}>
       <div className={styles.logoContainer}>
-        <ParticleFooter />
+        <LazyParticleFooter />
       </div>
     </div>
 
