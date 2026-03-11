@@ -203,8 +203,8 @@ export default function ParticleFooter() {
           orthographic
           camera={{ position: [0, 0, 100], zoom, near: 0.1, far: 200 }}
           frameloop="demand"
-          gl={{ antialias: isStrongHardware, alpha: true }}
-          dpr={isStrongHardware ? [1, 1.5] : [1, 1]}
+          gl={{ antialias: true, alpha: true }}
+          dpr={isStrongHardware ? [1, 2] : [1, 1.5]}
         >
           <Invalidator active={visible} />
           <VideoPlane texture={sharedTexture} video={sharedVideo} brightness={0.18} />
